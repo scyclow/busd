@@ -25,16 +25,17 @@ pragma solidity ^0.8.28;
 contract BUSD is ERC20, Ownable {
   address public issuer;
   uint256 public billsBurned;
-  ProofOfBurn public proofOfBurn
-  mapping(uint256 => string) public billToSerial;
-  mapping(uint256 => uint8) public billToDenomination;
-  mapping(uint256 => string) public burnProofs;
-  mapping(uint256 => uint256) public burnTimestamps;
-  mapping(uint256 => string) public burnNotes;
-  mapping(address => uint256) public burnedBy;
+  ProofOfBurn public proofOfBurn;
+  mapping(uint256 => string) public serials;
+  mapping(uint256 => uint8) public denominations;
+  mapping(uint256 => string) public proofs;
+  mapping(uint256 => uint256) public timestamps;
+  mapping(uint256 => string) public memos;
+  mapping(address => uint256) public busdBurnedBy;
 
-  constructor() ERC20('Burnt USD', 'bUSD') {
+  constructor() ERC20('Burned United States Dollars', 'bUSD') {
     issuer = msg.sender;
+    proofOfBurn = new ProofOfBurn();
   }
 
   modifier onlyIssuer {
@@ -46,45 +47,60 @@ contract BUSD is ERC20, Ownable {
     issuer = _issuer;
   }
 
+
+  // function mint(
+  //   address account,
+  //   uint256 denomination,
+  //   string calldata serial
+  // ) external {
+  //   mint(account, denomination, serial, false, 0);
+  // }
+
   function mint(
     address account,
-    uint8 denomination,
+    uint256 denomination,
     string calldata serial,
     bool sendPob,
+    uint256 feeBps
   ) external onlyIssuer {
-    billToDenomination[billsBurned] = denomination;
-    billToSerial[billsBurned] = serial;
-    burnProofs[billsBurned] = proof;
-    burnTimestamps[billsBurned] = block.timestamp;
+    denominations[billsBurned] = uint8(denomination);
+    serials[billsBurned] = serial;
+    timestamps[billsBurned] = block.timestamp;
 
     address pobRecipient = sendPob ? account : owner();
-    proofOfBurn.mint(billsBurned, pobRecipient);
+    proofOfBurn.mint(pobRecipient, billsBurned);
 
     billsBurned += 1;
 
-    _mint(account, denomination * 1 ether);
+    uint256 fee = (denomination * 1 ether * feeBps) / 10000;
+
+    _mint(account, denomination * 1 ether - fee);
+
+    if (fee > 0) {
+      _mint(owner(), fee);
+    }
   }
 
 
 
   function addProof(uint256 burnId, string calldata proof) external onlyIssuer {
-    burnProofs[burnId] = proof;
+    proofs[burnId] = proof;
   }
 
-  function addProofBatch(uint256[] burnIds, string calldata baseURI, string calldata ext) external onlyIssuer {
+  function addProofBatch(uint256[] calldata burnIds, string calldata baseURI, string calldata ext) external onlyIssuer {
     for (uint256 i; i < burnIds.length; i++) {
-      burnProofs[burnIds[i]] = string.concat(baseURI, '/', Strings.toString(i), ext);
+      proofs[burnIds[i]] = string.concat(baseURI, '/', Strings.toString(i), ext);
     }
   }
 
-  function addNote(uint256 burnId, string calldata note) external onlyIssuer {
-    burnNotes[burnId] = note;
+  function addMemo(uint256 burnId, string calldata memo) external onlyIssuer {
+    memos[burnId] = memo;
   }
 
 
 
   function burn(uint256 amount) external {
-    burnedBy[msg.sender] += amount;
+    busdBurnedBy[msg.sender] += amount;
     _burn(msg.sender, amount);
   }
 
@@ -95,7 +111,7 @@ contract BUSD is ERC20, Ownable {
       _spendAllowance(account, burner, amount);
     }
 
-    burnedBy[account] += amount;
+    busdBurnedBy[account] += amount;
     _burn(account, amount);
   }
 }
@@ -105,15 +121,16 @@ contract BUSD is ERC20, Ownable {
 
 
 
-contract ProofOfBurn is ERC721, ERC721Burnable {
+contract ProofOfBurn is ERC721 {
   BUSD public busd;
+  uint256 public proofsBurned;
 
-  constructor() ERC721('Proof of Burn', 'POB') {
-    busd = msg.sender;
+  constructor() ERC721('bUSD Proof of Burn', 'POB') {
+    busd = BUSD(msg.sender);
   }
 
-  function mint(address to, uint256 tokenId) {
-    require(msg.sender == busd, 'Invalid minter');
+  function mint(address to, uint256 tokenId) external {
+    require(msg.sender == address(busd), 'Invalid minter');
     _safeMint(to, tokenId);
   }
 
@@ -122,33 +139,33 @@ contract ProofOfBurn is ERC721, ERC721Burnable {
   }
 
   function totalSupply() external view returns (uint256) {
-    return busd.billsBurned();
+    return busd.billsBurned() - proofsBurned;
   }
 
   function burn(uint256 tokenId) public virtual {
-    require(_isApprovedOrOwner(_msgSender(), tokenId), "ERC721: caller is not token owner or approved");
+    require(_isApprovedOrOwner(msg.sender, tokenId), 'ERC721: caller is not token owner or approved');
 
-    uint256 denomination = uint256(busd.billToDenomination(tokenId)));
+    uint256 denomination = uint256(busd.denominations(tokenId));
     busd.burnFrom(ownerOf(tokenId), denomination * 1 ether);
 
+    proofsBurned += 1;
     _burn(tokenId);
   }
 
 
   function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-    string memory tokenString = Strings.toString(tokenId);
-    string memory denomination = Strings.toString(busd.billToDenomination(tokenId));
-    string memory timestampString = Strings.toString(busd.burnTimestamps(tokenId));
-    string memory serial = busd.billToSerial(tokenId);
-    string memory proof = busd.burnProofs(tokenId);
-    string memory notes = busd.burnNotes(tokenId);
+    string memory denomination = Strings.toString(busd.denominations(tokenId));
+    string memory timestampString = Strings.toString(busd.timestamps(tokenId));
+    string memory serial = busd.serials(tokenId);
+    string memory proof = busd.proofs(tokenId);
+    string memory memo = busd.memos(tokenId);
 
     string memory attrs = string.concat(
       '[',
         string.concat('{ "trait_type": "Serial", "value": "', serial, '" },'),
         string.concat('{ "trait_type": "Denomination", "value": "', denomination, '" },'),
         string.concat('{ "trait_type": "Burned at", "value": "', timestampString, '" }'),
-        notes != '' ? string.concat(',{ "trait_type": "Burn Notes", "value": "', notes, '" }') : '',
+        bytes(memo).length > 0 ? string.concat(',{ "trait_type": "Burn Memo", "value": "', memo, '" }') : '',
       ']'
     );
 
@@ -156,11 +173,11 @@ contract ProofOfBurn is ERC721, ERC721Burnable {
 
     return string(abi.encodePacked(
       'data:application/json;utf8,'
-      '{"name": "Proof of Burn ', string.concat(serial, ' ($', denomination,'.00)'),
+      '{"name": "bUSD Proof of Burn ', string.concat(serial, ' ($', denomination,'.00)'),
       '", "description": "'
       '", "image": "', proof,
       '", "animation_url": "', proof,
-      '", "attributes":', attrs
+      '", "attributes":', attrs,
       '}'
     ));
   }
