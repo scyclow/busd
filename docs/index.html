@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Pyramid Game</title>
+  <link rel="shortcut icon" type="image/x-icon" href="./logo.svg" id="favicon">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="description" content="">
+  <meta name="keywords" content="pyramid game, pyramid, game, steviep, steve pikelny, pikelny, crypto, ethereum, eth, bitcoin, scam, pyramid scheme, scheme">
+
+  <meta name="twitter:image" content="h">
+  <meta name="twitter:image:alt" content="">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:creator" content="@steviepxyz">
+  <meta name="twitter:site" content="@steviepxyz">
+  <meta property="twitter:description" content="">
+
+  <meta name="og:image" property="og:image" content="">
+  <meta name="og:image:alt" content="">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="">
+  <meta property="og:title" content="">
+  <meta property="og:site_name" content="">
+  <meta property="og:description" content="">
+
+
+  <link rel="stylesheet" type="text/css" href="./styles.css">
+
+  <style type="text/css">
+
+    h1 {
+      font-size: min(5em, 13vw);
+      font-weight: 500;
+    }
+
+    h1, h2, h3 {
+      text-align: center;
+    }
+
+    .slowBlink {
+      animation: Blink 3s steps(2, start) infinite;
+    }
+
+    #logo {
+      width: 500px;
+      max-width: 81vw;
+    }
+
+    button {
+      background: var(--gray-color);
+      color: var(--font-color);
+      border: 0.15em solid var(--font-color);
+      padding: 0.5em 1em;
+      font-size: 2em;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+    }
+
+    button:hover {
+      color: var(--font-color);
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+
+    button:active {
+      color: var(--font-color);
+      border-color: var(--font-color);
+      background: var(--bg-color);
+    }
+
+    .connectButton:hover {
+      border-color: var(--font-color);
+    }
+
+    .center-v {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .center {
+      display: flex;
+      justify-content: center;
+    }
+
+    table {
+      border: 2px solid;
+      border-spacing: 0;
+    }
+
+    td {
+      border: 1px solid;
+      padding: 0.5em;
+    }
+
+    section {
+      margin: 2.5em auto;
+      padding: 0 0.75em;
+    }
+
+    input {
+      border: 3px solid var(--font-color);
+      text-align: center;
+      padding: 0.25em 0;
+      font-size: 1.25em;
+      background: var(--input-color);
+    }
+
+    input:active, input:focus, input:hover {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+
+    input + .small-button {
+      border-left: 0;
+    }
+
+    .small-button {
+      font-size: 1.25em;
+    }
+
+    .tiny-button {
+      font-size: 1em;
+      margin-top: 0.25em;
+    }
+    .tiny-input {
+      font-size: 1em;
+      padding: 0.25em;
+    }
+
+    sup a {
+      display: inline-block;
+      border: 1px solid;
+      text-decoration: none;
+      color: var(--accent-color);
+      padding: 0 0.25em;
+      transform: translateY(-0.25em);
+      margin-left: 0.25em;
+      font-size: 0.75em;
+    }
+
+    sup a:hover {
+      background: var(--accent-color);
+      color: var(--font-color);
+      border-color: var(--accent-color);
+
+      text-decoration: none;
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--font-color);
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .scanlink {
+      border-bottom: 0.1em solid rgba(0, 0, 0, 0);
+      font-size: 1.75em;
+    }
+
+    .scanlink:hover {
+      text-decoration: none;
+      border-bottom: 0.1em solid;
+    }
+
+
+    .largeText {
+      font-size: 6em;
+    }
+    @media (max-width:  640px) {
+      .scanlink {
+        font-size: 1.25em;
+      }
+
+    }
+
+    @media (max-width:  550px) {
+      .largeText {
+        font-size: 3em;
+      }
+
+    }
+
+    @media (max-width: 450px) {
+      .scanlink {
+        font-size: 0.9em;
+      }
+
+      #leaderboard {
+        font-size: 0.7em;
+      }
+    }
+
+
+  </style>
+
+
+  <script src="./utils.js"></script>
+  <!-- <script type="module" src="./modal.js"></script> -->
+  <script type="module" src="./connectWallet.js"></script>
+
+
+
+
+</head>
+<body>
+
+
+
+  <connect-wallet>
+    <div slot="connected">
+connected
+
+    </div>
+
+    <div slot="notConnected">
+      <div class="center" style="margin-top: 1em">
+        <connect-button>
+          <button class="connectButton" slot="button">CONNECT</button>
+        </connect-button>
+      </div>
+    </div>
+  </connect-wallet>
+
+
+
+
+
+
+</body>
+
+
+
+<script type="module">
+  import {provider, etherscanAddr, addEtherscanLinks, ethVal} from './eth.js'
+  import {CONTRACTS} from './contracts.js'
+  import {$} from './$.js'
+
+
+  provider.setContractInfo(CONTRACTS)
+
+
+
+  provider.onConnect(async (addr) => {
+    const { URITest } = await provider.getContracts()
+    const { name: chainName, etherscanLink } = await provider.getNetwork()
+
+    console.log(await URITest.tokenURI(8849))
+  })
+
+
+
+
+</script>
+</html>

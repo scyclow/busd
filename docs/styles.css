@@ -1,0 +1,154 @@
+
+/*@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@200..800&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+
+:root {
+  /*--bg-color: #46ff5a;*/
+  /*--font-color: #000;*/
+  /*--blue-color: #09d3ff;*/
+  /*--blue-color: #0953ff;*/
+  /*--blue-color: #4791ff;*/
+  /*--red-color: #ff1d10;*/
+  /*--blue-color: #1016dc;*/
+
+  /*--blue-color: #003eca;*/
+  /*--red-color: #ff0000;*/
+  /*--magenta-color: #d08ac2;*/
+  /*--blue-color: #242af1;*/
+  /*--blue-color: #3f61ff;*/
+  /*--magenta-color: #ff46d9;*/
+  /*--red-color: #ff4646;*/
+
+  --orange-color: #ff920f;
+  --blue-color: #283fff;
+  --cyan-color: #02fafc;
+  --yellow-color: #ffff2b;
+  --red-color: #ff1b1b;
+  --magenta-color: #f528ff;
+  --green-color: #46ff5a;
+
+
+  --white-color: #e1ffe5;
+  --gray-color: #a1bebb;
+  --black-color: #000;
+
+
+  --accent-color: var(--magenta-color);
+  --font-color:  var(--green-color);
+  --bg-color: var(--black-color);
+
+  --tertiary-color: #000;
+  --input-color: color-mix(in srgb, var(--bg-color) 16%, #fff);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+/*  scrollbar-color: darkgray black;
+  scrollbar-width: thin;*/
+  font-family: "IBM Plex Mono", monospace;
+  stroke: var(--font-color);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--font-color);
+  animation: FadeIn 0.75s linear;
+}
+
+main {
+  padding: 0 1.2rem;
+}
+
+header, main, footer, section {
+  max-width: 780px;
+  margin: auto;
+}
+
+footer {
+  text-align: center;
+}
+
+p {
+  margin: 0.5em 0;
+  line-height: 1.7;
+}
+
+img {
+  max-width: 100%;
+  display: inline-block;
+}
+
+button, img {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+button, select, label, input[type="range"], input[type="checkbox"] {
+  cursor: pointer;
+}
+
+
+button:disabled {
+  user-select: none;
+  cursor: no-drop;
+}
+
+
+
+
+.label {
+  text-transform: uppercase;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+
+.address {
+  /*font-family: monospace;*/
+  font-weight: bold;
+}
+
+.hidden {
+  display: none !important;
+}
+
+
+
+@keyframes FadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.blink {
+  animation: Blink 1.5s steps(2, start) infinite;
+}
+
+@keyframes Blink {
+  to {
+    visibility: hidden;
+  }
+}
+
+
+@media(max-width: 600px) {
+
+}
+
+@media(max-width: 500px) {
+
+}
+
+
+::selection {
+  background: var(--font-color);
+  color: var(--bg-color);
+}
