@@ -4,7 +4,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Pyramid Game</title>
+  <title>bUSD (Burnt USD)</title>
   <link rel="shortcut icon" type="image/x-icon" href="./logo.svg" id="favicon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -32,133 +32,31 @@
   <style type="text/css">
 
     h1 {
-      font-size: min(5em, 13vw);
-      font-weight: 500;
+      font-weight: 600;
+      font-size: 4em;
+      /*position: absolute;*/
+      padding: 0.25em;
+
+      /*text-shadow: 0 0 5px var(--bg-color);*/
     }
 
     h1, h2, h3 {
       text-align: center;
     }
 
+    header {
+      margin: 0;
+    }
+
+    .heroVideo {
+      width: 100vw;
+    }
+
     .slowBlink {
       animation: Blink 3s steps(2, start) infinite;
     }
 
-    #logo {
-      width: 500px;
-      max-width: 81vw;
-    }
 
-    button {
-      background: var(--gray-color);
-      color: var(--font-color);
-      border: 0.15em solid var(--font-color);
-      padding: 0.5em 1em;
-      font-size: 2em;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-    }
-
-    button:hover {
-      color: var(--font-color);
-      background: var(--accent-color);
-      border-color: var(--accent-color);
-    }
-
-    button:active {
-      color: var(--font-color);
-      border-color: var(--font-color);
-      background: var(--bg-color);
-    }
-
-    .connectButton:hover {
-      border-color: var(--font-color);
-    }
-
-    .center-v {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    .center {
-      display: flex;
-      justify-content: center;
-    }
-
-    table {
-      border: 2px solid;
-      border-spacing: 0;
-    }
-
-    td {
-      border: 1px solid;
-      padding: 0.5em;
-    }
-
-    section {
-      margin: 2.5em auto;
-      padding: 0 0.75em;
-    }
-
-    input {
-      border: 3px solid var(--font-color);
-      text-align: center;
-      padding: 0.25em 0;
-      font-size: 1.25em;
-      background: var(--input-color);
-    }
-
-    input:active, input:focus, input:hover {
-      outline: none;
-      border-color: var(--accent-color);
-    }
-
-    input + .small-button {
-      border-left: 0;
-    }
-
-    .small-button {
-      font-size: 1.25em;
-    }
-
-    .tiny-button {
-      font-size: 1em;
-      margin-top: 0.25em;
-    }
-    .tiny-input {
-      font-size: 1em;
-      padding: 0.25em;
-    }
-
-    sup a {
-      display: inline-block;
-      border: 1px solid;
-      text-decoration: none;
-      color: var(--accent-color);
-      padding: 0 0.25em;
-      transform: translateY(-0.25em);
-      margin-left: 0.25em;
-      font-size: 0.75em;
-    }
-
-    sup a:hover {
-      background: var(--accent-color);
-      color: var(--font-color);
-      border-color: var(--accent-color);
-
-      text-decoration: none;
-    }
-
-    a {
-      text-decoration: none;
-      color: var(--font-color);
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
 
     .scanlink {
       border-bottom: 0.1em solid rgba(0, 0, 0, 0);
@@ -171,31 +69,9 @@
     }
 
 
-    .largeText {
-      font-size: 6em;
-    }
-    @media (max-width:  640px) {
-      .scanlink {
-        font-size: 1.25em;
-      }
-
-    }
-
-    @media (max-width:  550px) {
-      .largeText {
-        font-size: 3em;
-      }
-
-    }
-
-    @media (max-width: 450px) {
-      .scanlink {
-        font-size: 0.9em;
-      }
-
-      #leaderboard {
-        font-size: 0.7em;
-      }
+    .colorTest {
+      height: 50px;
+      width: 50px;
     }
 
 
@@ -212,9 +88,16 @@
 </head>
 <body>
 
+<header>
+  <h1>$bUSD [Burnt US Dollars]</h1>
+  <video class="heroVideo" autoplay loop muted controls="" style="">
+    <!-- <source src="./assets/testburn2.mov" type="video/mp4"> -->
+    <source src="./assets/testburn1-1280.mp4" type="video/mp4">
+  </video>
+</header>
 
 
-  <connect-wallet>
+<!--   <connect-wallet>
     <div slot="connected">
 connected
 
@@ -228,8 +111,13 @@ connected
       </div>
     </div>
   </connect-wallet>
+ -->
 
-
+<div class="colorTest" style="background: var(--green-color);"></div>
+<div class="colorTest" style="background: var(--blue-color);"></div>
+<div class="colorTest" style="background: var(--orange-color);"></div>
+<div class="colorTest" style="background: var(--dark-gray-color);"></div>
+<div class="colorTest" style="background: var(--light-gray-color);"></div>
 
 
 

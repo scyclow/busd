@@ -43,28 +43,35 @@ const contractBalance = contract => contract.provider.getBalance(contract.addres
 
 
 
-let BUSD, ProofOfBurn, signers, owner, issuer, recipient, busd, pob
+let BUSD, ProofOfBurn, BurnCeremony, signers, owner, burnAgent, recipient, busd, pob, ceremony
 
 describe('BUSD', () => {
   beforeEach(async () => {
     signers = await ethers.getSigners()
 
-    ;([owner, issuer, recipient] = signers)
-
+    ;([owner, burnAgent, recipient] = signers)
 
     const BUSDFactory = await ethers.getContractFactory('BUSD', owner)
+    const BurnCeremonyFactory = await ethers.getContractFactory('BurnCeremony', owner)
     const ProofOfBurnFactory = await ethers.getContractFactory('ProofOfBurn', owner)
 
 
     BUSD = await BUSDFactory.deploy()
     await BUSD.deployed()
+
     ProofOfBurn = await ProofOfBurnFactory.attach(
       await BUSD.proofOfBurn()
     )
 
 
+    BurnCeremony = await BurnCeremonyFactory.attach(
+      await BUSD.ceremony()
+    )
+
+
     busd = (s) => BUSD.connect(s)
     pob = (s) => ProofOfBurn.connect(s)
+    ceremony = (s) => BurnCeremony.connect(s)
   })
 
 
@@ -73,19 +80,31 @@ describe('BUSD', () => {
     it('should work', async () => {
 
       expect(await busd(owner).proofOfBurn()).to.equal(ProofOfBurn.address)
-      expect(await pob(owner).busd()).to.equal(BUSD.address)
+      expect(await busd(owner).ceremony()).to.equal(BurnCeremony.address)
 
-      expect(await busd(owner).issuer()).to.equal(owner.address)
+
       expect(await busd(owner).totalSupply()).to.equal(0)
-      expect(await busd(owner).billsBurned()).to.equal(0)
+      expect(await pob(owner).billsBurned()).to.equal(0)
 
+
+      expect(await pob(owner).busd()).to.equal(BUSD.address)
       expect(await pob(owner).totalSupply()).to.equal(0)
       expect(await pob(owner).exists(0)).to.equal(false)
+      expect(await pob(owner).proofsBurned()).to.equal(0)
+      expect(await pob(owner).billsBurned()).to.equal(0)
 
 
-      await busd(owner).assignIssuer(issuer.address)
+      expect(await ceremony(owner).burnAgent()).to.equal(owner.address)
+      expect(await ceremony(owner).proofOfBurn()).to.equal(ProofOfBurn.address)
+      expect(await ceremony(owner).busd()).to.equal(BUSD.address)
 
-      expect(await busd(owner).issuer()).to.equal(issuer.address)
+      await ceremony(owner).setBurnAgent(burnAgent.address)
+
+      expect(await ceremony(owner).burnAgent()).to.equal(burnAgent.address)
+
+      await expectRevert.unspecified(
+        ceremony(owner).init(ZERO_ADDR, ZERO_ADDR)
+      )
 
     })
   })
@@ -93,52 +112,73 @@ describe('BUSD', () => {
   describe('minting', () => {
     it('should work', async () => {
       await expectRevert(
-        busd(issuer).mint(issuer.address, 100, 'abc123', true, 0),
-        'Only the Issuer can execute this action'
+        ceremony(burnAgent).mint(burnAgent.address, 100, 'abc123'),
+        'Caller is not Burn Agent'
       )
 
       await expectRevert(
-        busd(issuer).assignIssuer(issuer.address),
-        'Ownable: caller is not the owner'
+        ceremony(burnAgent).setBurnAgent(burnAgent.address),
+        'Ownable: caller is not BUSD owner'
       )
 
-      await busd(owner).assignIssuer(issuer.address)
+      await ceremony(owner).setBurnAgent(burnAgent.address)
 
-      expect(await busd(owner).issuer()).to.equal(issuer.address)
-      await busd(issuer).mint(issuer.address, 100, 'abc123', true, 0)
+      expect(await ceremony(owner).burnAgent()).to.equal(burnAgent.address)
+
+      await expectRevert(
+        busd(burnAgent).mint(burnAgent.address, 100),
+        'Can only mint through official Burn Ceremony'
+      )
+
+
+      await ceremony(burnAgent).mint(burnAgent.address, 100, 'abc123')
 
       const ts0 = Number(await time.latest())
 
 
-      expect(await busd(owner).billsBurned()).to.equal(1)
-      expect(ethVal(await busd(owner).balanceOf(issuer.address))).to.equal(100)
+      expect(await pob(owner).billsBurned()).to.equal(1)
+      expect(ethVal(await busd(owner).balanceOf(burnAgent.address))).to.equal(100)
       expect(ethVal(await busd(owner).totalSupply())).to.equal(100)
 
       expect(await pob(owner).totalSupply()).to.equal(1)
       expect(await pob(owner).exists(0)).to.equal(true)
-      expect(await pob(owner).ownerOf(0)).to.equal(issuer.address)
+      expect(await pob(owner).ownerOf(0)).to.equal(burnAgent.address)
 
 
-      await busd(issuer).mint(recipient.address, 50, 'xyz123', false, 2000)
+      await ceremony(burnAgent).mint(recipient.address, 50, 'xyz123')
       const ts1 = Number(await time.latest())
 
-      expect(await busd(owner).billsBurned()).to.equal(2)
+      expect(await pob(owner).billsBurned()).to.equal(2)
       expect(ethVal(await busd(owner).totalSupply())).to.equal(150)
-      expect(ethVal(await busd(owner).balanceOf(recipient.address))).to.equal(40)
-      expect(ethVal(await busd(owner).balanceOf(owner.address))).to.equal(10)
+      expect(ethVal(await busd(owner).balanceOf(recipient.address))).to.equal(50)
+      expect(ethVal(await busd(owner).balanceOf(owner.address))).to.equal(0)
 
       expect(await pob(owner).totalSupply()).to.equal(2)
       expect(await pob(owner).exists(1)).to.equal(true)
-      expect(await pob(owner).ownerOf(1)).to.equal(owner.address)
+      expect(await pob(owner).ownerOf(1)).to.equal(recipient.address)
 
-      expect(await busd(owner).serials(0)).to.equal('abc123')
-      expect(await busd(owner).serials(1)).to.equal('xyz123')
+      expect(await pob(owner).serials(0)).to.equal('abc123')
+      expect(await pob(owner).serials(1)).to.equal('xyz123')
 
-      expect(await busd(owner).denominations(0)).to.equal(100)
-      expect(await busd(owner).denominations(1)).to.equal(50)
+      expect(await pob(owner).denominations(0)).to.equal(100)
+      expect(await pob(owner).denominations(1)).to.equal(50)
 
-      expect(Number(await busd(owner).timestamps(0))).to.equal(ts0)
-      expect(Number(await busd(owner).timestamps(1))).to.equal(ts1)
+      expect(Number(await pob(owner).timestamps(0))).to.equal(ts0)
+      expect(Number(await pob(owner).timestamps(1))).to.equal(ts1)
+
+
+
+      await expectRevert(
+        busd(recipient).modifyCeremony(recipient.address),
+        'Ownable: caller is not the owner'
+      )
+
+      await busd(owner).modifyCeremony(burnAgent.address)
+
+      await expectRevert(
+        ceremony(burnAgent).mint(burnAgent.address, 100, 'abc123'),
+        'Can only mint through official Burn Ceremony'
+      )
 
 
     })
@@ -147,31 +187,18 @@ describe('BUSD', () => {
 
   describe('burning', () => {
     it('should work', async () => {
-      await busd(owner).assignIssuer(issuer.address)
+      await ceremony(owner).setBurnAgent(burnAgent.address)
 
       expect(await busd(recipient).busdBurnedBy(recipient.address)).to.equal(0)
 
-      await expectRevert(
-        busd(recipient).burn(1),
-        'ERC20: burn amount exceeds balance'
-      )
-
-
-      await busd(issuer).mint(recipient.address, 100, 'abc123', true, 0)
+      await ceremony(burnAgent).mint(recipient.address, 100, 'abc123')
       expect(await pob(recipient).totalSupply()).to.equal(1)
+      expect(await pob(recipient).billsBurned()).to.equal(1)
+      expect(await pob(recipient).proofsBurned()).to.equal(0)
+      expect(await pob(recipient).exists(0)).to.equal(true)
 
-      await busd(recipient).burn(toETH(1))
-
-
-      expect(await busd(recipient).busdBurnedBy(recipient.address)).to.equal(toETH(1))
-      expect(await busd(recipient).totalSupply()).to.equal(toETH(99))
-      expect(await busd(recipient).balanceOf(recipient.address)).to.equal(toETH(99))
-
-
-
-      await expectRevert(
-        pob(recipient).burn(0),
-        'ERC20: burn amount exceeds balance'
+      await expectRevert.unspecified(
+        busd(recipient).burnFrom(recipient.address, 1),
       )
 
       await expectRevert(
@@ -179,109 +206,144 @@ describe('BUSD', () => {
         'ERC721: caller is not token owner or approved'
       )
 
+
       await pob(recipient).approve(owner.address, 0)
+      await busd(recipient).transfer(burnAgent.address, 1)
+
+      await expectRevert(
+        pob(owner).burn(0),
+        'ERC20: burn amount exceeds balance'
+      )
 
       await expectRevert(
         pob(recipient).burn(0),
         'ERC20: burn amount exceeds balance'
       )
 
-      await busd(issuer).mint(recipient.address, 1, 'def456', true, 0)
+      await busd(burnAgent).transfer(recipient.address, 1)
+
       await pob(owner).burn(0)
 
 
       expect(await busd(recipient).totalSupply()).to.equal(0)
       expect(await busd(recipient).balanceOf(recipient.address)).to.equal(0)
-      expect(await busd(recipient).busdBurnedBy(recipient.address)).to.equal(toETH(101))
+      expect(await busd(recipient).busdBurnedBy(recipient.address)).to.equal(toETH(100))
+      expect(await pob(recipient).burnedBy(0)).to.equal(recipient.address)
+      expect(await pob(recipient).totalSupply()).to.equal(0)
+      expect(await pob(recipient).billsBurned()).to.equal(1)
+      expect(await pob(recipient).proofsBurned()).to.equal(1)
+      expect(await pob(recipient).exists(0)).to.equal(false)
 
 
-      await busd(issuer).mint(recipient.address, 100, 'xyz123', true, 0)
-      await busd(issuer).mint(owner.address, 50, 'qwe777', true, 0)
-      expect(await pob(owner).totalSupply()).to.equal(3)
-      expect(await busd(owner).totalSupply()).to.equal(toETH(150))
-
-      await pob(recipient).approve(owner.address, 2)
-      await pob(owner).burn(2)
+      await ceremony(burnAgent).mint(recipient.address, 100, 'xyz123')
+      await ceremony(burnAgent).mint(owner.address, 50, 'qwe777')
 
       expect(await pob(owner).totalSupply()).to.equal(2)
+      expect(await pob(owner).billsBurned()).to.equal(3)
+      expect(await busd(owner).totalSupply()).to.equal(toETH(150))
 
+
+
+      await busd(recipient).transfer(burnAgent.address, 1)
+
+      await expectRevert(
+        pob(recipient).burn(1),
+        'ERC20: burn amount exceeds balance'
+      )
+
+      await busd(burnAgent).transfer(recipient.address, 1)
+
+
+      await pob(recipient).burn(1)
 
 
       expect(await busd(recipient).totalSupply()).to.equal(toETH(50))
-      expect(await busd(recipient).balanceOf(owner.address)).to.equal(toETH(50))
       expect(await busd(recipient).balanceOf(recipient.address)).to.equal(0)
+      expect(await busd(recipient).busdBurnedBy(recipient.address)).to.equal(toETH(200))
+      expect(await pob(recipient).burnedBy(1)).to.equal(recipient.address)
+      expect(await pob(recipient).totalSupply()).to.equal(1)
+      expect(await pob(recipient).billsBurned()).to.equal(3)
+      expect(await pob(recipient).proofsBurned()).to.equal(2)
+      expect(await pob(recipient).exists(1)).to.equal(false)
+      expect(await pob(recipient).exists(2)).to.equal(true)
 
-      expect(await busd(recipient).busdBurnedBy(recipient.address)).to.equal(toETH(201))
-
-      expect(await pob(owner).totalSupply()).to.equal(2)
-      expect(await busd(owner).totalSupply()).to.equal(toETH(50))
-
-
-      await expectRevert(
-        busd(recipient).burnFrom(owner.address, toETH(10)),
-        'ERC20: insufficient allowance'
-      )
-
-      await busd(owner).approve(recipient.address, toETH(10))
-      await busd(recipient).burnFrom(owner.address, toETH(10))
-      expect(await busd(owner).busdBurnedBy(owner.address)).to.equal(toETH(10))
-      expect(await busd(recipient).balanceOf(owner.address)).to.equal(toETH(40))
-
-      expect(await pob(owner).proofsBurned()).to.equal(2)
     })
   })
 
 
   describe('metadata', () => {
     it('should work', async () => {
-      await busd(owner).assignIssuer(issuer.address)
+      await ceremony(owner).setBurnAgent(burnAgent.address)
 
-      await busd(issuer).mint(recipient.address, 100, 'abc123', true, 0)
-      await busd(issuer).mint(recipient.address, 100, 'xyz123', true, 0)
-      await busd(issuer).mint(recipient.address, 100, 'def456', true, 0)
-      await busd(issuer).mint(recipient.address, 100, 'gih789', true, 0)
+      await ceremony(burnAgent).mint(recipient.address, 100, 'abc123')
+      await ceremony(burnAgent).mint(recipient.address, 100, 'xyz123')
+      await ceremony(burnAgent).mint(recipient.address, 100, 'def456')
 
-      expect(await busd(issuer).billsBurned()).to.equal(4)
-      expect(await pob(issuer).totalSupply()).to.equal(4)
+
+      expect(await pob(burnAgent).totalSessions()).to.equal(0)
+      expect(await pob(owner).tokenIdToSessionId(0)).to.equal(0)
+
+      await pob(burnAgent).markSessionEnd()
+      expect(await pob(burnAgent).totalSessions()).to.equal(1)
+      expect(await pob(owner).tokenIdToSessionId(0)).to.equal(0)
+      expect(await pob(owner).tokenIdToSessionId(1)).to.equal(0)
+      expect(await pob(owner).tokenIdToSessionId(2)).to.equal(0)
+
+      await ceremony(burnAgent).mint(recipient.address, 100, 'gih789')
+
+      await pob(burnAgent).markSessionEnd()
+
+      expect(await pob(burnAgent).totalSessions()).to.equal(2)
+      expect(await pob(owner).tokenIdToSessionId(3)).to.equal(1)
+
+
+      expect(await pob(burnAgent).billsBurned()).to.equal(4)
+      expect(await pob(burnAgent).totalSupply()).to.equal(4)
 
       await expectRevert(
-        busd(recipient).addProof(0, 'proof'),
-        'Only the Issuer can execute this action'
+        pob(recipient).addProof(0, 'proof'),
+        'Caller is not Burn Agent'
       )
 
       await expectRevert(
-        busd(recipient).addProofBatch([1, 2], 'proof://123', '.mov'),
-        'Only the Issuer can execute this action'
+        pob(recipient).addProofBatch([1, 2], 'proof://123', '.mov'),
+        'Caller is not Burn Agent'
       )
 
       await expectRevert(
-        busd(recipient).addMemo(1, 'something got fucked up'),
-        'Only the Issuer can execute this action'
+        pob(recipient).addMemo(1, 'something got fucked up'),
+        'Caller is not Burn Agent'
+      )
+
+      await expectRevert(
+        pob(recipient).markSessionEnd(),
+        'Caller is not Burn Agent'
       )
 
 
-      await busd(issuer).addProof(0, 'proof')
-      await busd(issuer).addProofBatch([1, 2], 'proof://123', '.mov')
-      await busd(issuer).addProofBatch([3], 'proof://456', '')
 
-      expect(await busd(owner).proofs(0)).to.equal('proof')
-      expect(await busd(owner).proofs(1)).to.equal('proof://123/0.mov')
-      expect(await busd(owner).proofs(2)).to.equal('proof://123/1.mov')
-      expect(await busd(owner).proofs(3)).to.equal('proof://456/0')
+      await pob(burnAgent).addProof(0, 'proof')
+      await pob(burnAgent).addProofBatch([1, 2], 'proof://123', '.mov')
+      await pob(burnAgent).addProofBatch([3], 'proof://456', '')
 
-      await busd(issuer).addProofBatch([0, 1, 2, 3], 'proof://abcdefg', '.mp4')
+      expect(await pob(owner).proofs(0)).to.equal('proof')
+      expect(await pob(owner).proofs(1)).to.equal('proof://123/0.mov')
+      expect(await pob(owner).proofs(2)).to.equal('proof://123/1.mov')
+      expect(await pob(owner).proofs(3)).to.equal('proof://456/0')
 
-      expect(await busd(owner).proofs(0)).to.equal('proof://abcdefg/0.mp4')
-      expect(await busd(owner).proofs(1)).to.equal('proof://abcdefg/1.mp4')
-      expect(await busd(owner).proofs(2)).to.equal('proof://abcdefg/2.mp4')
-      expect(await busd(owner).proofs(3)).to.equal('proof://abcdefg/3.mp4')
+      await pob(burnAgent).addProofBatch([0, 1, 2, 3], 'proof://abcdefg', '.mp4')
 
-      await busd(issuer).addMemo(0, 'updating proof')
+      expect(await pob(owner).proofs(0)).to.equal('proof://abcdefg/0.mp4')
+      expect(await pob(owner).proofs(1)).to.equal('proof://abcdefg/1.mp4')
+      expect(await pob(owner).proofs(2)).to.equal('proof://abcdefg/2.mp4')
+      expect(await pob(owner).proofs(3)).to.equal('proof://abcdefg/3.mp4')
 
-      expect(await busd(owner).memos(0)).to.equal('updating proof')
-      expect(await busd(owner).memos(1)).to.equal('')
-      expect(await busd(owner).memos(2)).to.equal('')
-      expect(await busd(owner).memos(3)).to.equal('')
+      await pob(burnAgent).addMemo(0, 'updating proof')
+
+      expect(await pob(owner).memos(0)).to.equal('updating proof')
+      expect(await pob(owner).memos(1)).to.equal('')
+      expect(await pob(owner).memos(2)).to.equal('')
+      expect(await pob(owner).memos(3)).to.equal('')
 
 
       console.log(getJsonURI(await pob(owner).tokenURI(0)))

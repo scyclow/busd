@@ -3,20 +3,35 @@ const toETH = amt => ethers.utils.parseEther(String(amt))
 const txValue = amt => ({ value: toETH(amt) })
 
 async function main() {
-  const signers = await ethers.getSigners()
+    signers = await ethers.getSigners()
 
-  const PyramidGameFactory = await ethers.getContractFactory('PyramidGame', signers[0])
-  const PyramidGame = await PyramidGameFactory.deploy()
-  await PyramidGame.deployed()
+    ;([owner, burnAgent, recipient] = signers)
 
-  const PG = (s) => PyramidGame.connect(signers[s])
+    const BUSDFactory = await ethers.getContractFactory('BUSD', owner)
+    const BurnCeremonyFactory = await ethers.getContractFactory('BurnCeremony', owner)
+    const ProofOfBurnFactory = await ethers.getContractFactory('ProofOfBurn', owner)
 
 
-  console.log(`PyramidGame:`, PyramidGame.address)
+    BUSD = await BUSDFactory.deploy()
+    await BUSD.deployed()
 
-  await PG(0).contribute(txValue(0.99))
+    ProofOfBurn = await ProofOfBurnFactory.attach(
+      await BUSD.proofOfBurn()
+    )
 
-  for (let i = 1; i< 10; i++) await PG(i).contribute(txValue(i + 1))
+
+    BurnCeremony = await BurnCeremonyFactory.attach(
+      await BUSD.ceremony()
+    )
+
+    await BurnCeremony.connect(owner).mint(owner.address, 100, 'abc123')
+    await BurnCeremony.connect(owner).mint(owner.address, 100, 'abc123')
+    await BurnCeremony.connect(owner).mint(owner.address, 100, 'abc123')
+
+    console.log('deployer:', owner.address)
+    console.log('BUSD:', BUSD.address)
+    console.log('Proof of Burn:', ProofOfBurn.address)
+    console.log('Burn Ceremony:', BurnCeremony.address)
 
 }
 
