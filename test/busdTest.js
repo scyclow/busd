@@ -43,7 +43,7 @@ const contractBalance = contract => contract.provider.getBalance(contract.addres
 
 
 
-let BUSD, ProofOfBurn, BurnCeremony, signers, owner, burnAgent, recipient, busd, pob, ceremony
+let BUSD, ProofOfBurn, BurnCeremony, BurnAgreement, signers, owner, burnAgent, recipient, busd, pob, ceremony, agreement
 
 describe('BUSD', () => {
   beforeEach(async () => {
@@ -54,6 +54,7 @@ describe('BUSD', () => {
     const BUSDFactory = await ethers.getContractFactory('BUSD', owner)
     const BurnCeremonyFactory = await ethers.getContractFactory('BurnCeremony', owner)
     const ProofOfBurnFactory = await ethers.getContractFactory('ProofOfBurn', owner)
+    const BurnAgreementFactory = await ethers.getContractFactory('BurnAgreement', owner)
 
 
     BUSD = await BUSDFactory.deploy()
@@ -68,10 +69,13 @@ describe('BUSD', () => {
       await BUSD.ceremony()
     )
 
+    BurnAgreement = await BurnAgreementFactory.deploy(BurnCeremony.address)
+
 
     busd = (s) => BUSD.connect(s)
     pob = (s) => ProofOfBurn.connect(s)
     ceremony = (s) => BurnCeremony.connect(s)
+    agreement = (s) => BurnAgreement.connect(s)
   })
 
 
@@ -270,14 +274,73 @@ describe('BUSD', () => {
     })
   })
 
+  describe.only('agreement minting', () => {
+    it('should work', async () => {
+      await expectRevert(
+        ceremony(burnAgent).setBurnAgreement(BurnAgreement.address),
+        'Ownable: caller is not BUSD owner'
+      )
+
+
+      await ceremony(owner).setBurnAgent(burnAgent.address)
+
+      await ceremony(owner).setBurnAgreement(BurnAgreement.address)
+
+      expect(await ceremony(burnAgent).burnAgreement()).to.equal(BurnAgreement.address)
+
+      await agreement(owner).setActiveAgreement('1.0.0')
+      await agreement(owner).setAgreementMetadata('1.0.0', 'ipfs://12345')
+
+      const ownerStartingBalance = await getBalance(owner)
+
+
+      await agreement(recipient).mint(txValue(0.01))
+      // await agreement(recipient).tokenIdToAgreementId(0)
+
+      expect(await agreement(recipient).tokenIdToAgreementId(0)).to.equal('1.0.0')
+      expect(await agreement(recipient).activeAgreementId()).to.equal('1.0.0')
+
+      await agreement(owner).setActiveAgreement('1.1.0')
+      expect(await agreement(recipient).activeAgreementId()).to.equal('1.1.0')
+
+      await agreement(recipient).mint(txValue(0.01))
+
+      expect(await agreement(recipient).tokenIdToAgreementId(0)).to.equal('1.0.0')
+      expect(await agreement(recipient).tokenIdToAgreementId(1)).to.equal('1.1.0')
+      expect(await agreement(recipient).agreementUsed(0)).to.equal(false)
+      expect(await agreement(recipient).agreementUsed(1)).to.equal(false)
+
+
+      await expectRevert(
+        agreement(burnAgent).markAgreementUsed(0),
+        'Only burn ceremony can use agreement'
+      )
+
+
+
+      await ceremony(burnAgent).mintWithAgreement(0, 100, 'MB70433235C')
+      expect(await agreement(recipient).agreementUsed(1)).to.equal(false)
+
+      const ownerEndingBalance = await getBalance(owner)
+
+      expect(ownerEndingBalance - ownerStartingBalance).to.be.closeTo(0.02, 0.0001)
+
+      console.log(getJsonURI(await agreement(recipient).tokenURI(0)))
+      console.log(getJsonURI(await agreement(recipient).tokenURI(1)))
+    })
+  })
+
 
   describe('metadata', () => {
     it('should work', async () => {
       await ceremony(owner).setBurnAgent(burnAgent.address)
 
-      await ceremony(burnAgent).mint(recipient.address, 100, 'abc123')
+      await ceremony(burnAgent).mint(recipient.address, 100, 'MB70433235C')
       await ceremony(burnAgent).mint(recipient.address, 100, 'xyz123')
       await ceremony(burnAgent).mint(recipient.address, 100, 'def456')
+
+      console.log(getJsonURI(await pob(owner).tokenURI(0)))
+
 
 
       expect(await pob(burnAgent).totalSessions()).to.equal(0)
@@ -323,15 +386,15 @@ describe('BUSD', () => {
 
 
       await pob(burnAgent).addProof(0, 'proof')
-      await pob(burnAgent).addProofBatch([1, 2], 'proof://123', '.mov')
-      await pob(burnAgent).addProofBatch([3], 'proof://456', '')
+      await pob(burnAgent).addProofBatch([1, 2], 'proof://123/', '.mov')
+      await pob(burnAgent).addProofBatch([3], 'proof://456/', '')
 
       expect(await pob(owner).proofs(0)).to.equal('proof')
       expect(await pob(owner).proofs(1)).to.equal('proof://123/0.mov')
       expect(await pob(owner).proofs(2)).to.equal('proof://123/1.mov')
       expect(await pob(owner).proofs(3)).to.equal('proof://456/0')
 
-      await pob(burnAgent).addProofBatch([0, 1, 2, 3], 'proof://abcdefg', '.mp4')
+      await pob(burnAgent).addProofBatch([0, 1, 2, 3], 'proof://abcdefg/', '.mp4')
 
       expect(await pob(owner).proofs(0)).to.equal('proof://abcdefg/0.mp4')
       expect(await pob(owner).proofs(1)).to.equal('proof://abcdefg/1.mp4')

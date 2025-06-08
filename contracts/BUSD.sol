@@ -28,6 +28,7 @@ pragma solidity ^0.8.28;
 contract BurnCeremony {
   BUSD public busd;
   ProofOfBurn public proofOfBurn;
+  BurnAgreement public burnAgreement;
   address public burnAgent;
 
   constructor() {
@@ -51,6 +52,11 @@ contract BurnCeremony {
     burnAgent = _agent;
   }
 
+  function setBurnAgreement(address agreement) external {
+    require(msg.sender == busd.owner(), 'Ownable: caller is not BUSD owner');
+    burnAgreement = BurnAgreement(agreement);
+  }
+
   function mint(
     address account,
     uint256 denomination,
@@ -60,9 +66,17 @@ contract BurnCeremony {
     proofOfBurn.mint(account, denomination, serial);
   }
 
-  // mintWithContract(account, tokenId) payable (0.01)
-    // mark contract as executed
-    // mint for ownerOf(tokenId)
+  function mintWithAgreement(
+    uint256 agreementTokenId,
+    uint256 denomination,
+    string calldata serial
+  ) external onlyAgent {
+    address account = burnAgreement.ownerOf(agreementTokenId);
+
+    burnAgreement.markAgreementUsed(agreementTokenId);
+    busd.mint(account, denomination * 1 ether);
+    proofOfBurn.mint(account, denomination, serial);
+  }
 }
 
 
@@ -167,7 +181,7 @@ contract ProofOfBurn is ERC721, Ownable {
 
   function addProofBatch(uint256[] calldata tokenIds, string calldata baseURI, string calldata ext) external onlyAgent {
     for (uint256 i; i < tokenIds.length; i++) {
-      proofs[tokenIds[i]] = string.concat(baseURI, '/', Strings.toString(i), ext);
+      proofs[tokenIds[i]] = string.concat(baseURI, Strings.toString(i), ext);
     }
   }
 
@@ -228,9 +242,26 @@ contract ProofOfBurnURI {
     string memory denomination = Strings.toString(pob.denominations(tokenId));
     string memory timestampString = Strings.toString(pob.timestamps(tokenId));
     string memory serial = pob.serials(tokenId);
-    string memory proof = pob.proofs(tokenId);
     string memory memo = pob.memos(tokenId);
     string memory sessionId = Strings.toString(pob.tokenIdToSessionId(tokenId));
+    string memory tokenIdStr = Strings.toString(tokenId);
+    bytes memory proof = bytes(pob.proofs(tokenId));
+
+
+    if (proof.length == 0) {
+      proof = abi.encodePacked(
+        'data:image/svg+xml;base64,',
+        Base64.encode(abi.encodePacked(
+          '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180">'
+            '<rect x="0" y="0" width="100%" height="100%" fill="#000"></rect>'
+            '<text x="50%" y="43%" font-size="20px" fill="#fff" font-family="monospace" dominant-baseline="middle" text-anchor="middle">Proof of Burn #', tokenIdStr,'</text>'
+            '<text x="50%" y="57%" font-size="20px" fill="#fff" font-family="monospace" dominant-baseline="middle" text-anchor="middle">',
+              serial, ' $', denomination,
+            '</text>'
+          '</svg>'
+        ))
+      );
+    }
 
     string memory attrs = string.concat(
       '[',
@@ -245,7 +276,7 @@ contract ProofOfBurnURI {
 
     return string(abi.encodePacked(
       'data:application/json;utf8,'
-      '{"name": "bUSD Proof of Burn ', string.concat(serial, ' ($', denomination,'.00)'),
+      '{"name": "Proof of Burn #', string.concat(tokenIdStr, ' (', serial, ', $', denomination, ')'),
       '", "description": "'
       '", "image": "', proof,
       '", "animation_url": "', proof,

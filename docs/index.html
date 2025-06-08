@@ -30,31 +30,93 @@
   <link rel="stylesheet" type="text/css" href="./styles.css">
 
   <style type="text/css">
-
+    *  {
+      font-family: "Roboto Mono", monospace;
+    }
     h1 {
-      font-weight: 600;
-      font-size: 4em;
+      font-weight: 400;
+      font-size: 1.75em;
+      /*text-align: center;*/
       /*position: absolute;*/
-      padding: 0.25em;
+      padding-left: 0.5em;
 
-      /*text-shadow: 0 0 5px var(--bg-color);*/
+      font-family: monospace;
+
+
+      /*font-family: monospace;*/
+      /*text-shadow: 1px 1px var(--orange-color);*/
     }
 
-    h1, h2, h3 {
+/*    h1, h2, h3 {
       text-align: center;
-    }
+    }*/
+
+
 
     header {
       margin: 0;
+    }
+
+    nav {
+
+      /*justify-content: space-between;*/
+      position: relative;
+      box-shadow: -6px 5px 5px var(--bg-color), 6px 5px 5px var(--bg-color);
+      margin-top: 5px;
+    }
+
+
+    nav div {
+      justify-content: space-around;
+      align-items: center;
+      padding: 0.25em 0.5em;
+      display: flex;
+    }
+    nav a {
+      color: var(--font-color);
+      text-decoration: none;
+      /*font-weight: 600;*/
+      transition: 250ms;
+      /*padding: 1em;*/
+      font-size: 1em;
+      display: block;
+      border-left: 1px solid var(--medium-gray-color);
+
+      flex: 1;
+      text-align: center;
+      padding: 0.25em;
+      animation: SlowFadeIn 4s linear;
+      min-width: 100px;
+      text-align: center;
+
+    }
+    nav a:first-child {
+      border: 0;
+    }
+    nav a:hover {
+      background: var(--orange-color);
+      color: var(--black-color);
+
     }
 
     .heroVideo {
       width: 100vw;
     }
 
+    .spacer {
+      height: 2em;
+      width: 100vw;
+      position: relative;
+      box-shadow: -6px -5px 5px var(--bg-color), 6px -5px 5px var(--bg-color);
+      background: var(--bg-color);
+    }
+
+
+
     .slowBlink {
       animation: Blink 3s steps(2, start) infinite;
     }
+
 
 
 
@@ -74,6 +136,65 @@
       width: 50px;
     }
 
+    .slow-fadein {
+      animation: SlowFadeIn 4s linear;
+    }
+
+    @keyframes SlowFadeIn {
+      0%, 50% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+
+    .glow {
+      animation: Glow 6s linear infinite;
+    }
+    @keyframes Glow {
+      0%, 100% {
+        background: var(--bg-color);
+      }
+      50% {
+        background: var(--orange-color);
+      }
+    }
+
+
+    .textGlow {
+      animation: TextGlow 8s linear infinite;
+    }
+    .textGlow:hover {
+      animation: none;
+    }
+    @keyframes TextGlow {
+      0%, 75%, 100% {
+        color: var(--white-color);
+      }
+      25%, 50% {
+        color: var(--orange-color);
+      }
+    }
+
+    @media (max-width: 680px) {
+      nav {
+        flex-direction: column;
+      }
+      nav div {
+        margin-top: 0.25em;
+        font-size: 0.9em;
+      }
+    }
+
+    @media (max-width: 440px) {
+      nav a {
+        font-size: 0.85em;
+        min-width: 75px;
+      }
+    }
+
 
   </style>
 
@@ -89,13 +210,44 @@
 <body>
 
 <header>
-  <h1>$bUSD [Burnt US Dollars]</h1>
-  <video class="heroVideo" autoplay loop muted controls="" style="">
-    <!-- <source src="./assets/testburn2.mov" type="video/mp4"> -->
-    <source src="./assets/testburn1-1280.mp4" type="video/mp4">
+  <nav>
+    <div style="max-width: 1500px; margin: auto;">
+      <h1 class="slow-fadein" style="flex: 1">Burnt USD ($bUSD)</h1>
+      <div class="slow-fadein">
+        <a href="#faq">About</a>
+        <a href="#buy" class="textGlow" style="animation-delay: 5s;">Burn</a>
+        <a href="#trade" class="hidden" id="tradeLink">Trade</a>
+        <a href="#proofs">Proofs</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <video class="heroVideo" autoplay loop muted  style="">
+    <source src="https://busd-proof-of-burn.s3.us-east-1.amazonaws.com/busd-pr.mov" type="video/mp4">
+    <!-- <source src="./assets/testburn1-1280.mp4" type="video/mp4"> -->
   </video>
 </header>
 
+<div class="spacer"></div>
+
+<main>
+  <p class="slow-fadein">Burnt USD ($bUSD) is a coin that can only be issued once a US Dollar bill is burned during an official Burn Ceremony. </p>
+
+  <p>Each coin has a notional value o</p>
+  <p>xxxx</p>
+  <p>xxxx</p>
+  <p>xxxx</p>
+  <p>xxxx</p>
+  <p>xxxx</p>
+
+
+
+  <div style="border: 1px solid var(--orange-color);">
+    <div class="glow" style="height: 2em; background: var(--orange-color); width: 30%;"></div>
+
+  </div>
+</main>
 
 <!--   <connect-wallet>
     <div slot="connected">
@@ -133,6 +285,10 @@ connected
 
 
   provider.setContractInfo(CONTRACTS)
+
+  if (provider.isEthBrowser) {
+    $.id('tradeLink').classList.remove('hidden')
+  }
 
 
 
