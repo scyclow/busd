@@ -10,7 +10,7 @@
 
 :root {
   /*--bg-color: #46ff5a;*/
-  /*--font-color: #000;*/
+  /*--text-color: #000;*/
   /*--blue-color: #09d3ff;*/
   /*--blue-color: #0953ff;*/
   /*--blue-color: #4791ff;*/
@@ -40,7 +40,7 @@
 
   --green-color: #4a9e80;
   --blue-color: #3c72d3;
-  --orange-color: #ff6200;
+  --orange-color: #ef701d;
 
 
   --white-color: #e2e2db;
@@ -50,8 +50,8 @@
   --black-color: #000;
 
 
-  --accent-color: var(--magenta-color);
-  --font-color:  var(--white-color);
+  --accent-color: var(--orange-color);
+  --text-color:  var(--white-color);
   --bg-color: var(--black-color);
 
   --tertiary-color: #000;
@@ -66,7 +66,7 @@
   font-family:"Open Sans", sans-serif;
   /*font-family: "Roboto Mono", monospace;;*/
   /*font-family:"Roboto", sans-serif;*/
-  stroke: var(--font-color);
+  stroke: var(--text-color);
 }
 
 html {
@@ -75,7 +75,7 @@ html {
 
 body {
   background: var(--bg-color);
-  color: var(--font-color);
+  color: var(--text-color);
   animation: FadeIn 0.75s linear;
 }
 
@@ -90,6 +90,8 @@ main, footer, section {
 
 footer {
   text-align: center;
+  margin-top: 5em;
+  margin-bottom: 5em;
 }
 
 p {

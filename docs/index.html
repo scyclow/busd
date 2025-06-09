@@ -44,7 +44,16 @@
 
 
       /*font-family: monospace;*/
-      /*text-shadow: 1px 1px var(--orange-color);*/
+      /*text-shadow: 1px 1px var(--accent-color);*/
+    }
+
+    h1, h2. h3 {
+      font-weight: 400;
+    }
+
+
+    h2 {
+      font-size: 2em;
     }
 
 /*    h1, h2, h3 {
@@ -62,18 +71,23 @@
       /*justify-content: space-between;*/
       position: relative;
       box-shadow: -6px 5px 5px var(--bg-color), 6px 5px 5px var(--bg-color);
-      margin-top: 5px;
+      padding-top: 5px;
     }
 
 
-    nav div {
+    nav > div {
       justify-content: space-around;
       align-items: center;
       padding: 0.25em 0.5em;
       display: flex;
     }
-    nav a {
-      color: var(--font-color);
+
+    .menu {
+      display: flex;
+    }
+
+    .menu a {
+      color: var(--text-color);
       text-decoration: none;
       /*font-weight: 600;*/
       transition: 250ms;
@@ -85,18 +99,36 @@
       flex: 1;
       text-align: center;
       padding: 0.25em;
-      animation: SlowFadeIn 4s linear;
       min-width: 100px;
       text-align: center;
 
     }
-    nav a:first-child {
+    .menu a:first-child {
       border: 0;
     }
-    nav a:hover {
-      background: var(--orange-color);
-      color: var(--black-color);
 
+    .menu a:hover {
+      background: var(--accent-color);
+      color: var(--bg-color);
+    }
+
+
+    a {
+      color: var(--accent-color);
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    p {
+      padding: 1em 0;
+      margin: 0;
+    }
+
+    section {
+      margin-top: 1em;
+      margin-bottom: 2em;
     }
 
     .heroVideo {
@@ -104,7 +136,7 @@
     }
 
     .spacer {
-      height: 2em;
+      height: 0.5em;
       width: 100vw;
       position: relative;
       box-shadow: -6px -5px 5px var(--bg-color), 6px -5px 5px var(--bg-color);
@@ -158,7 +190,7 @@
         background: var(--bg-color);
       }
       50% {
-        background: var(--orange-color);
+        background: var(--accent-color);
       }
     }
 
@@ -171,27 +203,56 @@
     }
     @keyframes TextGlow {
       0%, 75%, 100% {
-        color: var(--white-color);
+        color: var(--text-color);
       }
       25%, 50% {
-        color: var(--orange-color);
+        color: var(--accent-color);
       }
     }
 
-    @media (max-width: 680px) {
-      nav {
-        flex-direction: column;
+
+      #menu-mobile {
+        display: none;
       }
-      nav div {
+
+
+    @media (max-width: 700px) {
+      #menu {
+        display: none;
+      }
+
+      #menu-mobile {
+        display: flex;
+      }
+
+      .menu {
         margin-top: 0.25em;
         font-size: 0.9em;
       }
+
+      h1 {
+        text-align: center;
+      }
     }
 
+    @media (max-width: 540px) {
+      h1 {
+        font-size: 1.6em;
+        padding: 0.25em 0;
+      }
+      .vidContainer {
+        width: 100vw;
+        overflow: hidden;
+      }
+      .vidContainer video {
+        transform: scale(1.25);
+      }
+
+    }
     @media (max-width: 440px) {
-      nav a {
-        font-size: 0.85em;
-        min-width: 75px;
+      .menu a {
+        /*font-size: 0.85em;*/
+        min-width: 70px;
       }
     }
 
@@ -213,9 +274,9 @@
   <nav>
     <div style="max-width: 1500px; margin: auto;">
       <h1 class="slow-fadein" style="flex: 1">Burnt USD ($bUSD)</h1>
-      <div class="slow-fadein">
-        <a href="#faq">About</a>
-        <a href="#buy" class="textGlow" style="animation-delay: 5s;">Burn</a>
+      <div id="menu" class="menu slow-fadein">
+        <a href="#about">About</a>
+        <a href="#burn" class="textGlow" style="animation-delay: 5s;">Burn</a>
         <a href="#trade" class="hidden" id="tradeLink">Trade</a>
         <a href="#proofs">Proofs</a>
       </div>
@@ -223,31 +284,57 @@
   </nav>
 
 
-  <video class="heroVideo" autoplay loop muted  style="">
-    <source src="https://busd-proof-of-burn.s3.us-east-1.amazonaws.com/busd-pr.mov" type="video/mp4">
-    <!-- <source src="./assets/testburn1-1280.mp4" type="video/mp4"> -->
-  </video>
+  <div class="vidContainer">
+    <video class="heroVideo" autoplay loop muted  style="">
+      <source src="./assets/pr2-small.mov" type="video/mp4">
+      <!-- <source src="https://busd-proof-of-burn.s3.us-east-1.amazonaws.com/busd-pr.mov" type="video/mp4"> -->
+      <!-- <source src="./assets/testburn1-1280.mp4" type="video/mp4"> -->
+    </video>
+  </div>
 </header>
 
 <div class="spacer"></div>
 
+      <div id="menu-mobile" class="menu slow-fadein">
+        <a href="#about">About</a>
+        <a href="#burn" class="textGlow" style="animation-delay: 5s;">Burn</a>
+        <a href="#trade" class="hidden" id="tradeLink-mobile">Trade</a>
+        <a href="#proofs">Proofs</a>
+      </div>
+    </div>
+
 <main>
-  <p class="slow-fadein">Burnt USD ($bUSD) is a coin that can only be issued once a US Dollar bill is burned during an official Burn Ceremony. </p>
+  <section id="about">
+    <p class="slow-fadein">Burnt USD ($bUSD) is a coin that can only be issued by burning a physical US Dollar bill. </p>
 
-  <p>Each coin has a notional value o</p>
-  <p>xxxx</p>
-  <p>xxxx</p>
-  <p>xxxx</p>
-  <p>xxxx</p>
-  <p>xxxx</p>
+    <p>Each $bUSD coin has a notional value of $1, which corresponds to the total monetary value released during an official <a href="#ceremony">Burn Ceremony</a>.</p>
+
+    <p>$bUSD is not a stablecoin. It can never be redeemed for USD, and it may trade at values other than $1 for extended periods of time.</p>
+
+    <p>$bUSD is not a security. There is no utility or reasonable expectation of profit from owning it.</p>
+
+    <p>All $bUSD is issued on Ethereum L1.</p>
+
+    <p>For more information, reference the <a href="./burn-agreement-1-0">Burn Agreement</a>.</p>
+  </section>
 
 
+  <section id="burn">
+    <h2>Burn USD → Receive bUSD</h2>
+    <p>All participants who submit a valid USD bill will be issued a comen</p>
 
-  <div style="border: 1px solid var(--orange-color);">
-    <div class="glow" style="height: 2em; background: var(--orange-color); width: 30%;"></div>
+  </section>
 
-  </div>
+<!--
+  <div style="border: 1px solid var(--accent-color);">
+    <div class="glow" style="height: 2em; background: var(--accent-color); width: 30%;"></div>
+  </div> -->
 </main>
+
+
+<footer>
+  <a href="https://steviep.xyz" target="_blank">steviep.xyz</a> 2025
+</footer>
 
 <!--   <connect-wallet>
     <div slot="connected">
@@ -265,12 +352,12 @@ connected
   </connect-wallet>
  -->
 
-<div class="colorTest" style="background: var(--green-color);"></div>
+<!-- <div class="colorTest" style="background: var(--green-color);"></div>
 <div class="colorTest" style="background: var(--blue-color);"></div>
-<div class="colorTest" style="background: var(--orange-color);"></div>
+<div class="colorTest" style="background: var(--accent-color);"></div>
 <div class="colorTest" style="background: var(--dark-gray-color);"></div>
 <div class="colorTest" style="background: var(--light-gray-color);"></div>
-
+ -->
 
 
 
@@ -288,6 +375,7 @@ connected
 
   if (provider.isEthBrowser) {
     $.id('tradeLink').classList.remove('hidden')
+    $.id('tradeLink-mobile').classList.remove('hidden')
   }
 
 
