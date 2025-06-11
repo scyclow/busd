@@ -28,6 +28,7 @@ contract BurnAgreement is ERC721, Ownable {
   uint256 public totalSupply;
   string public activeAgreementId;
   address public burnCeremony;
+  BurnAgreementURI public uri;
 
   uint256 public price = 0.01 ether;
 
@@ -42,6 +43,7 @@ contract BurnAgreement is ERC721, Ownable {
 
   constructor(address ceremony) ERC721('Burn Agreement', 'BA') {
     burnCeremony = ceremony;
+    uri = new BurnAgreementURI();
   }
 
   function exists(uint256 tokenId) external view returns (bool) {
@@ -49,6 +51,8 @@ contract BurnAgreement is ERC721, Ownable {
   }
 
   function mint() external payable {
+    require(msg.value >= price, 'Invalid value');
+
     (bool paymentMade,) = payable(owner()).call{value: price}('');
 
     if (paymentMade) {
@@ -84,10 +88,34 @@ contract BurnAgreement is ERC721, Ownable {
     agreementIdToMetadata[agreementId] = metadata;
   }
 
+
   function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
-    string memory agreementVersion = tokenIdToAgreementId[tokenId];
-    string memory bg = agreementUsed[tokenId] ? '#000' : '#fff';
-    string memory text = agreementUsed[tokenId] ? '#fff' : '#000';
+    return uri.tokenURI(tokenId);
+  }
+
+  function updateURI(address newURI) external onlyOwner {
+    uri = BurnAgreementURI(newURI);
+  }
+
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721) returns (bool) {
+    return interfaceId == bytes4(0x49064906) || super.supportsInterface(interfaceId);
+  }
+}
+
+contract BurnAgreementURI {
+  BurnAgreement public agreement;
+
+  constructor() {
+    agreement = BurnAgreement(msg.sender);
+  }
+
+
+  function tokenURI(uint256 tokenId) public view returns (string memory) {
+    bool agreementUsed = agreement.agreementUsed(tokenId);
+    string memory agreementVersion = agreement.tokenIdToAgreementId(tokenId);
+
+    string memory bg = agreementUsed ? '#000' : '#fff';
+    string memory text = agreementUsed ? '#ef701d' : '#000';
 
     bytes memory thumbnail = abi.encodePacked(
       'data:image/svg+xml;base64,',
@@ -106,7 +134,7 @@ contract BurnAgreement is ERC721, Ownable {
     string memory attrs = string.concat(
       '[',
         string.concat('{ "trait_type": "Agreement Version", "value": "', agreementVersion, '" },'),
-        string.concat('{ "trait_type": "Agreement Used", "value": "', agreementUsed[tokenId] ? 'True' : 'False', '" }'),
+        string.concat('{ "trait_type": "Agreement Used", "value": "', agreementUsed ? 'True' : 'False', '" }'),
       ']'
     );
 
@@ -115,13 +143,9 @@ contract BurnAgreement is ERC721, Ownable {
       '{"name": "Burn Agreement v', agreementVersion,
       '", "description": "By purchasing this token you implicitly agree to the terms of this agreement.'
       '", "image": "', thumbnail,
-      '", "animation_url": "', agreementIdToMetadata[agreementVersion],
+      '", "animation_url": "', agreement.agreementIdToMetadata(agreementVersion),
       '", "attributes":', attrs,
       '}'
     ));
-  }
-
-  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721) returns (bool) {
-    return interfaceId == bytes4(0x49064906) || super.supportsInterface(interfaceId);
   }
 }

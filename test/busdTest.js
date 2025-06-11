@@ -274,7 +274,7 @@ describe('BUSD', () => {
     })
   })
 
-  describe.only('agreement minting', () => {
+  describe('agreement minting', () => {
     it('should work', async () => {
       await expectRevert(
         ceremony(burnAgent).setBurnAgreement(BurnAgreement.address),
@@ -286,6 +286,12 @@ describe('BUSD', () => {
 
       await ceremony(owner).setBurnAgreement(BurnAgreement.address)
 
+      await expectRevert(
+        agreement(recipient).updateURI(recipient.address),
+        'Ownable: caller is not the owner'
+      )
+      await agreement(owner).updateURI(await BurnAgreement.uri())
+
       expect(await ceremony(burnAgent).burnAgreement()).to.equal(BurnAgreement.address)
 
       await agreement(owner).setActiveAgreement('1.0.0')
@@ -293,6 +299,10 @@ describe('BUSD', () => {
 
       const ownerStartingBalance = await getBalance(owner)
 
+      await expectRevert(
+        agreement(recipient).mint(txValue(0.00999)),
+        'Invalid value'
+      )
 
       await agreement(recipient).mint(txValue(0.01))
       // await agreement(recipient).tokenIdToAgreementId(0)
@@ -324,6 +334,7 @@ describe('BUSD', () => {
       const ownerEndingBalance = await getBalance(owner)
 
       expect(ownerEndingBalance - ownerStartingBalance).to.be.closeTo(0.02, 0.0001)
+
 
       console.log(getJsonURI(await agreement(recipient).tokenURI(0)))
       console.log(getJsonURI(await agreement(recipient).tokenURI(1)))

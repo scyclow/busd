@@ -23,12 +23,16 @@ import "./Dependencies.sol";
 
 pragma solidity ^0.8.28;
 
+interface IBurnAgreement {
+  function ownerOf(uint256) external view returns (address);
+  function markAgreementUsed(uint256) external;
+}
 
 
 contract BurnCeremony {
   BUSD public busd;
   ProofOfBurn public proofOfBurn;
-  BurnAgreement public burnAgreement;
+  IBurnAgreement public burnAgreement;
   address public burnAgent;
 
   constructor() {
@@ -54,7 +58,7 @@ contract BurnCeremony {
 
   function setBurnAgreement(address agreement) external {
     require(msg.sender == busd.owner(), 'Ownable: caller is not BUSD owner');
-    burnAgreement = BurnAgreement(agreement);
+    burnAgreement = IBurnAgreement(agreement);
   }
 
   function mint(

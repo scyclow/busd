@@ -66,6 +66,67 @@
       margin: 0;
     }
 
+    ol li {
+      padding: 0.5em 0;
+    }
+    ol, ul li {
+      padding: 0.25em 0;
+    }
+
+    ol {
+      margin-left: 3em;
+    }
+
+    ul {
+      margin-left: 1em;
+      list-style-type: square;
+    }
+
+    li::marker {
+      color: var(--accent-color);
+    }
+
+
+    a {
+      color: var(--accent-color);
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    p {
+      padding: 1em 0;
+      margin: 0;
+    }
+
+    strong {
+      display: inline-block;
+      padding: 0.1em;
+    }
+    blockquote {
+      margin: 1em auto;
+      max-width: 200px;
+      padding: 0.5em;
+      font-weight: bolder;
+    }
+
+    strong, blockquote {
+      background: var(--accent-color);
+      color: var(--bg-color);
+    }
+
+    section {
+      margin-top: 1em;
+      margin-bottom: 2em;
+    }
+
+    hr {
+      border: 1px solid var(--accent-color);
+      margin-bottom: 1em;
+    }
+
+
     nav {
 
       /*justify-content: space-between;*/
@@ -81,6 +142,7 @@
       padding: 0.25em 0.5em;
       display: flex;
     }
+
 
     .menu {
       display: flex;
@@ -112,28 +174,47 @@
       color: var(--bg-color);
     }
 
-
-    a {
-      color: var(--accent-color);
+    #aboveTheFold {
+      font-size: 1.25em;
+      margin: 3em 0;
     }
 
-    a:hover {
-      text-decoration: none;
-    }
 
-    p {
-      padding: 1em 0;
-      margin: 0;
-    }
 
-    section {
-      margin-top: 1em;
-      margin-bottom: 2em;
-    }
 
     .heroVideo {
       width: 100vw;
     }
+
+    .navContent, .heroVideo {
+      max-width: 1500px;
+      margin: auto;
+    }
+
+    #proofs video {
+      max-width: 100%;
+      margin-top: 1em;
+      margin-bottom: 2.5em;
+      border: 1px solid var(--text-color);
+      cursor: pointer;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--dark-gray-color);
+      padding: 0.25em;
+      margin: 0.25em;
+      margin-left: 0;
+      font-size: 0.9em;
+    }
+
+    #cowswap {
+      margin: 2em auto;
+      max-width: 400px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px var(--text-color);
+    }
+
 
     .spacer {
       height: 0.5em;
@@ -141,6 +222,15 @@
       position: relative;
       box-shadow: -6px -5px 5px var(--bg-color), 6px -5px 5px var(--bg-color);
       background: var(--bg-color);
+    }
+
+    .connectButton {
+      background: var(--accent-color);
+      color: var(--bg-color);
+      border: 1px solid var(--accent-color);
+      padding: 0.5em 1.5em;
+      font-size: 1.5em;
+      border-radius: 0.25em;
     }
 
 
@@ -211,9 +301,10 @@
     }
 
 
-      #menu-mobile {
-        display: none;
-      }
+    #menu-mobile {
+      display: none;
+    }
+
 
 
     @media (max-width: 700px) {
@@ -221,8 +312,18 @@
         display: none;
       }
 
+      #aboveTheFold {
+        font-size: 1em;
+      }
+
+
       #menu-mobile {
         display: flex;
+      }
+
+      #burn {
+        animation: SlowFadeIn 4s linear;
+
       }
 
       .menu {
@@ -233,6 +334,17 @@
       h1 {
         text-align: center;
       }
+      h2 {
+        font-size: 1.25em;
+      }
+
+      ol {
+        font-size: 0.9em;
+      }
+
+      .tag {
+        font-size: 0.75em
+      }
     }
 
     @media (max-width: 540px) {
@@ -240,6 +352,16 @@
         font-size: 1.6em;
         padding: 0.25em 0;
       }
+
+      h2 {
+        font-size: 1em;
+      }
+
+      h3 {
+        font-size: 0.9em;
+      }
+
+
       .vidContainer {
         width: 100vw;
         overflow: hidden;
@@ -254,12 +376,30 @@
         /*font-size: 0.85em;*/
         min-width: 70px;
       }
+
+      ol {
+        margin-left: 2em;
+      }
+
+      ul {
+        margin-left: 1em;
+        list-style-type: square;
+      }
+
     }
+
+    @media (min-height: 980px) {
+      #burn {
+        animation: SlowFadeIn 4s linear;
+      }
+    }
+
 
 
   </style>
 
 
+  <script src="./cowswap.min.js"></script>
   <script src="./utils.js"></script>
   <!-- <script type="module" src="./modal.js"></script> -->
   <script type="module" src="./connectWallet.js"></script>
@@ -272,11 +412,11 @@
 
 <header>
   <nav>
-    <div style="max-width: 1500px; margin: auto;">
+    <div class="navContent">
       <h1 class="slow-fadein" style="flex: 1">Burnt USD ($bUSD)</h1>
       <div id="menu" class="menu slow-fadein">
-        <a href="#about">About</a>
         <a href="#burn" class="textGlow" style="animation-delay: 5s;">Burn</a>
+        <a href="#about">About</a>
         <a href="#trade" class="hidden" id="tradeLink">Trade</a>
         <a href="#proofs">Proofs</a>
       </div>
@@ -296,40 +436,122 @@
 <div class="spacer"></div>
 
       <div id="menu-mobile" class="menu slow-fadein">
-        <a href="#about">About</a>
         <a href="#burn" class="textGlow" style="animation-delay: 5s;">Burn</a>
+        <a href="#about">About</a>
         <a href="#trade" class="hidden" id="tradeLink-mobile">Trade</a>
         <a href="#proofs">Proofs</a>
       </div>
     </div>
 
 <main>
-  <section id="about">
-    <p class="slow-fadein">Burnt USD ($bUSD) is a coin that can only be issued by burning a physical US Dollar bill. </p>
-
-    <p>Each $bUSD coin has a notional value of $1, which corresponds to the total monetary value released during an official <a href="#ceremony">Burn Ceremony</a>.</p>
-
-    <p>$bUSD is not a stablecoin. It can never be redeemed for USD, and it may trade at values other than $1 for extended periods of time.</p>
-
-    <p>$bUSD is not a security. There is no utility or reasonable expectation of profit from owning it.</p>
-
-    <p>All $bUSD is issued on Ethereum L1.</p>
-
-    <p>For more information, reference the <a href="./burn-agreement-1-0">Burn Agreement</a>.</p>
+  <section id="aboveTheFold" class="slow-fadein" >
+    <p>Burnt USD (bUSD) is a coin that represents the value of burned US Dollars.</p>
   </section>
+
 
 
   <section id="burn">
+    <hr>
     <h2>Burn USD → Receive bUSD</h2>
-    <p>All participants who submit a valid USD bill will be issued a comen</p>
+    <p>All bUSD is issued at a one-to-one rate with the denomination of physical US Dollar bills that have been burned during an official Burn Ceremony.</p>
+    <p>To submit a USD for an official Burn Ceremony, please complete the following steps:</p>
+    <ol>
+      <li>Print and read the <a href="./assets/burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a> in full.</li>
+      <li>Sign and date the Agreement. Fill out all required information on the final page.</li>
+      <li>
+        Place the following in an envelope:
+        <ul>
+          <li>The final page of the <a href="./assets/burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a>.</li>
+          <li>A valid US Dollar bill to be burned. This should match the information included in the <a href="./assets/burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a>.</li>
+          <li>$20 in processing fees.</li>
+        </ul>
+      </li>
+      <li>Mail the envelope with adequate postage to: </li>
+    </ol>
+    <blockquote>
+      PO BOX ....<br>
+      Brooklyn, NY 11238
+    </blockquote>
+
+    <p>Please double check that all information is correct before mailing. </p>
+
+    <p>All bills received by the <a href="https://steviep.xyz" target="_blank">Burn Agent</a> will be burned within 60 days during an official Burn Ceremony.</p>
 
   </section>
 
-<!--
-  <div style="border: 1px solid var(--accent-color);">
-    <div class="glow" style="height: 2em; background: var(--accent-color); width: 30%;"></div>
-  </div> -->
+  <section id="about">
+    <hr>
+    <h2>About</h2>
+    <p>bUSD is an ERC20 token issued on <strong>Ethereum L1</strong>. It will only be issued during an official Burn Ceremony, which involves burning real US Dollar notes.</p>
+
+    <p><strong>bUSD is not a stablecoin</strong> It can never be redeemed for USD, and may trade at values other than $1 for extended periods of time.</p>
+    <p><strong>bUSD is not a security</strong> There is no utility or reasonable expectation of profit from owning it.</p>
+    <p><strong>bUSD is not legal tender</strong> It is issued by the <a href="https://steviep.xyz" target="_blank">Burn Agent</a>, who has no affliation with the US Government.</p>
+    <p>Burning US currency is a <a href="https://uscode.house.gov/view.xhtml?path=/prelim@title18/part1/chapter17&edition=prelim" target="_blank" rel="nofollow">federal crime</a> punishable for up to six months in prison.</p>
+    <p>See the <a href="./assets/burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a> for more information.</p>
+  </section>
+
+
+  <section id="trade">
+    <hr>
+    <h2>Trade</h2>
+
+    <h3>Global Supply: 3 $bUSD</h3>
+
+
+    <connect-wallet>
+      <div slot="connected">
+        <div id="cowswap"></div>
+      </div>
+
+      <div slot="notConnected">
+        <button class="connectButton" slot="button">Connect</button>
+      </div>
+    </div>
+  </section>
+
+
+
+  <section id="proofs">
+    <hr>
+    <h2 style="margin-bottom: 1em;">Proofs of Burn</h2>
+
+    <h3>Proof of Burn 1 [TEST]</h3>
+    <div>
+      <span class="tag">Denomination: $1</span>
+      <span class="tag">Serial: E00484988A</span>
+      <span class="tag">Session: 0</span>
+      <span class="tag">Timestamp: 69696969</span>
+    </div>
+    <video controls>
+      <source src="./assets/testburn1-small.mp4" type="video/mp4">
+    </video>
+
+    <h3>Proof of Burn 2 [TEST]</h3>
+    <div>
+      <span class="tag">Denomination: $1</span>
+      <span class="tag">Serial: B52726219C</span>
+      <span class="tag">Session: 0</span>
+      <span class="tag">Timestamp: 69696969</span>
+    </div>
+    <video controls>
+      <source src="./assets/testburn2-small.mp4" type="video/mp4">
+    </video>
+
+    <h3>Proof of Burn 3 [TEST]</h3>
+    <div>
+      <span class="tag">Denomination: $1</span>
+      <span class="tag">Serial: L24083692Q</span>
+      <span class="tag">Session: 0</span>
+      <span class="tag">Timestamp: 69696969</span>
+    </div>
+    <video controls>
+      <source src="./assets/testburn3-small.mp4" type="video/mp4">
+    </video>
+  </section>
+
 </main>
+
 
 
 <footer>
@@ -385,7 +607,57 @@ connected
     const { name: chainName, etherscanLink } = await provider.getNetwork()
 
     console.log(await URITest.tokenURI(8849))
+
+      const params = {
+        "appCode": "My Cool App", // Name of your app (max 50 characters)
+        "width": "100%", // Width in pixels (or 100% to use all available space)
+        "height": "640px",
+        "chainId": 1, // 1 (Mainnet), 100 (Gnosis), 11155111 (Sepolia)
+        "tokenLists": [ // All default enabled token lists. Also see https://tokenlists.org
+            "https://files.cow.fi/tokens/CoinGecko.json",
+            "https://files.cow.fi/tokens/CowSwap.json"
+        ],
+        "tradeType": "swap", // swap, limit or advanced
+        "sell": { // Sell token. Optionally add amount for sell orders
+            "asset": "USDC",
+            "amount": "100000"
+        },
+        "buy": { // Buy token. Optionally add amount for buy orders
+            "asset": "COW",
+            "amount": "0"
+        },
+        "enabledTradeTypes": [ // swap, limit, advanced, yield
+            "swap",
+            "limit",
+            "advanced",
+            "yield"
+        ],
+        "theme": { // light/dark or provide your own color palette
+            "baseTheme": "dark",
+            "primary": "#ef701d",
+            "paper": "#000000",
+            "text": "#ffffff"
+        },
+        "standaloneMode": false,
+        "disableToastMessages": false,
+        "disableProgressBar": false,
+        "hideBridgeInfo": false,
+        "hideOrdersTable": false,
+        "images": {},
+        "sounds": {},
+        "customTokens": []
+    }
+
+
+    const { updateParams } = cowSwapWidget.createCowSwapWidget(
+      document.getElementById("cowswap"),
+      { params, provider: window.ethereum }
+    )
   })
+
+
+
+
 
 
 
