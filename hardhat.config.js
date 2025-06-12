@@ -46,7 +46,7 @@ module.exports = {
 
     sepolia: {
       url: STUFF.ETH_SEPOLIA_URL,
-      accounts: [`0x${STUFF.DEV1}`]
+      accounts: [`0x${STUFF.DEV1}`, `0x${STUFF.DEV2}`, `0x${STUFF.DEV3}`]
     },
 
   },

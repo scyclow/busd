@@ -315,6 +315,10 @@ describe('BUSD', () => {
 
       await agreement(recipient).mint(txValue(0.01))
 
+      expect(await agreement(recipient).totalSupply()).to.equal(2)
+      expect(await agreement(recipient).exists(0)).to.equal(true)
+      expect(await agreement(recipient).exists(1)).to.equal(true)
+
       expect(await agreement(recipient).tokenIdToAgreementId(0)).to.equal('1.0.0')
       expect(await agreement(recipient).tokenIdToAgreementId(1)).to.equal('1.1.0')
       expect(await agreement(recipient).agreementUsed(0)).to.equal(false)
@@ -330,6 +334,19 @@ describe('BUSD', () => {
 
       await ceremony(burnAgent).mintWithAgreement(0, 100, 'MB70433235C')
       expect(await agreement(recipient).agreementUsed(1)).to.equal(false)
+
+
+      expect( await getBalance(owner) - ownerStartingBalance).to.be.closeTo(0, 0.0001)
+
+      await expectRevert(
+        agreement(recipient).withdraw(toETH(0.02)),
+        'Ownable: caller is not the owner'
+      )
+
+
+      await agreement(owner).withdraw(toETH(0.02))
+
+
 
       const ownerEndingBalance = await getBalance(owner)
 

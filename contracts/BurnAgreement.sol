@@ -53,13 +53,13 @@ contract BurnAgreement is ERC721, Ownable {
   function mint() external payable {
     require(msg.value >= price, 'Invalid value');
 
-    (bool paymentMade,) = payable(owner()).call{value: price}('');
+    tokenIdToAgreementId[totalSupply] = activeAgreementId;
+    _safeMint(msg.sender, totalSupply);
+    totalSupply++;
+  }
 
-    if (paymentMade) {
-      tokenIdToAgreementId[totalSupply] = activeAgreementId;
-      _safeMint(msg.sender, totalSupply);
-      totalSupply++;
-    }
+  function withdraw(uint256 balance) external onlyOwner {
+    payable(owner()).call{value: balance}('');
   }
 
   function markAgreementUsed(uint256 tokenId) external {

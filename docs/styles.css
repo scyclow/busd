@@ -173,6 +173,6 @@ button:disabled {
 
 
 ::selection {
-  background: var(--green-color);
-  color: var(--black-color);
+  background: var(--text-color);
+  color: var(--bg-color);
 }
