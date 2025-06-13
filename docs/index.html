@@ -272,17 +272,7 @@
     }
 
 
-    .glow {
-      animation: Glow 6s linear infinite;
-    }
-    @keyframes Glow {
-      0%, 100% {
-        background: var(--bg-color);
-      }
-      50% {
-        background: var(--accent-color);
-      }
-    }
+
 
 
     .textGlow {
@@ -297,6 +287,23 @@
       }
       25%, 50% {
         color: var(--accent-color);
+      }
+    }
+
+
+
+    .glow {
+      animation: Glow 8s linear infinite;
+    }
+
+    @keyframes Glow {
+      0%, 100% {
+        color: var(--deep-orange-color);
+        background: var(--deep-orange-color);
+      }
+      50% {
+        color: var(--yellow-color);
+        background: var(--yellow-color);
       }
     }
 
@@ -411,9 +418,9 @@
 <body>
 
 <header>
-  <nav>
+  <nav class="slow-fadein" style="position: fixed; width: 100vw; background: var(--bg-color); z-index: 1; opacity: 0.9;">
     <div class="navContent">
-      <h1 class="slow-fadein" style="flex: 1">Burnt USD ($bUSD)</h1>
+      <h1  style="flex: 1">Burnt USD ($bUSD)</h1>
       <div id="menu" class="menu slow-fadein">
         <a href="#burn" class="textGlow" style="animation-delay: 5s;">Burn</a>
         <a href="#about">About</a>
@@ -446,6 +453,15 @@
 <main>
   <section id="aboveTheFold" class="slow-fadein" >
     <p>Burnt USD (bUSD) is a coin that represents the value of burned US Dollars.</p>
+
+
+<!--     <h3 class="glow" style="font-weight: normal; font-size: 1em; background: var(--bg-color) !important; text-align: center; margin-bottom: 0.25em;">Total Burnt: $3</h3>
+
+    <div class="glow" style="background: var(--bg-color) !important; border: 2px solid;">
+      <div class="glow" style="height:1.5em; width: 10%;"></div>
+    </div>
+ -->
+
   </section>
 
 
@@ -454,6 +470,8 @@
     <hr>
     <h2>Burn USD → Receive bUSD</h2>
     <p>All bUSD is issued at a one-to-one rate with the denomination of physical US Dollar bills that have been burned during an official Burn Ceremony.</p>
+
+    <h2 style="text-align: center; margin: 0.5em 0;"><a href="./assets/burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a></h2>
     <p>To submit a USD for an official Burn Ceremony, please complete the following steps:</p>
     <ol>
       <li>Print and read the <a href="./assets/burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a> in full.</li>
@@ -461,8 +479,8 @@
       <li>
         Place the following in an envelope:
         <ul>
-          <li><a href="./assets/burn-agreement-1_0_0-participation-form.pdf" target="_blank">The final page</a> of the Burn Agreement.</li>
-          <li>A valid US Dollar bill to be burned. This should match the information included in the <a href="./assets/burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a>.</li>
+          <li><a href="./assets/burn-agreement-1_0_0-signature-page.pdf" target="_blank">The signature page</a> of the Burn Agreement.</li>
+          <li>A valid US Dollar bill to be burned. This should match the information included on the <a href="./assets/burn-agreement-1_0_0-signature-page.pdf" target="_blank">Burn Agreement signature page</a>.</li>
           <li>$20 in processing fees.</li>
           <li>If you would like to submit multiple bills, please include a separate signature page and processing fee for each.</li>
         </ul>
@@ -497,7 +515,7 @@
     <hr>
     <h2>Trade</h2>
 
-    <h3>Global Supply: 3 $bUSD</h3>
+    <!-- <h3>Global Supply: 3 $bUSD</h3> -->
 
 
     <connect-wallet>
@@ -635,7 +653,7 @@ connected
         ],
         "theme": { // light/dark or provide your own color palette
             "baseTheme": "dark",
-            "primary": "#ef701d",
+            "primary": "#ef791f",
             "paper": "#000000",
             "text": "#ffffff"
         },

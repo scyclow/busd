@@ -138,7 +138,8 @@ contract ProofOfBurn is ERC721, Ownable {
 
   uint256[] private _sessionEnds;
 
-
+  event MetadataUpdate(uint256 _tokenId);
+  event BatchMetadataUpdate(uint256 _fromTokenId, uint256 _toTokenId);
 
   constructor() ERC721('bUSD Proof of Burn', 'POB') {
     busd = BUSD(msg.sender);
@@ -181,12 +182,14 @@ contract ProofOfBurn is ERC721, Ownable {
 
   function addProof(uint256 tokenId, string calldata proof) external onlyAgent {
     proofs[tokenId] = proof;
+    emit MetadataUpdate(tokenId);
   }
 
   function addProofBatch(uint256[] calldata tokenIds, string calldata baseURI, string calldata ext) external onlyAgent {
     for (uint256 i; i < tokenIds.length; i++) {
       proofs[tokenIds[i]] = string.concat(baseURI, Strings.toString(i), ext);
     }
+    emit BatchMetadataUpdate(0, billsBurned);
   }
 
   function addMemo(uint256 tokenId, string calldata memo) external onlyAgent {
@@ -230,6 +233,11 @@ contract ProofOfBurn is ERC721, Ownable {
   function setURI(address newURI) external {
     require(msg.sender == busd.owner(), 'Caller is not BUSD Owner');
     uri = ProofOfBurnURI(newURI);
+  }
+
+
+  function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721) returns (bool) {
+    return interfaceId == bytes4(0x49064906) || super.supportsInterface(interfaceId);
   }
 }
 

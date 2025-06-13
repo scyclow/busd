@@ -115,7 +115,7 @@ contract BurnAgreementURI {
     string memory agreementVersion = agreement.tokenIdToAgreementId(tokenId);
 
     string memory bg = agreementUsed ? '#000' : '#fff';
-    string memory text = agreementUsed ? '#ef701d' : '#000';
+    string memory text = agreementUsed ? '#ef791f' : '#000';
 
     bytes memory thumbnail = abi.encodePacked(
       'data:image/svg+xml;base64,',
