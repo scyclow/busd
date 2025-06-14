@@ -134,6 +134,11 @@
       position: relative;
       box-shadow: -6px 5px 5px var(--bg-color), 6px 5px 5px var(--bg-color);
       padding-top: 5px;
+      position: absolute;
+      width: 100vw;
+      background: var(--bg-color);
+      z-index: 1;
+      opacity: 0.8;
     }
 
 
@@ -339,6 +344,11 @@
         font-size: 0.9em;
       }
 
+      nav {
+        position: static;
+        opacity: 0.99;
+      }
+
       h1 {
         text-align: center;
       }
@@ -419,7 +429,7 @@
 <body>
 
 <header>
-  <nav class="slow-fadein" style="position: fixed; width: 100vw; background: var(--bg-color); z-index: 1; opacity: 0.9;">
+  <nav class="slow-fadein">
     <div class="navContent">
       <h1  style="flex: 1">Burnt USD ($bUSD)</h1>
       <div id="menu" class="menu slow-fadein">
