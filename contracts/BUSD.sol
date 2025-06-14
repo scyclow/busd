@@ -136,7 +136,7 @@ contract ProofOfBurn is ERC721, Ownable {
   mapping(uint256 => string) public memos;
   mapping(uint256 => address) public burnedBy;
 
-  uint256[] private _sessionEnds;
+  uint256[] public sessionEnds;
 
   event MetadataUpdate(uint256 _tokenId);
   event BatchMetadataUpdate(uint256 _fromTokenId, uint256 _toTokenId);
@@ -162,22 +162,22 @@ contract ProofOfBurn is ERC721, Ownable {
   }
 
   function totalSessions() public view returns (uint256) {
-    return _sessionEnds.length;
+    return sessionEnds.length;
   }
 
   function tokenIdToSessionId(uint256 tokenId) public view returns (uint256) {
     uint256 ts = timestamps[tokenId];
 
-    for (uint256 i; i < _sessionEnds.length; i++) {
-      if (ts < _sessionEnds[i]) return i;
+    for (uint256 i; i < sessionEnds.length; i++) {
+      if (ts < sessionEnds[i]) return i;
     }
 
-    return _sessionEnds.length;
+    return sessionEnds.length;
   }
 
 
   function markSessionEnd() external onlyAgent {
-    _sessionEnds.push(block.timestamp);
+    sessionEnds.push(block.timestamp);
   }
 
   function addProof(uint256 tokenId, string calldata proof) external onlyAgent {
