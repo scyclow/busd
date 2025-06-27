@@ -44,7 +44,7 @@
   --deep-orange-color: #e2620f;
   --orange-color: #ef791f;
   /*--orange-color: #ef901f;*/
-  --orange-color: #e57e34;
+  /*--orange-color: #e57e34;*/
   /*--orange-color: #e57e2f;*/
   /*--orange-color: #e58f34;*/
 
@@ -62,6 +62,7 @@
   --accent-color: var(--orange-color);
   --text-color:  var(--white-color);
   --bg-color: var(--black-color);
+  --border-color: var(--medium-gray-color);
 
   --tertiary-color: #000;
   --input-color: color-mix(in srgb, var(--bg-color) 16%, #fff);
@@ -72,6 +73,10 @@
   margin: 0;
   font-family: "Roboto Mono", monospace;
   stroke: var(--text-color);
+}
+
+table {
+  border-spacing: 0;
 }
 
 html {

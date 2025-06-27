@@ -25,8 +25,8 @@ pragma solidity ^0.8.28;
 
 
 contract BurnAgreement is ERC721, Ownable {
-  uint256 public totalSupply;
-  string public activeAgreementId;
+  uint256 public totalSupply = 1;
+  string public activeAgreementId = '1.0.0';
   address public burnCeremony;
   BurnAgreementURI public uri;
 
@@ -44,6 +44,8 @@ contract BurnAgreement is ERC721, Ownable {
   constructor(address ceremony) ERC721('Burn Agreement', 'BA') {
     burnCeremony = ceremony;
     uri = new BurnAgreementURI();
+    _safeMint(msg.sender, 0);
+    tokenIdToAgreementId[0] = activeAgreementId;
   }
 
   function exists(uint256 tokenId) external view returns (bool) {
@@ -141,7 +143,7 @@ contract BurnAgreementURI {
     return string(abi.encodePacked(
       'data:application/json;utf8,'
       '{"name": "Burn Agreement v', agreementVersion,
-      '", "description": "By purchasing this token you implicitly agree to the terms of this agreement.'
+      '", "description": "By purchasing this token you implicitly agree to the terms of this agreement. Ownership of this NFT does not guarantee participation in a Burn Ceremony. Participation shall be left to the full discretion of the Burn Agent.'
       '", "image": "', thumbnail,
       '", "animation_url": "', agreement.agreementIdToMetadata(agreementVersion),
       '", "attributes":', attrs,

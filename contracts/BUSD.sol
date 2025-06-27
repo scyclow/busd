@@ -257,6 +257,9 @@ contract ProofOfBurnURI {
     string memory memo = pob.memos(tokenId);
     string memory sessionId = Strings.toString(pob.tokenIdToSessionId(tokenId));
     string memory tokenIdStr = Strings.toString(tokenId);
+
+    bool hasMemo = bytes(memo).length > 0;
+    string memory description = string.concat('Proof of Burn #', tokenIdStr, ' for bill: ', serial, ', issuing ', denomination, ' bUSD at timestamp ', timestampString, hasMemo ? string.concat('. Included Memo: ', memo) : '.');
     bytes memory proof = bytes(pob.proofs(tokenId));
 
 
@@ -281,7 +284,7 @@ contract ProofOfBurnURI {
         string.concat('{ "trait_type": "Denomination", "value": "', denomination, '" },'),
         string.concat('{ "trait_type": "Burned at", "value": "', timestampString, '" },'),
         string.concat('{ "trait_type": "Session ID", "value": "', sessionId, '" }'),
-        bytes(memo).length > 0 ? string.concat(',{ "trait_type": "Burn Memo", "value": "', memo, '" }') : '',
+        hasMemo ? string.concat(',{ "trait_type": "Burn Memo", "value": "', memo, '" }') : '',
       ']'
     );
 
@@ -289,7 +292,7 @@ contract ProofOfBurnURI {
     return string(abi.encodePacked(
       'data:application/json;utf8,'
       '{"name": "Proof of Burn #', string.concat(tokenIdStr, ' (', serial, ', $', denomination, ')'),
-      '", "description": "'
+      '", "description": "', description,
       '", "image": "', proof,
       '", "animation_url": "', proof,
       '", "attributes":', attrs,

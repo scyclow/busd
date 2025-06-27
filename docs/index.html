@@ -67,12 +67,10 @@
       margin: 0;
     }
 
-    ol li {
+    ol li, ul li {
       padding: 0.5em 0;
     }
-    ol, ul li {
-      padding: 0.25em 0;
-    }
+
 
     ol {
       margin-left: 3em;
@@ -113,13 +111,12 @@
     }
 
     strong, blockquote {
-      background: var(--accent-color);
+      background: var(--text-color);
       color: var(--bg-color);
     }
 
     section {
-      margin-top: 1em;
-      margin-bottom: 2em;
+      margin: 3em 0;
     }
 
     hr {
@@ -162,7 +159,7 @@
       /*padding: 1em;*/
       font-size: 1em;
       display: block;
-      border-left: 1px solid var(--medium-gray-color);
+      border-left: 1px solid var(--border-color);
 
       flex: 1;
       text-align: center;
@@ -180,9 +177,12 @@
       color: var(--bg-color);
     }
 
+    .menu a:hover,  .menu a:hover + a{
+      border-color: var(--bg-color);
+    }
+
     #aboveTheFold {
       font-size: 1.25em;
-      margin: 3em 0;
     }
 
 
@@ -245,6 +245,18 @@
       animation: Blink 3s steps(2, start) infinite;
     }
 
+    .issuanceTable {
+      margin: auto;
+
+    }
+
+    .issuanceTable td {
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+    }
+    .issuanceTable th {
+      padding: 0.5em;
+    }
 
 
 
@@ -431,11 +443,11 @@
 <header>
   <nav class="slow-fadein">
     <div class="navContent">
-      <h1  style="flex: 1">Burnt USD ($bUSD)</h1>
+      <h1  style="flex: 1">Burnt USD (bUSD)</h1>
       <div id="menu" class="menu slow-fadein">
         <a href="#burn" class="textGlow" style="animation-delay: 5s;">Burn</a>
         <a href="#about">About</a>
-        <a href="#trade" class="hidden" id="tradeLink">Trade</a>
+        <a href="#coinInfo" class="hidden" id="tradeLink">Trade</a>
         <a href="#proofs">Proofs</a>
       </div>
     </div>
@@ -456,14 +468,14 @@
       <div id="menu-mobile" class="menu slow-fadein">
         <a href="#burn" class="textGlow" style="animation-delay: 5s;">Burn</a>
         <a href="#about">About</a>
-        <a href="#trade" class="hidden" id="tradeLink-mobile">Trade</a>
+        <a href="#coinInfo" class="hidden" id="tradeLink-mobile">Trade</a>
         <a href="#proofs">Proofs</a>
       </div>
     </div>
 
 <main>
   <section id="aboveTheFold" class="slow-fadein" >
-    <p>Burnt USD (bUSD) is a coin that represents the value of burned US Dollars.</p>
+    <p>Burnt USD (bUSD) is a <a href="#coinInfo">coin</a> that represents the value of burned US Dollars.</p>
 
 
 <!--     <h3 class="glow" style="font-weight: normal; font-size: 1em; background: var(--bg-color) !important; text-align: center; margin-bottom: 0.25em;">Total Burnt: $3</h3>
@@ -476,61 +488,137 @@
   </section>
 
 
+  <section id="about">
+    <hr>
+    <h2>How Does It Work?</h2>
+    <ol>
+      <li>Participants submit valid US currency to the <a href="https://steviep.xyz" target="_blank">Burn Agent</a>.</li>
+      <li>The Burn Agent performs a Burn Ceremony, in which the submitted bill is lit on fire.</li>
+      <li>The Burn Agent issues bUSD to the participant at a one-to-one rate<sup><a href="#burnRate">*</a></sup> with the denomination of the submitted bill once it is completely burned.</li>
+      <li>The <a href="#proofs">Proof of Burn</a> is published.</li>
+    </ol>
+
+
+    <div id="burnRate"  style="margin: 2em 0">
+
+      <h3 style="text-align: center; margin-top: 2em"><sup>*</sup>Issuance Rates:</h3>
+
+      <table class="issuanceTable">
+        <thead>
+          <tr>
+            <th>Bill Denomination</th>
+            <th>bUSD Issued</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>$100</td>
+            <td>100.00</td>
+          </tr>
+
+          <tr>
+            <td>$50</td>
+            <td>50.00</td>
+          </tr>
+
+          <tr>
+            <td>$20</td>
+            <td>20.00</td>
+          </tr>
+
+          <tr>
+            <td>$10</td>
+            <td>10.00</td>
+          </tr>
+
+          <tr>
+            <td>$5</td>
+            <td>5.00</td>
+          </tr>
+
+          <tr>
+            <td>$2</td>
+            <td>2.00</td>
+          </tr>
+
+          <tr>
+            <td>$1</td>
+            <td>1.00</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <ul>
+      <li>All bUSD is issued as an ERC20 token on L1 Ethereum.</li>
+      <li>bUSD is not a stablecoin. It can never be redeemed for USD, and may trade at values other than $1 for extended periods of time.</li>
+      <li>bUSD is not a security. There is no utility or reasonable expectation of profit from owning it.</li>
+      <li>bUSD is not legal tender. It is issued by the <a href="https://steviep.xyz" target="_blank">Burn Agent</a>, who has no affliation with the US Government.</li>
+      <li>Burning US currency is a <a href="https://uscode.house.gov/view.xhtml?path=/prelim@title18/part1/chapter17&edition=prelim" target="_blank" rel="nofollow">federal crime</a> punishable for up to six months in prison.</li>
+    </ul>
+
+
+    <div style="margin: 2em 0">
+      <h3 style="text-align: center; padding-bottom: 0.5em">For all further questions:</h3>
+
+      <h2 style="text-align: center; margin: 0.5em 0;"><a href="./burn-agreement-1_0_0.pdf" target="_blank" style="background: var(--accent-color); color: var(--bg-color); padding: 0.5em;">Read The Burn Agreement</a></h2>
+    </div>
+    <hr style="border-color: var(--bg-color);">
+
+
+  </section>
+
+
 
   <section id="burn">
     <hr>
-    <h2>Burn USD → Receive bUSD</h2>
-    <p>All bUSD is issued at a one-to-one rate with the denomination of physical US Dollar bills that have been burned during an official Burn Ceremony. In addition to bUSD, all Participants will receive a Proof of Burn NFT.</p>
+    <h2>Burn USD</h2>
 
-    <h2 style="text-align: center; margin: 0.5em 0;"><a href="./burn-agreement-1_0_0.pdf" target="_blank" style="background: var(--accent-color); color: var(--bg-color); padding: 0.5em;">Read The Burn Agreement</a></h2>
-    <p>To submit a USD for an official Burn Ceremony, please complete the following steps:</p>
+    <p>All Participants must complete the following in order to submit a bill for burn and receive bUSD:</p>
     <ol>
       <li>Print and read the <a href="./burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a> in full.</li>
       <li>Sign and complete a <a href="./burn-application-1_0_0.pdf" target="_blank">Burn Application</a>.</li>
+
       <li>Mail an envelope including your completed Application, all bills you wish to submit, and all required processing fees ($20 per bill submitted) to:</li>
 
     </ol>
     <blockquote>
-      PO BOX ....<br>
-      Brooklyn, NY
+      Contact the Burn Agent for mailing instructions.
+      <!-- PO BOX ....<br>
+      Brooklyn, NY -->
     </blockquote>
 
     <p>Please double check that all information is correct before mailing. </p>
 
     <p>All bills received by the <a href="https://steviep.xyz" target="_blank">Burn Agent</a> will be burned within 60 days during an official Burn Ceremony.</p>
 
+    <p>Reference the <a href="./burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a> for all policies regarding bill return, bill eligability, bull custody, and bill forfeit.</p>
+
   </section>
 
-  <section id="about">
+  <section id="coinInfo">
     <hr>
-    <h2>About</h2>
-    <p>bUSD is an ERC20 token issued on <strong>Ethereum L1</strong>. It will only be issued during an official Burn Ceremony, which involves burning real US Dollar notes.</p>
+    <h2>Coin Info</h2>
 
-    <p><strong>bUSD is not a stablecoin</strong> It can never be redeemed for USD, and may trade at values other than $1 for extended periods of time.</p>
-    <p><strong>bUSD is not a security</strong> There is no utility or reasonable expectation of profit from owning it.</p>
-    <p><strong>bUSD is not legal tender</strong> It is issued by the <a href="https://steviep.xyz" target="_blank">Burn Agent</a>, who has no affliation with the US Government.</p>
-    <p>Burning US currency is a <a href="https://uscode.house.gov/view.xhtml?path=/prelim@title18/part1/chapter17&edition=prelim" target="_blank" rel="nofollow">federal crime</a> punishable for up to six months in prison.</p>
-    <p>See the <a href="./burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a> for more information.</p>
-  </section>
+    <h3>Total Supply: --- bUSD</h3>
+    <h3>Total USD Burned: $--.00</h3>
 
-
-  <section id="trade">
-    <hr>
-    <h2>Trade</h2>
-
-    <!-- <h3>Global Supply: 3 $bUSD</h3> -->
 
 
     <connect-wallet>
       <div slot="connected">
+        <h3>USD/bUSD Exchange Rate: 1.22222</h3>
         <div id="cowswap"></div>
       </div>
 
       <div slot="notConnected">
         <button class="connectButton" slot="button">Connect</button>
       </div>
-    </div>
+    </connect-wallet>
   </section>
+
 
 
 
