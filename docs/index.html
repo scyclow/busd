@@ -230,13 +230,17 @@
       background: var(--bg-color);
     }
 
-    .connectButton {
+    button {
       background: var(--accent-color);
       color: var(--bg-color);
       border: 1px solid var(--accent-color);
       padding: 0.5em 1.5em;
       font-size: 1.5em;
       border-radius: 0.25em;
+      transition: 0.2s;
+    }
+    button:hover {
+      opacity: 0.7;
     }
 
 
@@ -316,12 +320,13 @@
 
     @keyframes Glow {
       0%, 100% {
-        color: var(--deep-orange-color);
-        background: var(--deep-orange-color);
+        color: var(--bg-color);
+        background: var(--accent-color);
       }
       50% {
-        color: var(--yellow-color);
-        background: var(--yellow-color);
+        color: var(--accent-color);
+        background: var(--bg-color);
+        border-color: var(--accent-color);
       }
     }
 
@@ -447,7 +452,7 @@
       <div id="menu" class="menu slow-fadein">
         <a href="#burn" class="textGlow" style="animation-delay: 5s;">Burn</a>
         <a href="#about">About</a>
-        <a href="#coinInfo" class="hidden" id="tradeLink">Trade</a>
+        <a href="#coinInfo" class="hidden walletOnly" id="tradeLink">Trade</a>
         <a href="#proofs">Proofs</a>
       </div>
     </div>
@@ -468,7 +473,7 @@
       <div id="menu-mobile" class="menu slow-fadein">
         <a href="#burn" class="textGlow" style="animation-delay: 5s;">Burn</a>
         <a href="#about">About</a>
-        <a href="#coinInfo" class="hidden" id="tradeLink-mobile">Trade</a>
+        <a href="#coinInfo" class="hidden walletOnly" id="tradeLink-mobile">Trade</a>
         <a href="#proofs">Proofs</a>
       </div>
     </div>
@@ -476,25 +481,43 @@
 <main>
   <section id="aboveTheFold" class="slow-fadein" >
     <p>Burnt USD (bUSD) is a <a href="#coinInfo">coin</a> that represents the value of burned US Dollars.</p>
-
-
-<!--     <h3 class="glow" style="font-weight: normal; font-size: 1em; background: var(--bg-color) !important; text-align: center; margin-bottom: 0.25em;">Total Burnt: $3</h3>
-
-    <div class="glow" style="background: var(--bg-color) !important; border: 2px solid;">
-      <div class="glow" style="height:1.5em; width: 10%;"></div>
-    </div>
- -->
-
   </section>
 
+
+  <section id="burn">
+    <hr>
+    <h2>Burn USD</h2>
+
+    <p>Participants who submit a valid US banknote, accompanied with a completed <a href="./burn-application-1_0_0.pdf" target="_blank">Burn Application</a>, shall receive a proportional amount of bUSD and a <a href="#proofs">Proof of Burn</a> NFT.</p>
+
+    <p>To submit USD for an official Burn Ceremony, please complete the following steps:</p>
+    <ol>
+      <li>Read the <a href="./burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a> in full.</li>
+      <li>Sign and complete a <a href="./burn-application-1_0_0.pdf" target="_blank">Burn Application</a>.</li>
+
+      <li>Mail an envelope including your completed Application, all bills you wish to submit, and all required processing fees ($20 per bill submitted) to:</li>
+
+    </ol>
+    <blockquote>
+      Contact the Burn Agent for mailing instructions.
+      <!-- PO BOX ....<br>
+      Brooklyn, NY -->
+    </blockquote>
+
+    <p>Please double check that all information is correct before mailing. </p>
+
+    <p>All bills received by the <a href="https://steviep.xyz" target="_blank">Burn Agent</a> will be burned within 60 days during an official Burn Ceremony.</p>
+
+    <p>Reference the <a href="./burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a> for all policies regarding bill return, bill eligability, bull custody, and bill forfeit.</p>
+  </section>
 
   <section id="about">
     <hr>
     <h2>How Does It Work?</h2>
     <ol>
-      <li>Participants submit valid US currency to the <a href="https://steviep.xyz" target="_blank">Burn Agent</a>.</li>
-      <li>The Burn Agent performs a Burn Ceremony, in which the submitted bill is lit on fire.</li>
-      <li>The Burn Agent issues bUSD to the participant at a one-to-one rate<sup><a href="#burnRate">*</a></sup> with the denomination of the submitted bill once it is completely burned.</li>
+      <li>Participants <a href="#burn">submit valid US currency</a> to the <a href="https://steviep.xyz" target="_blank">Burn Agent</a>.</li>
+      <li>The <a href="https://steviep.xyz" target="_blank">Burn Agent</a> performs a Burn Ceremony, in which the submitted bill is lit on fire.</li>
+      <li>The <a href="https://steviep.xyz" target="_blank">Burn Agent</a> issues bUSD to the participant at a one-to-one rate<sup><a href="#burnRate">*</a></sup> with the denomination of the submitted bill once it is completely burned.</li>
       <li>The <a href="#proofs">Proof of Burn</a> is published.</li>
     </ol>
 
@@ -560,43 +583,46 @@
     </ul>
 
 
-    <div style="margin: 2em 0">
-      <h3 style="text-align: center; padding-bottom: 0.5em">For all further questions:</h3>
-
-      <h2 style="text-align: center; margin: 0.5em 0;"><a href="./burn-agreement-1_0_0.pdf" target="_blank" style="background: var(--accent-color); color: var(--bg-color); padding: 0.5em;">Read The Burn Agreement</a></h2>
-    </div>
-    <hr style="border-color: var(--bg-color);">
-
-
   </section>
 
 
 
-  <section id="burn">
+  <section id="burnAgreement">
     <hr>
-    <h2>Burn USD</h2>
+    <h2>Burn Agreement</h2>
 
-    <p>All Participants must complete the following in order to submit a bill for burn and receive bUSD:</p>
-    <ol>
-      <li>Print and read the <a href="./burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a> in full.</li>
-      <li>Sign and complete a <a href="./burn-application-1_0_0.pdf" target="_blank">Burn Application</a>.</li>
+    <h2 style="text-align: center; margin: 2em 0;"><a href="./burn-agreement-1_0_0.pdf" target="_blank" style="background: var(--accent-color); color: var(--bg-color); padding: 0.5em 1.5em; border-radius: 0.3em">Read The Burn Agreement</a></h2>
 
-      <li>Mail an envelope including your completed Application, all bills you wish to submit, and all required processing fees ($20 per bill submitted) to:</li>
+    <p>The bUSD <a href="./burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a> outlines all legal matters pertaining to the bUSD project, including valuation, legality, the Burn Ceremony, Proof of Burn media, bUSD reciept, the Burn Agent, issuance authorization, bUSD supply, bill custody, bill forfeit, return policy, bill eligibility, burn scheduling, processing fees, privacy policy, intellectual property, and warranty. </p>
 
-    </ol>
-    <blockquote>
-      Contact the Burn Agent for mailing instructions.
-      <!-- PO BOX ....<br>
-      Brooklyn, NY -->
-    </blockquote>
+    <div class="hidden walletOnly" style="display: flex; flex-direction: column; align-items: center; margin-top: 1em;">
+      <h3>Mint an Agreement NFT</h3>
+      <p>Burn Agreement NFTs, which display the bUSD Burn Agreement in full, may be used in place of a processing fee as part of a simplified bUSD application process. To use an Agreement NFT, please follow the standard <a href="burn">Burn Application process</a> using a completed <a href="./simplified-burn-application-1_0_0.pdf">Simplified Burn Application</a> instead of the standard Application in Step 2. Each Agreement NFT may be used to exempt an individual bill's processing fee.</p>
 
-    <p>Please double check that all information is correct before mailing. </p>
 
-    <p>All bills received by the <a href="https://steviep.xyz" target="_blank">Burn Agent</a> will be burned within 60 days during an official Burn Ceremony.</p>
+      <connect-wallet>
+        <div slot="connected">
+          <div style="margin-top: 1em">
+            <button>Mint</button> (0.01 ETH)
+          </div>
+        </div>
 
-    <p>Reference the <a href="./burn-agreement-1_0_0.pdf" target="_blank">Burn Agreement</a> for all policies regarding bill return, bill eligability, bull custody, and bill forfeit.</p>
+        <div slot="notConnected" style="margin-top: 1em">
+          <connect-button>
+            <button class="connectButton" slot="button">Connect</button>
+            <h3 slot="loading">Connecting...</h3>
+          </connect-button>
+
+        </div>
+      </connect-wallet>
+    </div>
+
+
 
   </section>
+
+
+
 
   <section id="coinInfo">
     <hr>
@@ -607,16 +633,21 @@
 
 
 
-    <connect-wallet>
-      <div slot="connected">
-        <h3>USD/bUSD Exchange Rate: 1.22222</h3>
-        <div id="cowswap"></div>
-      </div>
+    <div style="display: flex; flex-direction: column; align-items: center; margin-top: 1em">
+      <connect-wallet>
+        <div slot="connected">
+          <h3>USD/bUSD Exchange Rate: 1.22222</h3>
+          <div id="cowswap"></div>
+        </div>
 
-      <div slot="notConnected">
-        <button class="connectButton" slot="button">Connect</button>
-      </div>
-    </connect-wallet>
+        <div slot="notConnected">
+          <connect-button>
+            <button class="connectButton" slot="button">Connect</button>
+            <h3 slot="loading">Connecting...</h3>
+          </connect-button>
+        </div>
+      </connect-wallet>
+    </div>
   </section>
 
 
@@ -658,6 +689,17 @@
     <video controls>
       <source src="./assets/proofs/testburn0-small.mp4" type="video/mp4">
     </video>
+  </section>
+
+  <section>
+    <hr>
+    <h2>Smart Contracts</h2>
+    <div style="display: flex; flex-direction: column; margin-top: 1em;">
+      <a href="#">BUSD</a>
+      <a href="">BurnCeremony</a>
+      <a href="#">ProofOfBurn</a>
+      <a href="#">BurnAgreement</a>
+    </div>
   </section>
 
 </main>
@@ -706,8 +748,12 @@ connected
   provider.setContractInfo(CONTRACTS)
 
   if (provider.isEthBrowser) {
-    $.id('tradeLink').classList.remove('hidden')
-    $.id('tradeLink-mobile').classList.remove('hidden')
+
+    $.cls('walletOnly').forEach(c => {
+      c.classList.remove('hidden')
+    })
+    // $.id('tradeLink').classList.remove('hidden')
+    // $.id('tradeLink-mobile').classList.remove('hidden')
   }
 
 
