@@ -43,10 +43,10 @@ export class Web3Provider {
   onConnectCbs = []
   ens = ''
 
-  FORCED_CHAIN_ID = '0x1'
+  FORCED_CHAIN_ID = '0xaa36a7'
   VALID_CHAINS = [
-    '0x1', // mainnet
-    '0x7a69', // local
+    // '0x1', // mainnet
+    // '0x7a69', // localz
     '0xaa36a7', // sepolia
     // '0x2105', // base
     // '0x14a34', // base sepolia
@@ -209,6 +209,11 @@ export class Web3Provider {
     }
   }
 
+  isENS(ens) {
+    return isENS(ens)
+  }
+
+
   isAddress(addr) {
     return ethers.utils.isAddress(addr)
   }
@@ -219,6 +224,10 @@ export class Web3Provider {
 
   async getENS(addr) {
     return this.provider.lookupAddress(addr)
+  }
+
+  async fromENS(ens) {
+    return this.provider.resolveName(ens)
   }
 
   async getTransactionCount(addr) {
@@ -242,7 +251,7 @@ export class Web3Provider {
   }
 
   async getETHBalance(addr) {
-    return (await this.provider.getBalance(addr)) / 1e18
+    return ethVal(await this.provider.getBalance(addr))
   }
 
   async getNetwork() {

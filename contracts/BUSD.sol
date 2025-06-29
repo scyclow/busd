@@ -61,16 +61,16 @@ contract BurnCeremony {
     burnAgreement = IBurnAgreement(agreement);
   }
 
-  function mint(
+  function issue(
     address account,
     uint256 denomination,
     string calldata serial
   ) external onlyAgent {
-    busd.mint(account, denomination * 1 ether);
+    busd.issue(account, denomination * 1 ether);
     proofOfBurn.mint(account, denomination, serial);
   }
 
-  function mintWithAgreement(
+  function issueWithAgreement(
     uint256 agreementTokenId,
     uint256 denomination,
     string calldata serial
@@ -78,7 +78,7 @@ contract BurnCeremony {
     address account = burnAgreement.ownerOf(agreementTokenId);
 
     burnAgreement.markAgreementUsed(agreementTokenId);
-    busd.mint(account, denomination * 1 ether);
+    busd.issue(account, denomination * 1 ether);
     proofOfBurn.mint(account, denomination, serial);
   }
 }
@@ -100,8 +100,8 @@ contract BUSD is ERC20, Ownable {
     ceremony.init(owner(), proofOfBurn);
   }
 
-  function mint(address account, uint256 amount) external {
-    require(msg.sender == address(ceremony), 'Can only mint through official Burn Ceremony');
+  function issue(address account, uint256 amount) external {
+    require(msg.sender == address(ceremony), 'Can only issue through official Burn Ceremony');
     _mint(account, amount);
   }
 

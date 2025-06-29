@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <link rel="shortcut icon" type="image/x-icon" href="./logo.svg" id="favicon">
+
+  <title>Burn Agent Console</title>
+
+
+  <link rel="stylesheet" type="text/css" href="./styles.css">
+
+  <style type="text/css">
+    *  {
+      font-family: "Roboto Mono", monospace;
+    }
+    h1 {
+      font-weight: 400;
+      font-size: 1.75em;
+      /*text-align: center;*/
+      /*position: absolute;*/
+      padding-left: 0.5em;
+
+      font-family: monospace;
+
+
+      /*font-family: monospace;*/
+      /*text-shadow: 1px 1px var(--accent-color);*/
+    }
+
+    h1, h2. h3 {
+      font-weight: 400;
+    }
+
+
+    h2 {
+      font-size: 2em;
+    }
+
+/*    h1, h2, h3 {
+      text-align: center;
+    }*/
+
+
+
+    header {
+      margin: 0;
+    }
+
+    ol li, ul li {
+      padding: 0.5em 0;
+    }
+
+
+    ol {
+      margin-left: 3em;
+    }
+
+    ul {
+      margin-left: 1em;
+      list-style-type: square;
+    }
+
+    li::marker {
+      color: var(--accent-color);
+    }
+
+
+    a {
+      color: var(--accent-color);
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    p {
+      padding: 1em 0;
+      margin: 0;
+    }
+
+    strong {
+      display: inline-block;
+      padding: 0.1em;
+    }
+    blockquote {
+      margin: 1em auto;
+      max-width: 200px;
+      padding: 0.5em;
+      font-weight: bolder;
+    }
+
+    strong, blockquote {
+      background: var(--border-color);
+      color: var(--bg-color);
+    }
+
+    section {
+      margin: 3em 0;
+    }
+
+    hr {
+      border: 1px solid var(--border-color);
+      margin-bottom: 1em;
+    }
+
+
+    nav {
+
+      /*justify-content: space-between;*/
+      position: relative;
+      box-shadow: -6px 5px 5px var(--bg-color), 6px 5px 5px var(--bg-color);
+      padding-top: 5px;
+      position: absolute;
+      width: 100vw;
+      background: var(--bg-color);
+      z-index: 1;
+      opacity: 0.8;
+    }
+
+
+    nav > div {
+      justify-content: space-around;
+      align-items: center;
+      padding: 0.25em 0.5em;
+      display: flex;
+    }
+
+
+    .menu {
+      display: flex;
+    }
+
+    .menu a {
+      color: var(--text-color);
+      text-decoration: none;
+      /*font-weight: 600;*/
+      transition: 250ms;
+      /*padding: 1em;*/
+      font-size: 1em;
+      display: block;
+      border-left: 1px solid var(--border-color);
+
+      flex: 1;
+      text-align: center;
+      padding: 0.25em;
+      min-width: 100px;
+      text-align: center;
+
+    }
+    .menu a:first-child {
+      border: 0;
+    }
+
+    .menu a:hover {
+      background: var(--accent-color);
+      color: var(--bg-color);
+    }
+
+    .menu a:hover,  .menu a:hover + a{
+      border-color: var(--bg-color);
+    }
+
+    #aboveTheFold {
+      font-size: 1.25em;
+    }
+
+
+
+
+    .heroVideo {
+      width: 100vw;
+    }
+
+    .navContent, .heroVideo {
+      max-width: 1500px;
+      margin: auto;
+    }
+
+    #proofs video {
+      max-width: 100%;
+      margin-top: 1em;
+      margin-bottom: 2.5em;
+      border: 1px solid var(--text-color);
+      cursor: pointer;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--dark-gray-color);
+      padding: 0.25em;
+      margin: 0.25em;
+      margin-left: 0;
+      font-size: 0.9em;
+    }
+
+    #cowswap {
+      margin: 2em auto;
+      max-width: 400px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px var(--text-color);
+    }
+
+
+    .spacer {
+      height: 0.5em;
+      width: 100vw;
+      position: relative;
+      box-shadow: -6px -5px 5px var(--bg-color), 6px -5px 5px var(--bg-color);
+      background: var(--bg-color);
+    }
+
+    button {
+      background: var(--accent-color);
+      color: var(--bg-color);
+      border: 1px solid var(--border-color);
+      padding: 0.5em 1.5em;
+      font-size: 1.5em;
+      border-radius: 0.25em;
+      transition: 0.2s;
+    }
+    button:hover {
+      opacity: 0.7;
+    }
+
+
+
+    .slowBlink {
+      animation: Blink 3s steps(2, start) infinite;
+    }
+
+    .issuanceTable {
+      margin: auto;
+
+    }
+
+    .issuanceTable td {
+      text-align: center;
+      border-top: 1px solid var(--border-color);
+    }
+    .issuanceTable th {
+      padding: 0.5em;
+    }
+
+
+
+    .scanlink {
+      border-bottom: 0.1em solid rgba(0, 0, 0, 0);
+      font-size: 1.75em;
+    }
+
+    .scanlink:hover {
+      text-decoration: none;
+      border-bottom: 0.1em solid;
+    }
+
+
+    .colorTest {
+      height: 50px;
+      width: 50px;
+    }
+
+    .slow-fadein {
+      animation: SlowFadeIn 4s linear;
+    }
+
+    @keyframes SlowFadeIn {
+      0%, 50% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+
+
+
+
+
+    .textGlow {
+      animation: TextGlow 8s linear infinite;
+    }
+    .textGlow:hover {
+      animation: none;
+    }
+    @keyframes TextGlow {
+      0%, 75%, 100% {
+        color: var(--text-color);
+      }
+      25%, 50% {
+        color: var(--accent-color);
+      }
+    }
+
+
+
+    .glow {
+      animation: Glow 8s linear infinite;
+    }
+
+    @keyframes Glow {
+      0%, 100% {
+        color: var(--bg-color);
+        background: var(--accent-color);
+      }
+      50% {
+        color: var(--accent-color);
+        background: var(--bg-color);
+        border-color: var(--accent-color);
+      }
+    }
+
+
+    #menu-mobile {
+      display: none;
+    }
+
+
+
+    @media (max-width: 700px) {
+
+      .slow-fadein {
+        animation: SlowFadeIn 1s linear;
+      }
+
+      #menu {
+        display: none;
+      }
+
+      #aboveTheFold {
+        font-size: 1em;
+      }
+
+
+      #menu-mobile {
+        display: flex;
+      }
+
+      .menu {
+        margin-top: 0.25em;
+        font-size: 0.9em;
+      }
+
+      nav {
+        position: static;
+        opacity: 0.99;
+      }
+
+      h1 {
+        text-align: center;
+      }
+      h2 {
+        font-size: 1.25em;
+      }
+
+      ol {
+        font-size: 0.9em;
+      }
+
+      .tag {
+        font-size: 0.75em
+      }
+    }
+
+    @media (max-width: 540px) {
+      h1 {
+        font-size: 1.6em;
+        padding: 0.25em 0;
+      }
+
+      h2 {
+        font-size: 1em;
+      }
+
+      h3 {
+        font-size: 0.9em;
+      }
+
+
+      .vidContainer {
+        width: 100vw;
+        overflow: hidden;
+      }
+      .vidContainer video {
+        transform: scale(1.25);
+      }
+
+    }
+    @media (max-width: 440px) {
+      .menu a {
+        /*font-size: 0.85em;*/
+        min-width: 70px;
+      }
+
+      ol {
+        margin-left: 2em;
+      }
+
+      ul {
+        margin-left: 1em;
+        list-style-type: square;
+      }
+
+    }
+
+    input {
+      padding: 0.25em;
+      background: var(--text-color);
+      border: 1px solid var(--border-color);
+      font-size: 1.25em;
+    }
+    input:focus {
+      outline: 1px solid var(--accent-color);
+    }
+
+    input::selection {
+      background: var(--bg-color);
+      color: var(--text-color);
+    }
+
+
+  </style>
+
+
+  <script src="./cowswap.min.js"></script>
+  <script src="./utils.js"></script>
+  <!-- <script type="module" src="./modal.js"></script> -->
+  <script type="module" src="./connectWallet.js"></script>
+
+</head>
+<body>
+
+  <header>
+    <h1 style="text-align: center; padding: 0.5em;">Burn Agent Console</h1>
+  </header>
+
+
+  <main>
+    <connect-wallet>
+      <div slot="connected">
+        <div style="margin-top: 1em; text-align: center;">
+          <h2>Connected as: <span id="connectedAs">...</span></h2>
+          <h2>Total $bUSD: <span id="totalBUSD">...</span></h2>
+          <h2>Proof of Burns: <span id="pobs">...</span></h2>
+          <div style="border: 1px solid">
+            <div style="margin: 1em">
+              <h4 style="margin-bottom: 0.25em">Recipient Address</h4>
+              <input id="recipientAddr" style="width: 27em; text-align: center">
+              <div style="margin-top: 0.25em">Resolves to: <span id="resolveAddr">...</span></div>
+              <div>ETH Balance: <span id="checkBalance">...</span></div>
+            </div>
+
+
+            <div style="margin: 1em">
+              <h3>OR</h3>
+              <h4 style="margin-bottom: 0.25em">Burn Agreement Token ID</h4>
+              <input id="agreementId" style="text-align: center">
+              <div style="margin-top: 0.25em">Exists: <span id="agreementIdExists">...</span></div>
+              <div>Agreement Used: <span id="agreementUsed">...</span></div>
+              <div>Owner: <span id="agreementOwner">...</span></div>
+            </div>
+          </div>
+
+          <div style="margin: 1em; border: 1px solid; padding: 0.5em;">
+            <h4 style="margin-bottom: 0.25em">Denomination</h4>
+            <input id="denomination" type="number">
+          </div>
+
+          <div style="margin: 1em; border: 1px solid; padding: 0.5em;">
+            <h4 style="margin-bottom: 0.25em">Serial Number</h4>
+            <input id="serial">
+          </div>
+
+          <div>
+            <h3 id="error" style=""></h2>
+            <button id="issueBUSD" style="margin-bottom: 0.5em">Issue bUSD</button>
+          </div>
+
+          <div>
+            <div id="contracts"></div>
+          </div>
+        </div>
+      </div>
+
+      <div slot="notConnected" style="margin-top: 1em">
+        <connect-button>
+          <button class="connectButton" slot="button">Connect</button>
+          <h3 slot="loading">Connecting...</h3>
+        </connect-button>
+
+      </div>
+    </connect-wallet>
+  </main>
+
+</body>
+
+<script type="module">
+  import {provider, etherscanAddr, addEtherscanLinks, ethVal} from './eth.js'
+  import {CONTRACTS} from './contracts.js'
+  import {$} from './$.js'
+
+
+  provider.setContractInfo(CONTRACTS)
+
+
+  provider.onConnect(async (addr) => {
+    const { BurnCeremony, BurnAgreement, BUSD, ProofOfBurn } = await provider.getContracts()
+    const { etherscanLink } = await provider.getNetwork()
+
+
+    $.id('contracts').innerHTML = `
+      <div>${etherscanAddr(etherscanLink, BUSD.address, 'BUSD')}</div>
+      <div>${etherscanAddr(etherscanLink, ProofOfBurn.address, 'ProofOfBurn')}</div>
+      <div>${etherscanAddr(etherscanLink, BurnCeremony.address, 'BurnCeremony')}</div>
+      <div>${etherscanAddr(etherscanLink, BurnAgreement.address, 'BurnAgreement')}</div>
+    `
+
+
+    const burnAgentAddr = await BurnCeremony.burnAgent()
+
+    if (addr === burnAgentAddr) {
+      $.id('connectedAs').innerHTML = addr
+    } else {
+      $.id('connectedAs').innerHTML = `${addr} <span style="color: var(--accent-color)">WARNING: connected address is not the burn agent (${burnAgentAddr})</span>`
+
+    }
+
+
+    const recipientThrottle = createThrottler(1000)
+
+    async function validateRecipient() {
+      $.id('resolveAddr').innerHTML = 'searching...'
+      $.id('checkBalance').innerHTML = 'searching...'
+      $.id('agreementIdExists').innerHTML = 'searching...'
+      $.id('agreementOwner').innerHTML = 'searching...'
+      $.id('agreementUsed').innerHTML = 'searching...'
+
+      recipientThrottle(async () => {
+        const val = $.id('recipientAddr').value
+        const agreementId = $.id('agreementId').value
+
+
+        if (provider.isENS(val)) {
+          const resolved = await provider.fromENS(val)
+          const balance = await provider.getETHBalance(resolved)
+
+          $.id('resolveAddr').innerHTML = etherscanAddr(etherscanLink, resolved)
+          $.id('checkBalance').innerHTML = balance
+
+        } else if (provider.isAddress(val)) {
+          const balance = await provider.getETHBalance(val)
+
+          $.id('resolveAddr').innerHTML = etherscanAddr(etherscanLink, val)
+          $.id('checkBalance').innerHTML = balance
+
+        } else if (val) {
+          $.id('resolveAddr').innerHTML = 'INVALID ADDRESS'
+          $.id('checkBalance').innerHTML = '???'
+        } else {
+          $.id('resolveAddr').innerHTML = '...'
+          $.id('checkBalance').innerHTML = '...'
+        }
+
+
+        if (agreementId) {
+          const exists = await BurnAgreement.exists(agreementId)
+
+          if (exists) {
+            const agreementUsed = await BurnAgreement.agreementUsed(agreementId)
+            const owner = await BurnAgreement.ownerOf(agreementId)
+
+            $.id('agreementIdExists').innerHTML = 'true'
+            $.id('agreementUsed').innerHTML = agreementUsed ? '<strong>*USED*</strong>' : 'Unused'
+            $.id('agreementOwner').innerHTML = etherscanAddr(etherscanLink, owner)
+
+          } else {
+            $.id('agreementIdExists').innerHTML = 'false'
+            $.id('agreementOwner').innerHTML = '-'
+            $.id('agreementUsed').innerHTML = '-'
+          }
+
+        } else {
+            $.id('agreementIdExists').innerHTML = '...'
+            $.id('agreementOwner').innerHTML = '...'
+            $.id('agreementUsed').innerHTML = '...'
+        }
+      })
+    }
+
+    async function renderData() {
+      const busdTotalSupply = await BUSD.totalSupply()
+      const pobTotalSupply = await ProofOfBurn.totalSupply()
+
+      $.id('totalBUSD').innerHTML = ethVal(busdTotalSupply).toFixed(2)
+      $.id('pobs').innerHTML = pobTotalSupply
+    }
+
+    renderData()
+
+    $.id('recipientAddr').addEventListener('input', validateRecipient)
+    $.id('agreementId').addEventListener('input', validateRecipient)
+
+    if ($.id('recipientAddr').value) {
+      validateRecipient()
+    }
+
+
+    $.id('issueBUSD').onclick = async () => {
+      console.log('CLICKED')
+
+      $.id('serial').value = $.id('serial').value.toUpperCase().replaceAll(' ', '')
+
+      const recipientAddr = $.id('recipientAddr').value
+      const agreementId = $.id('agreementId').value
+      const denomination = $.id('denomination').value
+      const serial = $.id('serial').value
+
+      if (recipientAddr && agreementId) {
+        $.id('error').innerHTML = `Cannot have recipient address AND Agreement ID`
+        return
+      }
+
+      if (recipientAddr) {
+        if (!(provider.isENS(recipientAddr) || provider.isAddress(recipientAddr))) {
+          $.id('error').innerHTML = `Invalid Recipient`
+          return
+        }
+      } else if (agreementId) {
+        const exists = await BurnAgreement.exists(agreementId)
+
+        if (!exists) {
+          $.id('error').innerHTML = `Invalid Recipient`
+          return
+        }
+
+        const agreementUsed = await BurnAgreement.agreementUsed(agreementId)
+
+        if (agreementUsed) {
+          $.id('error').innerHTML = `Invalid Recipient`
+          return
+        }
+
+
+      } else {
+        $.id('error').innerHTML = `Invalid Recipient`
+        return
+      }
+
+      if (![100, 50, 20, 10, 5, 2, 1].includes(Number(denomination))) {
+        $.id('error').innerHTML = `Invalid Denomination`
+        return
+      }
+
+      if (!isValidUsdSerial(serial, denomination)) {
+        $.id('error').innerHTML = `Invalid Serial`
+        return
+      }
+
+      $.id('error').innerHTML = `Pending...`
+
+
+      try {
+
+        console.log(recipientAddr, agreementId, denomination, serial.toUpperCase().replaceAll(' ', ''))
+        const tx = recipientAddr
+          ? await BurnCeremony.issue(recipientAddr, denomination, serial.toUpperCase().replaceAll(' ', ''))
+          : await BurnCeremony.issueWithAgreement(agreementId, denomination, serial.toUpperCase().replaceAll(' ', ''))
+
+        $.id('error').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        const txReciept1 = await tx.wait(1)
+        $.id('error').innerHTML = `Success`
+
+
+        $.id('recipientAddr').value = ''
+        $.id('agreementId').value = ''
+        $.id('denomination').value = ''
+        $.id('serial').value = ''
+        validateRecipient()
+        renderData()
+      } catch (e) {
+        $.id('error').innerHTML = e?.data?.message || e?.error?.message || e?.message || 'Something went wrong'
+        console.error(e)
+      }
+
+    }
+
+  }, e => console.log('oops', e))
+
+
+function isValidUsdSerial(serial, denomination) {
+  if (typeof serial !== 'string') {
+    return false;
+  }
+
+  // 1-letter prefix format (length 10)
+  if (serial.length === 10) {
+    const prefix = serial[0];
+    const numberPart = serial.slice(1, 9);
+    const suffix = serial[9];
+
+    if (!/^[A-L]$/.test(prefix)) {
+      return false;
+    }
+    if (!/^\d{8}$/.test(numberPart)) {
+      return false;
+    }
+    if (!/^[A-NP-Z]$/.test(suffix)) {
+      return false;
+    }
+    return true;
+  }
+
+  // 2-letter prefix format (length 11)
+  if (serial.length === 11 && denomination !== 1 && denomination !== 2) {
+    const prefix = serial.slice(0, 2);
+    const numberPart = serial.slice(2, 10);
+    const suffix = serial[10];
+
+    if (!/^[A-Z]{2}$/.test(prefix)) {
+      return false;
+    }
+    if (!/^\d{8}$/.test(numberPart)) {
+      return false;
+    }
+    if (!/^[A-NP-Z]$/.test(suffix)) {
+      return false;
+    }
+    return true;
+  }
+
+  return false;
+}
+
+</script>
+</html>

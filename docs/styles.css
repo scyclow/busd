@@ -29,7 +29,6 @@
   --blue-color: #283fff;
   --cyan-color: #02fafc;
   --yellow-color: #ffff2b;
-  --red-color: #ff1b1b;
   --magenta-color: #f528ff;
   --green-color: #46ff5a;*/
 
@@ -38,6 +37,7 @@
   --blue-color: #3c72d3;
   --orange-color: #f7975a;*/
 
+  --red-color: #ff1b1b;
   --green-color: #4a9e80;
   --blue-color: #3c72d3;
   --yellow-color: #ffe941;
@@ -123,7 +123,7 @@ button, img {
   -webkit-user-select: none;
 }
 
-button, select, label, input[type="range"], input[type="checkbox"] {
+button, select, label, input[type="range"], input[type="checkbox"], details {
   cursor: pointer;
 }
 

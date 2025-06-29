@@ -116,7 +116,7 @@ describe('BUSD', () => {
   describe('minting', () => {
     it('should work', async () => {
       await expectRevert(
-        ceremony(burnAgent).mint(burnAgent.address, 100, 'abc123'),
+        ceremony(burnAgent).issue(burnAgent.address, 100, 'abc123'),
         'Caller is not Burn Agent'
       )
 
@@ -130,12 +130,12 @@ describe('BUSD', () => {
       expect(await ceremony(owner).burnAgent()).to.equal(burnAgent.address)
 
       await expectRevert(
-        busd(burnAgent).mint(burnAgent.address, 100),
-        'Can only mint through official Burn Ceremony'
+        busd(burnAgent).issue(burnAgent.address, 100),
+        'Can only issue through official Burn Ceremony'
       )
 
 
-      await ceremony(burnAgent).mint(burnAgent.address, 100, 'abc123')
+      await ceremony(burnAgent).issue(burnAgent.address, 100, 'abc123')
 
       const ts0 = Number(await time.latest())
 
@@ -149,7 +149,7 @@ describe('BUSD', () => {
       expect(await pob(owner).ownerOf(0)).to.equal(burnAgent.address)
 
 
-      await ceremony(burnAgent).mint(recipient.address, 50, 'xyz123')
+      await ceremony(burnAgent).issue(recipient.address, 50, 'xyz123')
       const ts1 = Number(await time.latest())
 
       expect(await pob(owner).billsBurned()).to.equal(2)
@@ -180,8 +180,8 @@ describe('BUSD', () => {
       await busd(owner).modifyCeremony(burnAgent.address)
 
       await expectRevert(
-        ceremony(burnAgent).mint(burnAgent.address, 100, 'abc123'),
-        'Can only mint through official Burn Ceremony'
+        ceremony(burnAgent).issue(burnAgent.address, 100, 'abc123'),
+        'Can only issue through official Burn Ceremony'
       )
 
 
@@ -195,7 +195,7 @@ describe('BUSD', () => {
 
       expect(await busd(recipient).busdBurnedBy(recipient.address)).to.equal(0)
 
-      await ceremony(burnAgent).mint(recipient.address, 100, 'abc123')
+      await ceremony(burnAgent).issue(recipient.address, 100, 'abc123')
       expect(await pob(recipient).totalSupply()).to.equal(1)
       expect(await pob(recipient).billsBurned()).to.equal(1)
       expect(await pob(recipient).proofsBurned()).to.equal(0)
@@ -239,8 +239,8 @@ describe('BUSD', () => {
       expect(await pob(recipient).exists(0)).to.equal(false)
 
 
-      await ceremony(burnAgent).mint(recipient.address, 100, 'xyz123')
-      await ceremony(burnAgent).mint(owner.address, 50, 'qwe777')
+      await ceremony(burnAgent).issue(recipient.address, 100, 'xyz123')
+      await ceremony(burnAgent).issue(owner.address, 50, 'qwe777')
 
       expect(await pob(owner).totalSupply()).to.equal(2)
       expect(await pob(owner).billsBurned()).to.equal(3)
@@ -338,7 +338,7 @@ describe('BUSD', () => {
 
 
 
-      await ceremony(burnAgent).mintWithAgreement(0, 100, 'MB70433235C')
+      await ceremony(burnAgent).issueWithAgreement(0, 100, 'MB70433235C')
       expect(await agreement(recipient).agreementUsed(1)).to.equal(false)
 
 
@@ -369,9 +369,9 @@ describe('BUSD', () => {
     it('should work', async () => {
       await ceremony(owner).setBurnAgent(burnAgent.address)
 
-      await ceremony(burnAgent).mint(recipient.address, 100, 'MB70433235C')
-      await ceremony(burnAgent).mint(recipient.address, 100, 'xyz123')
-      await ceremony(burnAgent).mint(recipient.address, 100, 'def456')
+      await ceremony(burnAgent).issue(recipient.address, 100, 'MB70433235C')
+      await ceremony(burnAgent).issue(recipient.address, 100, 'xyz123')
+      await ceremony(burnAgent).issue(recipient.address, 100, 'def456')
 
       console.log(getJsonURI(await pob(owner).tokenURI(0)))
 
@@ -386,7 +386,7 @@ describe('BUSD', () => {
       expect(await pob(owner).tokenIdToSessionId(1)).to.equal(0)
       expect(await pob(owner).tokenIdToSessionId(2)).to.equal(0)
 
-      await ceremony(burnAgent).mint(recipient.address, 100, 'gih789')
+      await ceremony(burnAgent).issue(recipient.address, 100, 'gih789')
 
       await pob(burnAgent).markSessionEnd()
 
@@ -396,6 +396,12 @@ describe('BUSD', () => {
 
       expect(await pob(burnAgent).billsBurned()).to.equal(4)
       expect(await pob(burnAgent).totalSupply()).to.equal(4)
+
+      await expectRevert(
+        pob(recipient).mint(recipient.address, 10, '12345'),
+        'Invalid minter'
+      )
+
 
       await expectRevert(
         pob(recipient).addProof(0, 'proof'),

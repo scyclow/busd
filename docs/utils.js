@@ -90,6 +90,13 @@ function waitPromise(ms) {
 }
 
 
+function createThrottler(ms) {
+  let __throttleTimeoutId
+  return function throttle(fn) {
+    clearTimeout(__throttleTimeoutId)
+    __throttleTimeoutId = setTimeout(fn, ms)
+  }
+}
 
 
 
