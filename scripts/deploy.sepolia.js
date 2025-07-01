@@ -46,7 +46,7 @@ async function main() {
     // await BurnAgreement.connect(owner).setActiveAgreement('1.0.0')
 
     // // 6.
-    // await BurnAgreement.connect(owner).setAgreementMetadata('1.0.0', 'https://steviep.xyz/busd/burn-agreement-1_0_0.html')
+    // await BurnAgreement.connect(owner).setAgreementMetadata('1.0.0', 'ipfs://...')
 
 
 
