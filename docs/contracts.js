@@ -4,7 +4,7 @@
 export const CONTRACTS = {
   BUSD: {
     addr: {
-      sepolia: '0x87BEc860d6297108481E4Dedf3D8D64133842C5d',
+      sepolia: '0x91032e4DD917c5850907A3f134E07E0ec7CAD04D',
       mainnet: ''
     },
     abi: [
@@ -14,7 +14,7 @@ export const CONTRACTS = {
 
   ProofOfBurn: {
     addr: {
-      sepolia: '0x5a581C9A2Cf3d07BDBA0bA09e1168f5bc95Ad060',
+      sepolia: '0x6b8dCA99bc84F6b6Ab27064BA5d72F8Ef4ca963E',
       mainnet: ''
     },
     abi: [
@@ -24,7 +24,7 @@ export const CONTRACTS = {
 
   BurnCeremony: {
     addr: {
-      sepolia: '0xae900709887e5A895f5Ee9384D6765457229c6f9',
+      sepolia: '0x73c15E8C45C9E1eEE273e6604b44f37453EaCD62',
       mainnet: ''
     },
     abi: [
@@ -36,7 +36,7 @@ export const CONTRACTS = {
 
   BurnAgreement: {
     addr: {
-      sepolia: '0x89E65a1b37c1F82542A7c3C7cb73bE3e7b29063e',
+      sepolia: '0x85e4fCAca45BA56F423834F6610d61eAc507eae6',
       mainnet: ''
     },
     abi: [

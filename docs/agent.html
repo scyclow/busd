@@ -692,11 +692,13 @@ function isValidUsdSerial(serial, denomination) {
     return false;
   }
 
+  const serialAdj = serial.slice(-1) === '*' ? serial.replace('*', '') : serial
+
   // 1-letter prefix format (length 10)
-  if (serial.length === 10) {
-    const prefix = serial[0];
-    const numberPart = serial.slice(1, 9);
-    const suffix = serial[9];
+  if (serialAdj.length === 10) {
+    const prefix = serialAdj[0];
+    const numberPart = serialAdj.slice(1, 9);
+    const suffix = serialAdj[9];
 
     if (!/^[A-L]$/.test(prefix)) {
       return false;
@@ -711,10 +713,10 @@ function isValidUsdSerial(serial, denomination) {
   }
 
   // 2-letter prefix format (length 11)
-  if (serial.length === 11 && denomination !== 1 && denomination !== 2) {
-    const prefix = serial.slice(0, 2);
-    const numberPart = serial.slice(2, 10);
-    const suffix = serial[10];
+  if (serialAdj.length === 11 && denomination !== 1 && denomination !== 2) {
+    const prefix = serialAdj.slice(0, 2);
+    const numberPart = serialAdj.slice(2, 10);
+    const suffix = serialAdj[10];
 
     if (!/^[A-Z]{2}$/.test(prefix)) {
       return false;
