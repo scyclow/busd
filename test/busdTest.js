@@ -43,7 +43,7 @@ const contractBalance = contract => contract.provider.getBalance(contract.addres
 
 
 
-let BUSD, ProofOfBurn, BurnCeremony, BurnAgreement, signers, owner, burnAgent, recipient, busd, pob, ceremony, agreement
+let BUSD, ProofOfBurn, BurnCeremony, BurnAgreement, BurnAgreementMinter, signers, owner, burnAgent, recipient, busd, pob, ceremony, agreement
 
 describe('BUSD', () => {
   beforeEach(async () => {
@@ -55,6 +55,7 @@ describe('BUSD', () => {
     const BurnCeremonyFactory = await ethers.getContractFactory('BurnCeremony', owner)
     const ProofOfBurnFactory = await ethers.getContractFactory('ProofOfBurn', owner)
     const BurnAgreementFactory = await ethers.getContractFactory('BurnAgreement', owner)
+    const BurnAgreementMinterFactory = await ethers.getContractFactory('BurnAgreementMinter', owner)
 
 
     BUSD = await BUSDFactory.deploy()
@@ -71,11 +72,16 @@ describe('BUSD', () => {
 
     BurnAgreement = await BurnAgreementFactory.deploy(BurnCeremony.address)
 
+    BurnAgreementMinter = await BurnAgreementMinterFactory.attach(
+      await BurnAgreement.minter()
+    )
+
 
     busd = (s) => BUSD.connect(s)
     pob = (s) => ProofOfBurn.connect(s)
     ceremony = (s) => BurnCeremony.connect(s)
     agreement = (s) => BurnAgreement.connect(s)
+    agreementMinter = (s) => BurnAgreementMinter.connect(s)
   })
 
 
@@ -164,6 +170,9 @@ describe('BUSD', () => {
       expect(await pob(owner).serials(0)).to.equal('abc123')
       expect(await pob(owner).serials(1)).to.equal('xyz123')
 
+      // expect(await pob(owner).serialToTokenId('abc123')).to.equal(0)
+      // expect(await pob(owner).serialToTokenId('xyz123')).to.equal(1)
+
       expect(await pob(owner).denominations(0)).to.equal(100)
       expect(await pob(owner).denominations(1)).to.equal(50)
 
@@ -171,6 +180,12 @@ describe('BUSD', () => {
       expect(Number(await pob(owner).timestamps(1))).to.equal(ts1)
 
 
+console.log('<><><><><><><><><>')
+// console.log(await pob(burnAgent).serialToTokenId('abc123'))
+      await expectRevert(
+        ceremony(burnAgent).issue(burnAgent.address, 100, 'abc123'),
+        'Serial already used'
+      )
 
       await expectRevert(
         busd(recipient).modifyCeremony(recipient.address),
@@ -287,10 +302,10 @@ describe('BUSD', () => {
       await ceremony(owner).setBurnAgreement(BurnAgreement.address)
 
       await expectRevert(
-        agreement(recipient).updateURI(recipient.address),
+        agreement(recipient).setURI(recipient.address),
         'Ownable: caller is not the owner'
       )
-      await agreement(owner).updateURI(await BurnAgreement.uri())
+      await agreement(owner).setURI(await BurnAgreement.uri())
 
       expect(await ceremony(burnAgent).burnAgreement()).to.equal(BurnAgreement.address)
 
@@ -305,20 +320,25 @@ describe('BUSD', () => {
       const ownerStartingBalance = await getBalance(owner)
 
       await expectRevert(
-        agreement(recipient).mint(txValue(0.00999)),
+        agreement(recipient).mint(recipient.address, txValue(0.01)),
+        'Only minting address can mint'
+      )
+
+      await expectRevert(
+        agreementMinter(recipient).mint(txValue(0.00999)),
         'Invalid value'
       )
 
-      await agreement(recipient).mint(txValue(0.01))
+      await agreementMinter(recipient).mint(txValue(0.01))
       // await agreement(recipient).tokenIdToAgreementId(0)
 
-      expect(await agreement(recipient).tokenIdToAgreementId(1)).to.equal('1.0.1')
       expect(await agreement(recipient).activeAgreementId()).to.equal('1.0.1')
+      expect(await agreement(recipient).tokenIdToAgreementId(1)).to.equal('1.0.1')
 
       await agreement(owner).setActiveAgreement('1.1.0')
       expect(await agreement(recipient).activeAgreementId()).to.equal('1.1.0')
 
-      await agreement(recipient).mint(txValue(0.01))
+      await agreementMinter(recipient).mint(txValue(0.01))
 
       expect(await agreement(recipient).totalSupply()).to.equal(3)
       expect(await agreement(recipient).exists(1)).to.equal(true)
@@ -345,12 +365,12 @@ describe('BUSD', () => {
       expect( await getBalance(owner) - ownerStartingBalance).to.be.closeTo(0, 0.0001)
 
       await expectRevert(
-        agreement(recipient).withdraw(toETH(0.02)),
+        agreementMinter(recipient).withdraw(toETH(0.02)),
         'Ownable: caller is not the owner'
       )
 
 
-      await agreement(owner).withdraw(toETH(0.02))
+      await agreementMinter(owner).withdraw(toETH(0.02))
 
 
 
@@ -358,6 +378,31 @@ describe('BUSD', () => {
 
       expect(ownerEndingBalance - ownerStartingBalance).to.be.closeTo(0.02, 0.0001)
 
+
+      await expectRevert(
+        agreementMinter(recipient).setPrice(toETH(0)),
+        'Ownable: caller is not the owner'
+      )
+
+      await agreementMinter(owner).setPrice(toETH(0.02))
+
+      await expectRevert(
+        agreementMinter(recipient).mint(txValue(0.01999)),
+        'Invalid value'
+      )
+
+      await agreementMinter(recipient).mint(txValue(0.02))
+      expect(await agreement(recipient).totalSupply()).to.equal(4)
+
+
+      await expectRevert(
+        agreement(recipient).setMinter(recipient.address),
+        'Ownable: caller is not the owner'
+      )
+
+      await agreement(owner).setMinter(owner.address)
+
+      expect(await agreement(owner).minter()).to.equal(owner.address)
 
       console.log(getJsonURI(await agreement(recipient).tokenURI(0)))
       console.log(getJsonURI(await agreement(recipient).tokenURI(1)))

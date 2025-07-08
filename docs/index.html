@@ -486,9 +486,14 @@
     <p>To submit USD for an official Burn Ceremony, please complete the following steps:</p>
     <ol>
       <li>Read the <a href="./burn-agreement-1_1_0" target="_blank">Burn Agreement</a> in full.</li>
-      <li>Sign and complete a <a href="./burn-application-1_1_0.pdf" target="_blank">Burn Application</a>.</li>
+      <li>
+        Sign and complete a <a href="./burn-application-1_1_0.pdf" target="_blank">Burn Application</a>.
+        <h3 style="padding-left: 3em;">OR</h3>
+        <a href="#burnAgreement">Mint a BurnAgreement NFT</a> and complete a <a href="./simplified-burn-application-1_1_0.pdf" target="_blank">Simplified Burn Application</a>.
 
-      <li>Mail an envelope including your completed Application, all bills you wish to submit, and all required processing fees ($20 per bill submitted) to:</li>
+      </li>
+
+      <li>Mail an envelope including your completed Application, all bills you wish to submit, and all required processing fees ($20 or BurnAgreement NFT per submitted bill) to:</li>
 
     </ol>
     <blockquote>
@@ -655,38 +660,9 @@
     <hr>
     <h2 style="margin-bottom: 1em;">Proofs of Burn</h2>
 
-    <h3>Proof of Burn 1 [TEST]</h3>
-    <div>
-      <span class="tag">Denomination: $1</span>
-      <span class="tag">Serial: E00484988A</span>
-      <span class="tag">Session: 0</span>
-      <span class="tag">Timestamp: 69696969</span>
-    </div>
-    <video controls>
-      <source src="./assets/proofs/testburn1-small.mp4" type="video/mp4">
-    </video>
+    <div id="proofVids"></div>
 
-    <h3>Proof of Burn 2 [TEST]</h3>
-    <div>
-      <span class="tag">Denomination: $1</span>
-      <span class="tag">Serial: B52726219C</span>
-      <span class="tag">Session: 0</span>
-      <span class="tag">Timestamp: 69696969</span>
-    </div>
-    <video controls>
-      <source src="./assets/proofs/testburn2-small.mp4" type="video/mp4">
-    </video>
 
-    <h3>Proof of Burn 3 [TEST]</h3>
-    <div>
-      <span class="tag">Denomination: $1</span>
-      <span class="tag">Serial: L24083692Q</span>
-      <span class="tag">Session: 0</span>
-      <span class="tag">Timestamp: 69696969</span>
-    </div>
-    <video controls>
-      <source src="./assets/proofs/testburn0-small.mp4" type="video/mp4">
-    </video>
   </section>
 
   <section>
@@ -754,6 +730,21 @@ connected
     // $.id('tradeLink-mobile').classList.remove('hidden')
   }
 
+
+  times(10, i => {
+    $.id('proofVids').innerHTML += `    <div>
+      <h3>Proof of Burn ${i} [TEST]</h3>
+      <div>
+        <span class="tag">Denomination: $1</span>
+        <span class="tag">Serial: E00484988A</span>
+        <span class="tag">Session: 0</span>
+        <span class="tag">Timestamp: 69696969</span>
+      </div>
+      <video controls>
+        <source src="./assets/proofs/${i}.mp4" type="video/mp4">
+      </video>
+    </div>`
+  })
 
 
   provider.onConnect(async (addr) => {

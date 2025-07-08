@@ -29,8 +29,7 @@ contract BurnAgreement is ERC721, Ownable {
   string public activeAgreementId = '1.0.0';
   address public burnCeremony;
   BurnAgreementURI public uri;
-
-  uint256 public price = 0.01 ether;
+  BurnAgreementMinter public minter;
 
   mapping(uint256 => string) public tokenIdToAgreementId;
   mapping(string => string) public agreementIdToMetadata;
@@ -40,10 +39,10 @@ contract BurnAgreement is ERC721, Ownable {
   event BatchMetadataUpdate(uint256 _fromTokenId, uint256 _toTokenId);
 
 
-
   constructor(address ceremony) ERC721('Burn Agreement', 'BA') {
     burnCeremony = ceremony;
     uri = new BurnAgreementURI();
+    minter = new BurnAgreementMinter();
     _safeMint(msg.sender, 0);
     tokenIdToAgreementId[0] = activeAgreementId;
   }
@@ -52,16 +51,12 @@ contract BurnAgreement is ERC721, Ownable {
     return _exists(tokenId);
   }
 
-  function mint() external payable {
-    require(msg.value >= price, 'Invalid value');
+  function mint(address recipient) external payable {
+    require(msg.sender == address(minter), 'Only minting address can mint');
 
     tokenIdToAgreementId[totalSupply] = activeAgreementId;
-    _safeMint(msg.sender, totalSupply);
+    _safeMint(recipient, totalSupply);
     totalSupply++;
-  }
-
-  function withdraw(uint256 balance) external onlyOwner {
-    payable(owner()).call{value: balance}('');
   }
 
   function markAgreementUsed(uint256 tokenId) external {
@@ -73,9 +68,10 @@ contract BurnAgreement is ERC721, Ownable {
   }
 
 
-  function setPrice(uint256 _price) external onlyOwner {
-    price = _price;
+  function setMinter(BurnAgreementMinter newMinter) external onlyOwner {
+    minter = newMinter;
   }
+
 
   function setBurnCeremony(address _burnCeremony) external onlyOwner {
     burnCeremony = _burnCeremony;
@@ -95,7 +91,7 @@ contract BurnAgreement is ERC721, Ownable {
     return uri.tokenURI(tokenId);
   }
 
-  function updateURI(address newURI) external onlyOwner {
+  function setURI(address newURI) external onlyOwner {
     uri = BurnAgreementURI(newURI);
   }
 
@@ -103,6 +99,39 @@ contract BurnAgreement is ERC721, Ownable {
     return interfaceId == bytes4(0x49064906) || super.supportsInterface(interfaceId);
   }
 }
+
+
+contract BurnAgreementMinter {
+  uint256 public price = 0.01 ether;
+
+  BurnAgreement public burnAgreement;
+
+  constructor() {
+    burnAgreement = BurnAgreement(msg.sender);
+  }
+
+  modifier onlyOwner {
+    require(msg.sender == burnAgreement.owner(), "Ownable: caller is not the owner");
+    _;
+  }
+
+  function mint() external payable {
+    require(msg.value >= price, 'Invalid value');
+
+    burnAgreement.mint(msg.sender);
+  }
+
+
+  function withdraw(uint256 balance) external onlyOwner {
+    payable(burnAgreement.owner()).call{value: balance}('');
+  }
+
+  function setPrice(uint256 _price) external onlyOwner {
+    price = _price;
+  }
+}
+
+
 
 contract BurnAgreementURI {
   BurnAgreement public agreement;

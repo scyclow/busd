@@ -135,11 +135,13 @@ contract ProofOfBurn is ERC721, Ownable {
   mapping(uint256 => uint256) public timestamps;
   mapping(uint256 => string) public memos;
   mapping(uint256 => address) public burnedBy;
+  mapping(string => bool) public serialUsed;
 
   uint256[] public sessionEnds;
 
   event MetadataUpdate(uint256 _tokenId);
   event BatchMetadataUpdate(uint256 _fromTokenId, uint256 _toTokenId);
+  event Burn(address burner, uint256 tokenId, uint256 amount);
 
   constructor() ERC721('bUSD Proof of Burn', 'POB') {
     busd = BUSD(msg.sender);
@@ -168,7 +170,7 @@ contract ProofOfBurn is ERC721, Ownable {
   function tokenIdToSessionId(uint256 tokenId) public view returns (uint256) {
     uint256 ts = timestamps[tokenId];
 
-    for (uint256 i; i < sessionEnds.length; i++) {
+    for (uint256 i; i < sessionEnds.length; ++i) {
       if (ts < sessionEnds[i]) return i;
     }
 
@@ -186,7 +188,7 @@ contract ProofOfBurn is ERC721, Ownable {
   }
 
   function addProofBatch(uint256[] calldata tokenIds, string calldata baseURI, string calldata ext) external onlyAgent {
-    for (uint256 i; i < tokenIds.length; i++) {
+    for (uint256 i; i < tokenIds.length; ++i) {
       proofs[tokenIds[i]] = string.concat(baseURI, Strings.toString(i), ext);
     }
     emit BatchMetadataUpdate(0, billsBurned);
@@ -203,9 +205,11 @@ contract ProofOfBurn is ERC721, Ownable {
     string calldata serial
   ) external {
     require(msg.sender == address(busd.ceremony()), 'Invalid minter');
+    require(!serialUsed[serial], 'Serial already used');
 
     denominations[billsBurned] = uint8(denomination);
     serials[billsBurned] = serial;
+    serialUsed[serial] = true;
     timestamps[billsBurned] = block.timestamp;
 
     _safeMint(to, billsBurned);
@@ -217,12 +221,14 @@ contract ProofOfBurn is ERC721, Ownable {
   function burn(uint256 tokenId) public virtual {
     require(_isApprovedOrOwner(msg.sender, tokenId), 'ERC721: caller is not token owner or approved');
 
-    uint256 denomination = uint256(denominations[tokenId]);
-    busd.burnFrom(ownerOf(tokenId), denomination * 1 ether);
+    uint256 amount = uint256(denominations[tokenId]) * 1 ether;
+    busd.burnFrom(ownerOf(tokenId), amount);
     burnedBy[tokenId] = ownerOf(tokenId);
 
     proofsBurned += 1;
     _burn(tokenId);
+
+    emit Burn(burnedBy[tokenId], tokenId, amount);
   }
 
 

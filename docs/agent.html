@@ -442,39 +442,56 @@
           <h2>Connected as: <span id="connectedAs">...</span></h2>
           <h2>Total $bUSD: <span id="totalBUSD">...</span></h2>
           <h2>Proof of Burns: <span id="pobs">...</span></h2>
-          <div style="border: 1px solid">
-            <div style="margin: 1em">
-              <h4 style="margin-bottom: 0.25em">Recipient Address</h4>
-              <input id="recipientAddr" style="width: 27em; text-align: center">
-              <div style="margin-top: 0.25em">Resolves to: <span id="resolveAddr">...</span></div>
-              <div>ETH Balance: <span id="checkBalance">...</span></div>
+
+          <section>
+
+            <h2>Issue</h2>
+
+            <div style="border: 1px dotted">
+              <div style="margin: 1em">
+                <h4 style="margin-bottom: 0.25em">Recipient Address</h4>
+                <input id="recipientAddr" style="width: 27em; text-align: center">
+                <div style="margin-top: 0.25em">Resolves to: <span id="resolveAddr">...</span></div>
+                <div>ETH Balance: <span id="checkBalance">...</span></div>
+              </div>
+
+
+              <div style="margin: 1em">
+                <h3>OR</h3>
+                <h4 style="margin-bottom: 0.25em">Burn Agreement Token ID</h4>
+                <input id="agreementId" style="text-align: center">
+                <div style="margin-top: 0.25em">Exists: <span id="agreementIdExists">...</span></div>
+                <div>Agreement Used: <span id="agreementUsed">...</span></div>
+                <div>Owner: <span id="agreementOwner">...</span></div>
+              </div>
             </div>
 
-
-            <div style="margin: 1em">
-              <h3>OR</h3>
-              <h4 style="margin-bottom: 0.25em">Burn Agreement Token ID</h4>
-              <input id="agreementId" style="text-align: center">
-              <div style="margin-top: 0.25em">Exists: <span id="agreementIdExists">...</span></div>
-              <div>Agreement Used: <span id="agreementUsed">...</span></div>
-              <div>Owner: <span id="agreementOwner">...</span></div>
+            <div style="margin: 1em; border: 1px dotted; padding: 0.5em;">
+              <h4 style="margin-bottom: 0.25em">Denomination</h4>
+              <input id="denomination" type="number">
             </div>
-          </div>
 
-          <div style="margin: 1em; border: 1px solid; padding: 0.5em;">
-            <h4 style="margin-bottom: 0.25em">Denomination</h4>
-            <input id="denomination" type="number">
-          </div>
+            <div style="margin: 1em; border: 1px dotted; padding: 0.5em;">
+              <h4 style="margin-bottom: 0.25em">Serial Number</h4>
+              <input id="serial">
+            </div>
 
-          <div style="margin: 1em; border: 1px solid; padding: 0.5em;">
-            <h4 style="margin-bottom: 0.25em">Serial Number</h4>
-            <input id="serial">
-          </div>
+            <div>
+              <h3 id="error" style=""></h3>
+              <button id="issueBUSD" style="margin-bottom: 0.5em">Issue bUSD</button>
+            </div>
 
-          <div>
-            <h3 id="error" style=""></h2>
-            <button id="issueBUSD" style="margin-bottom: 0.5em">Issue bUSD</button>
-          </div>
+          </section>
+
+
+
+          <section>
+            <h2>Mark Session End</h2>
+            <h3>Current Session: <span id="currentSession">...</span></h3>
+            <button id="endSession">Mark Session End</button>
+            <h3 id="endSessionError"></h3>
+          </section>
+
 
           <div>
             <div id="contracts"></div>
@@ -518,11 +535,12 @@
 
     const burnAgentAddr = await BurnCeremony.burnAgent()
 
+
+
     if (addr === burnAgentAddr) {
       $.id('connectedAs').innerHTML = addr
     } else {
       $.id('connectedAs').innerHTML = `${addr} <span style="color: var(--accent-color)">WARNING: connected address is not the burn agent (${burnAgentAddr})</span>`
-
     }
 
 
@@ -590,9 +608,11 @@
     async function renderData() {
       const busdTotalSupply = await BUSD.totalSupply()
       const pobTotalSupply = await ProofOfBurn.totalSupply()
+      const sessionEnds = await ProofOfBurn.totalSessions()
 
       $.id('totalBUSD').innerHTML = ethVal(busdTotalSupply).toFixed(2)
       $.id('pobs').innerHTML = pobTotalSupply
+      $.id('currentSession').innerHTML = Number(sessionEnds)
     }
 
     renderData()
@@ -604,9 +624,33 @@
       validateRecipient()
     }
 
+    $.id('endSession').onclick = async () => {
+
+      $.id('endSessionError').innerHTML = `Pending...`
+
+
+      try {
+
+        const tx = ProofOfBurn.markSessionEnd()
+
+        $.id('endSessionError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        const txReciept1 = await tx.wait(1)
+        $.id('endSessionError').innerHTML = `Success`
+
+        setTimeout(() => {
+          $.id('endSessionError').innerHTML = ``
+        }, 4000)
+
+
+        renderData()
+      } catch (e) {
+        $.id('endSessionError').innerHTML = e?.data?.message || e?.error?.message || e?.message || 'Something went wrong'
+        console.error(e)
+      }
+    }
+
 
     $.id('issueBUSD').onclick = async () => {
-      console.log('CLICKED')
 
       $.id('serial').value = $.id('serial').value.toUpperCase().replaceAll(' ', '')
 
@@ -669,6 +713,10 @@
         $.id('error').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
         const txReciept1 = await tx.wait(1)
         $.id('error').innerHTML = `Success`
+
+        setTimeout(() => {
+          $.id('error').innerHTML = ``
+        }, 4000)
 
 
         $.id('recipientAddr').value = ''
