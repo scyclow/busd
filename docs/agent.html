@@ -403,7 +403,7 @@
 
     }
 
-    input {
+    input, textarea {
       padding: 0.25em;
       background: var(--text-color);
       border: 1px solid var(--border-color);
@@ -490,6 +490,33 @@
             <h3>Current Session: <span id="currentSession">...</span></h3>
             <button id="endSession">Mark Session End</button>
             <h3 id="endSessionError"></h3>
+          </section>
+
+
+          <section>
+            <h2>Add Proof</h2>
+            <h4 style="margin-bottom: 0.25em">Token ID</h4>
+            <input id="proofTokenId">
+            <h4 style="margin-bottom: 0.25em">proof</h4>
+            <input id="singleProof" placeholder="ipfs://abc.mp4">
+            <div style="margin-top: 0.5em">
+              <h3 id="addProofError" style=""></h3>
+              <button id="addProof" style="margin-bottom: 0.5em">Add Proof</button>
+            </div>
+          </section>
+
+          <section>
+            <h2>Add Proof Batch</h2>
+            <h4 style="margin-bottom: 0.25em">Token IDs</h4>
+            <textarea id="proofBatchTokenIds" style="width: 250px; height: 100px;"></textarea>
+            <h4 style="margin-bottom: 0.25em">Base URI</h4>
+            <input id="baseURI" placeholder="ipfs://.../" style="width: 650px">
+            <h4 style="margin-bottom: 0.25em">Extension</h4>
+            <input id="extension" placeholder=".mp4">
+            <div style="margin-top: 0.5em">
+              <h3 id="addProofBatchError" style=""></h3>
+              <button id="addProofBatch" style="margin-bottom: 0.5em">Add Proofs</button>
+            </div>
           </section>
 
 
@@ -631,7 +658,7 @@
 
       try {
 
-        const tx = ProofOfBurn.markSessionEnd()
+        const tx = await ProofOfBurn.markSessionEnd()
 
         $.id('endSessionError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
         const txReciept1 = await tx.wait(1)
@@ -731,6 +758,107 @@
       }
 
     }
+
+
+    $.id('addProof').onclick = async () => {
+      const proofTokenId = $.id('proofTokenId').value
+      const singleProof = $.id('singleProof').value
+
+      if (proofTokenId === '' || isNaN(Number(proofTokenId))) {
+        $.id('addProofError').innerHTML = 'Invalid Token ID'
+        return
+      }
+
+      if (!singleProof) {
+        $.id('addProofError').innerHTML = 'Invalid Proof'
+        return
+      }
+
+
+
+      $.id('endSessionError').innerHTML = `Pending...`
+
+
+      try {
+
+        const tx = await ProofOfBurn.addProof(proofTokenId, singleProof)
+
+        $.id('addProofError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        const txReciept1 = await tx.wait(1)
+        $.id('addProofError').innerHTML = `Success`
+
+        setTimeout(() => {
+          $.id('addProofError').innerHTML = ``
+        }, 4000)
+
+        $.id('proofTokenId').value = ''
+        $.id('singleProof').value = ''
+
+        renderData()
+      } catch (e) {
+        $.id('addProofError').innerHTML = e?.data?.message || e?.error?.message || e?.message || 'Something went wrong'
+        console.error(e)
+      }
+    }
+
+
+
+
+
+
+
+
+
+    $.id('addProofBatch').onclick = async () => {
+      const proofBatchTokenIds = $.id('proofBatchTokenIds').value
+      const baseURI = $.id('baseURI').value
+      const extension = $.id('extension').value
+
+      const tokenIds = proofBatchTokenIds.split(',').map(n => Number(n))
+
+      if (proofBatchTokenIds === '' || tokenIds.length === 0 || tokenIds.some(id => isNaN(id))) {
+        $.id('addProofBatchError').innerHTML = 'Invalid Token ID List'
+        return
+      }
+
+      if (!baseURI) {
+        $.id('addProofBatchError').innerHTML = 'Invalid Base URI'
+        return
+      }
+
+      if (!extension) {
+        $.id('addProofBatchError').innerHTML = 'Invalid Extension'
+        return
+      }
+
+
+
+      $.id('endSessionError').innerHTML = `Pending...`
+
+
+      try {
+
+        const tx = await ProofOfBurn.addProofBatch(tokenIds, baseURI, extension)
+
+        $.id('addProofBatchError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        const txReciept1 = await tx.wait(1)
+        $.id('addProofBatchError').innerHTML = `Success`
+
+        setTimeout(() => {
+          $.id('addProofBatchError').innerHTML = ``
+        }, 4000)
+
+        $.id('proofTokenId').value = ''
+        $.id('singleProof').value = ''
+
+        renderData()
+      } catch (e) {
+        $.id('addProofBatchError').innerHTML = e?.data?.message || e?.error?.message || e?.message || 'Something went wrong'
+        console.error(e)
+      }
+    }
+
+
 
   }, e => console.log('oops', e))
 

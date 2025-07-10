@@ -170,8 +170,6 @@ describe('BUSD', () => {
       expect(await pob(owner).serials(0)).to.equal('abc123')
       expect(await pob(owner).serials(1)).to.equal('xyz123')
 
-      // expect(await pob(owner).serialToTokenId('abc123')).to.equal(0)
-      // expect(await pob(owner).serialToTokenId('xyz123')).to.equal(1)
 
       expect(await pob(owner).denominations(0)).to.equal(100)
       expect(await pob(owner).denominations(1)).to.equal(50)
@@ -180,8 +178,7 @@ describe('BUSD', () => {
       expect(Number(await pob(owner).timestamps(1))).to.equal(ts1)
 
 
-console.log('<><><><><><><><><>')
-// console.log(await pob(burnAgent).serialToTokenId('abc123'))
+
       await expectRevert(
         ceremony(burnAgent).issue(burnAgent.address, 100, 'abc123'),
         'Serial already used'
@@ -454,7 +451,7 @@ console.log('<><><><><><><><><>')
       )
 
       await expectRevert(
-        pob(recipient).addProofBatch([1, 2], 'proof://123', '.mov'),
+        pob(recipient).addProofBatch([1, 2], 'proof://123/', '.mov'),
         'Caller is not Burn Agent'
       )
 
