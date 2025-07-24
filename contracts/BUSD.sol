@@ -35,6 +35,9 @@ contract BurnCeremony {
   IBurnAgreement public burnAgreement;
   address public burnAgent;
 
+  event Issuance(address indexed account, uint256 indexed denomination, string indexed serial);
+
+
   constructor() {
     busd = BUSD(msg.sender);
   }
@@ -68,6 +71,8 @@ contract BurnCeremony {
   ) external onlyAgent {
     busd.issue(account, denomination * 1 ether);
     proofOfBurn.mint(account, denomination, serial);
+
+    emit Issuance(account, denomination, serial);
   }
 
   function issueWithAgreement(
@@ -80,6 +85,8 @@ contract BurnCeremony {
     burnAgreement.markAgreementUsed(agreementTokenId);
     busd.issue(account, denomination * 1 ether);
     proofOfBurn.mint(account, denomination, serial);
+
+    emit Issuance(account, denomination, serial);
   }
 }
 
@@ -91,6 +98,8 @@ contract BUSD is ERC20, Ownable {
   BurnCeremony public ceremony;
   ProofOfBurn public proofOfBurn;
 
+  bool public isLocked;
+
   mapping(address => uint256) public busdBurnedBy;
 
   constructor() ERC20('Burnt United States Dollars', 'bUSD') {
@@ -101,6 +110,7 @@ contract BUSD is ERC20, Ownable {
   }
 
   function issue(address account, uint256 amount) external {
+    require(!isLocked, 'New issuance is locked');
     require(msg.sender == address(ceremony), 'Can only issue through official Burn Ceremony');
     _mint(account, amount);
   }
@@ -116,6 +126,24 @@ contract BUSD is ERC20, Ownable {
   function modifyCeremony(address newCeremony) external onlyOwner {
     ceremony = BurnCeremony(newCeremony);
   }
+
+
+  function lockIssuance() external onlyOwner {
+    isLocked = true;
+  }
+
+  string private _contractURI = 'data:application/json;utf8,{"name":"Burnt US Dollars"}';
+  event ContractURIUpdated();
+
+  function contractURI() external view returns (string memory) {
+    return _contractURI;
+  }
+
+  function updateContractURI(string calldata newURI) external onlyOwner {
+    _contractURI = newURI;
+    emit ContractURIUpdated();
+  }
+
 }
 
 
@@ -146,6 +174,7 @@ contract ProofOfBurn is ERC721, Ownable {
   constructor() ERC721('bUSD Proof of Burn', 'POB') {
     busd = BUSD(msg.sender);
     uri = new ProofOfBurnURI();
+    transferOwnership(tx.origin);
   }
 
   function exists(uint256 tokenId) external view returns (bool) {
@@ -244,6 +273,19 @@ contract ProofOfBurn is ERC721, Ownable {
 
   function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721) returns (bool) {
     return interfaceId == bytes4(0x49064906) || super.supportsInterface(interfaceId);
+  }
+
+
+  string private _contractURI = 'data:application/json;utf8,{"name":"bUSD Proof of Burn"}';
+  event ContractURIUpdated();
+
+  function contractURI() external view returns (string memory) {
+    return _contractURI;
+  }
+
+  function updateContractURI(string calldata newURI) external onlyOwner {
+    _contractURI = newURI;
+    emit ContractURIUpdated();
   }
 }
 

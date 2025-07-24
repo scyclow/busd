@@ -19,10 +19,13 @@ export const CONTRACTS = {
     },
     abi: [
       'function totalSupply() external view returns (uint256)',
+      'function billsBurned() external view returns (uint256)',
       'function markSessionEnd() external',
       'function totalSessions() external view returns (uint256)',
       'function addProof(uint256 tokenId, string proof) external',
       'function addProofBatch(uint256[] tokenIds, string baseURI, string ext)',
+      'function tokenURI(uint256 tokenId) external view returns (string) ',
+      'function ownerOf(uint256 tokenId) external view returns (address) ',
     ]
   },
 

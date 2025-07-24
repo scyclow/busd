@@ -189,11 +189,26 @@ describe('BUSD', () => {
         'Ownable: caller is not the owner'
       )
 
+
       await busd(owner).modifyCeremony(burnAgent.address)
 
       await expectRevert(
         ceremony(burnAgent).issue(burnAgent.address, 100, 'abc123'),
         'Can only issue through official Burn Ceremony'
+      )
+
+      expect(await busd(recipient).isLocked()).to.equal(false)
+      await expectRevert(
+        busd(burnAgent).lockIssuance(),
+        'Ownable: caller is not the owner'
+      )
+
+      await busd(owner).lockIssuance()
+      expect(await busd(recipient).isLocked()).to.equal(true)
+
+      await expectRevert(
+        ceremony(burnAgent).issue(burnAgent.address, 100, 'kjhkjhkjh'),
+        'New issuance is locked'
       )
 
 
@@ -489,6 +504,27 @@ describe('BUSD', () => {
       expect(await pob(owner).memos(1)).to.equal('')
       expect(await pob(owner).memos(2)).to.equal('')
       expect(await pob(owner).memos(3)).to.equal('')
+
+      expect(await busd(owner).contractURI()).to.equal('data:application/json;utf8,{"name":"Burnt US Dollars"}')
+      expect(await pob(owner).contractURI()).to.equal('data:application/json;utf8,{"name":"bUSD Proof of Burn"}')
+
+      await expectRevert(
+        busd(burnAgent).updateContractURI('uriuriuri'),
+        'Ownable: caller is not the owner'
+      )
+
+      await expectRevert(
+        pob(burnAgent).updateContractURI('uriuriuri'),
+        'Ownable: caller is not the owner'
+      )
+
+      await busd(owner).updateContractURI('uriuriuri')
+
+      // console.log(await pob(owner).owner(), burnAgent.address, owner.address)
+      await pob(owner).updateContractURI('uriuriuri')
+
+      expect(await busd(owner).contractURI()).to.equal('uriuriuri')
+      expect(await pob(owner).contractURI()).to.equal('uriuriuri')
 
 
       console.log(getJsonURI(await pob(owner).tokenURI(0)))

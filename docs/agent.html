@@ -418,6 +418,21 @@
       color: var(--text-color);
     }
 
+    .queueContentItem {
+      border: 1px dashed;
+      cursor: pointer;
+      padding: 0.25em;
+    }
+    .queueContentItem:hover {
+      background: var(--text-color);
+      color: var(--bg-color);
+    }
+
+    textarea::selection, input::selection {
+      color: var(--text-color);
+      background: var(--bg-color);
+    }
+
 
   </style>
 
@@ -434,8 +449,7 @@
     <h1 style="text-align: center; padding: 0.5em;">Burn Agent Console</h1>
   </header>
 
-
-  <main>
+  <main style="max-width: 100vw;">
     <connect-wallet>
       <div slot="connected">
         <div style="margin-top: 1em; text-align: center;">
@@ -443,43 +457,69 @@
           <h2>Total $bUSD: <span id="totalBUSD">...</span></h2>
           <h2>Proof of Burns: <span id="pobs">...</span></h2>
 
-          <section>
-
+          <section style="max-width: 100vw;">
             <h2>Issue</h2>
+            <div style="display: flex;">
+              <aside style="width: 400px; margin-right: 1em;">
+                <div style="height: 45vh; overflow: scroll; background: var(--border-color); padding: 0.5em;">
+                  <h4>Queue:</h4>
+                  <div id="queueContent">
 
-            <div style="border: 1px dotted">
-              <div style="margin: 1em">
-                <h4 style="margin-bottom: 0.25em">Recipient Address</h4>
-                <input id="recipientAddr" style="width: 27em; text-align: center">
-                <div style="margin-top: 0.25em">Resolves to: <span id="resolveAddr">...</span></div>
-                <div>ETH Balance: <span id="checkBalance">...</span></div>
+                  </div>
+                </div>
+
+                <div id="clearQueue" style="text-decoration: underline; cursor: pointer; margin: 1em 0; color: var(--accent-color);">Clear Queue</div>
+
+                <div style="display: flex; align-items: center; justify-content: center; margin: 1em 0;">
+                  <textarea id="queueInput" style="margin-right: 0.5em; font-size: 10px; width: 300px; height: 100px;"></textarea>
+                  <button id="addToQueue" style="font-size: 14px;">Enqueue</button>
+                </div>
+                <div id="enqueueError"></div>
+
+
+                <div style="height: 45vh; overflow: scroll; background: var(--blue-color); padding: 0.5em; margin-top: 0.5em; text-align: left;">
+                  <h4 style="margin-bottom: 0.25em">Already Issued:</h4>
+                  <div id="issuedPOBs"></div>
+                </div>
+              </aside>
+
+              <div>
+                <div style="border: 1px dotted">
+                  <div style="margin: 1em">
+                    <h4 style="margin-bottom: 0.25em">Recipient Address</h4>
+                    <input id="recipientAddr" style="width: 27em; text-align: center">
+                    <div style="margin-top: 0.25em">Resolves to: <span id="resolveAddr">...</span></div>
+                    <div>ETH Balance: <span id="checkBalance">...</span></div>
+                  </div>
+
+
+                  <div style="margin: 1em">
+                    <h3>OR</h3>
+                    <h4 style="margin-bottom: 0.25em">Burn Agreement Token ID</h4>
+                    <input id="agreementId" style="text-align: center">
+                    <div style="margin-top: 0.25em">Exists: <span id="agreementIdExists">...</span></div>
+                    <div>Agreement Used: <span id="agreementUsed">...</span></div>
+                    <div>Owner: <span id="agreementOwner">...</span></div>
+                  </div>
+                </div>
+
+                <div style="margin: 1em; border: 1px dotted; padding: 0.5em;">
+                  <h4 style="margin-bottom: 0.25em">Denomination</h4>
+                  <input id="denomination" type="number">
+                </div>
+
+                <div style="margin: 1em; border: 1px dotted; padding: 0.5em;">
+                  <h4 style="margin-bottom: 0.25em">Serial Number</h4>
+                  <input id="serial">
+                </div>
+
+                <div>
+                  <h3 id="error" style=""></h3>
+                  <button id="issueBUSD" style="margin-bottom: 0.5em">Issue bUSD</button>
+                </div>
               </div>
-
-
-              <div style="margin: 1em">
-                <h3>OR</h3>
-                <h4 style="margin-bottom: 0.25em">Burn Agreement Token ID</h4>
-                <input id="agreementId" style="text-align: center">
-                <div style="margin-top: 0.25em">Exists: <span id="agreementIdExists">...</span></div>
-                <div>Agreement Used: <span id="agreementUsed">...</span></div>
-                <div>Owner: <span id="agreementOwner">...</span></div>
-              </div>
             </div>
 
-            <div style="margin: 1em; border: 1px dotted; padding: 0.5em;">
-              <h4 style="margin-bottom: 0.25em">Denomination</h4>
-              <input id="denomination" type="number">
-            </div>
-
-            <div style="margin: 1em; border: 1px dotted; padding: 0.5em;">
-              <h4 style="margin-bottom: 0.25em">Serial Number</h4>
-              <input id="serial">
-            </div>
-
-            <div>
-              <h3 id="error" style=""></h3>
-              <button id="issueBUSD" style="margin-bottom: 0.5em">Issue bUSD</button>
-            </div>
 
           </section>
 
@@ -541,7 +581,7 @@
 <script type="module">
   import {provider, etherscanAddr, addEtherscanLinks, ethVal} from './eth.js'
   import {CONTRACTS} from './contracts.js'
-  import {$} from './$.js'
+  import {$, ls} from './$.js'
 
 
   provider.setContractInfo(CONTRACTS)
@@ -550,6 +590,8 @@
   provider.onConnect(async (addr) => {
     const { BurnCeremony, BurnAgreement, BUSD, ProofOfBurn } = await provider.getContracts()
     const { etherscanLink } = await provider.getNetwork()
+
+    let pobURI = []
 
 
     $.id('contracts').innerHTML = `
@@ -640,6 +682,56 @@
       $.id('totalBUSD').innerHTML = ethVal(busdTotalSupply).toFixed(2)
       $.id('pobs').innerHTML = pobTotalSupply
       $.id('currentSession').innerHTML = Number(sessionEnds)
+
+
+      const totalBillsBurned = await ProofOfBurn.billsBurned()
+
+      pobURI = (await Promise.all(times(totalBillsBurned, async tokenId => {
+        return {
+          tokenId,
+          tokenURI: JSON.parse((await ProofOfBurn.tokenURI(tokenId)).replace('data:application/json;utf8,', '')),
+          owner: await provider.formatAddr(await ProofOfBurn.ownerOf(tokenId))
+
+        }
+      }))).sort((a, b) => a.tokenId - b.tokenId)
+
+
+      $.id('issuedPOBs').innerHTML = pobURI.map(pob => `
+        <div>${pob.tokenId}. ${pob.tokenURI.attributes[0].value} ($${pob.tokenURI.attributes[1].value}) ${pob.owner}</div>
+      `).join('')
+
+
+      const issuedSerials = new Set(pobURI.map(p => p.tokenURI.attributes[0].value))
+      const existingQueue = (ls.get(QUEUE_KEY) || []).filter(q => !issuedSerials.has(q.serial))
+
+      $.id('queueContent').innerHTML = ''
+
+      existingQueue.forEach(q => {
+        const item = $.div(`${q.name} (${q.denomination}): ${q.serial}`, { class: 'queueContentItem' })
+         $.render(
+          $.id('queueContent'),
+          item
+        )
+
+        item.onclick = () => {
+          if (q.recipient) {
+            $.id('recipientAddr').value = q.recipient
+            $.id('recipientAddr').dispatchEvent(new Event('input'))
+          }
+          if (q.agreementId) {
+            $.id('agreementId').value = q.agreementId
+            $.id('agreementId').dispatchEvent(new Event('input'))
+          }
+          $.id('denomination').value = q.denomination
+          $.id('serial').value = q.serial
+        }
+      })
+
+
+
+
+
+
     }
 
     renderData()
@@ -858,6 +950,57 @@
       }
     }
 
+
+
+    const QUEUE_KEY = '__QUEUE_KEY__'
+
+    $.id('addToQueue').onclick = () => {
+      try {
+        $.id('enqueueError').innerHTML = ''
+        console.log('sdfs')
+        const queueInput = JSON.parse($.id('queueInput').value.trim())
+
+        if (!Array.isArray(queueInput)) throw new Error('Queue input must be array')
+
+
+        for (let q of queueInput) {
+          if (!q.serial) throw new Error(`Invalid serial for ${JSON.stringify(q)}`)
+          if (isNaN(q.denomination)) throw new Error(`Invalid denomination for ${JSON.stringify(q)}`)
+
+          if (q.recipient && q.agreementId) throw new Error(`Cannot include receipient & agreementId for ${JSON.stringify(q)}`)
+          else if (!q.recipient && q.agreementId) {
+            if (isNaN(q.agreementId)) throw new Error(`Invalid agreementId for ${JSON.stringify(q)}`)
+          }
+          else if (!q.recipient && !q.agreementId) throw new Error(`Must include receipient or agreementId for ${JSON.stringify(q)}`)
+
+          if (!q.recipient) throw new Error(`Invalid recipient for ${JSON.stringify(q)}`)
+          if (!q.name)  throw new Error(`Invalid name for ${JSON.stringify(q)}`)
+        }
+
+
+        const existingQueue = ls.get(QUEUE_KEY) || []
+
+
+
+        const issuedSerials = new Set(pobURI.map(p => p.tokenURI.attributes[0].value))
+
+        const newQueue = existingQueue.concat(queueInput).filter(q => !issuedSerials.has(q.serial))
+
+        ls.set(QUEUE_KEY, JSON.stringify(newQueue))
+
+        $.id('queueInput').value = ''
+        renderData()
+      } catch (e) {
+        $.id('enqueueError').innerHTML = `Something went wrong: ${e}`
+      }
+    }
+
+    $.id('clearQueue').onclick = () => {
+      if (confirm('Are you sure?')) {
+        ls.set(QUEUE_KEY, '[]')
+        renderData()
+      }
+    }
 
 
   }, e => console.log('oops', e))
