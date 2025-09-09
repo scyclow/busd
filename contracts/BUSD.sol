@@ -93,7 +93,6 @@ contract BurnCeremony {
 
 /// @title bUSD
 /// @author steviep.eth
-/// @notice ...
 contract BUSD is ERC20, Ownable {
   BurnCeremony public ceremony;
   ProofOfBurn public proofOfBurn;
@@ -218,7 +217,7 @@ contract ProofOfBurn is ERC721, Ownable {
 
   function addProofBatch(uint256[] calldata tokenIds, string calldata baseURI, string calldata ext) external onlyAgent {
     for (uint256 i; i < tokenIds.length; ++i) {
-      proofs[tokenIds[i]] = string.concat(baseURI, Strings.toString(i), ext);
+      proofs[tokenIds[i]] = string.concat(baseURI, Strings.toString(tokenIds[i]), ext);
     }
     emit BatchMetadataUpdate(0, billsBurned);
   }

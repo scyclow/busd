@@ -487,9 +487,9 @@ describe('BUSD', () => {
       await pob(burnAgent).addProofBatch([3], 'proof://456/', '')
 
       expect(await pob(owner).proofs(0)).to.equal('proof')
-      expect(await pob(owner).proofs(1)).to.equal('proof://123/0.mov')
-      expect(await pob(owner).proofs(2)).to.equal('proof://123/1.mov')
-      expect(await pob(owner).proofs(3)).to.equal('proof://456/0')
+      expect(await pob(owner).proofs(1)).to.equal('proof://123/1.mov')
+      expect(await pob(owner).proofs(2)).to.equal('proof://123/2.mov')
+      expect(await pob(owner).proofs(3)).to.equal('proof://456/3')
 
       await pob(burnAgent).addProofBatch([0, 1, 2, 3], 'proof://abcdefg/', '.mp4')
 
