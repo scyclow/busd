@@ -54,5 +54,14 @@ export const CONTRACTS = {
     ]
   },
 
+  BurnAgreementMinter: {
+    addr: {
+      mainnet: '0xc4ef253a7147Fcc3322165D014cc8053870F4090'
+    },
+    abi: [
+      'function mint() external payable',
+    ]
+  },
+
 }
 

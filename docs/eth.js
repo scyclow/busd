@@ -3,6 +3,7 @@ import {CONTRACTS} from './contracts.js'
 
 export const bnToN = bn => Number(bn.toString())
 export const ethVal = (n, str=false) => str ? ethers.utils.formatEther(n) : Number(ethers.utils.formatEther(n))
+
 export const truncateAddr = (addr, len=13) => {
   const padding = Math.floor((len - 5)/2)
   return addr.slice(0, 2+padding) + '...' + addr.slice(-padding)

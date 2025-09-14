@@ -614,8 +614,9 @@
       <connect-wallet>
         <div slot="connected">
           <div style="margin-top: 1em; text-align: center;">
-            <button style="margin-bottom: 0.5em">Mint</button> <span style="font-size: 1.5em; display: inline-block;">(0.01 ETH)</span>
+            <button id="mintBurnAgreement" style="margin-bottom: 0.5em">Mint</button> <span style="font-size: 1.5em; display: inline-block;">(0.01 ETH)</span>
           </div>
+          <h3 id="burnAgreementError" style="text-align: center;"></h3>
         </div>
 
         <div slot="notConnected" style="margin-top: 1em">
@@ -733,7 +734,7 @@ connected
 
 
 <script type="module">
-  import {provider, etherscanAddr, addEtherscanLinks, ethVal} from './eth.js'
+  import {provider, etherscanAddr, addEtherscanLinks, ethVal, txValue} from './eth.js'
   import {CONTRACTS} from './contracts.js'
   import {$} from './$.js'
 
@@ -767,10 +768,7 @@ connected
 
 
   provider.onConnect(async (addr) => {
-    const { URITest } = await provider.getContracts()
     const { name: chainName, etherscanLink } = await provider.getNetwork()
-
-    console.log(await URITest.tokenURI(8849))
 
       const params = {
         "appCode": "My Cool App", // Name of your app (max 50 characters)
@@ -817,6 +815,37 @@ connected
       document.getElementById("cowswap"),
       { params, provider: window.ethereum }
     )
+
+
+    const { BurnAgreementMinter } = await provider.getContracts()
+
+
+
+    $.id('mintBurnAgreement').onclick = async () => {
+
+
+      $.id('burnAgreementError').innerHTML = `Pending...`
+
+
+      try {
+
+        const tx = await BurnAgreementMinter.mint(txValue(0.01))
+
+        $.id('burnAgreementError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        const txReciept1 = await tx.wait(1)
+        $.id('burnAgreementError').innerHTML = `Success`
+
+        setTimeout(() => {
+          $.id('burnAgreementError').innerHTML = ``
+        }, 4000)
+
+        renderData()
+      } catch (e) {
+        $.id('burnAgreementError').innerHTML = e?.data?.message || e?.error?.message || e?.message || 'Something went wrong'
+        console.error(e)
+      }
+    }
+
   })
 
 
