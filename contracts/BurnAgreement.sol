@@ -24,41 +24,58 @@ import "./Dependencies.sol";
 pragma solidity ^0.8.28;
 
 
+/// @title Burn Agreement (bUSD)
+/// @author steviep.eth
+/// @notice Terms and conditions for engaging with the bUSD project. Owning a Burn Agreement token can be used to streamline the bUSD issuance process. Ownership of this NFT does not guarantee participation in a Burn Ceremony
 contract BurnAgreement is ERC721, Ownable {
   uint256 public totalSupply = 1;
-  string public activeAgreementId = '1.0.0';
+  string public activeAgreementVersion = '1.0.0';
   address public burnCeremony;
   BurnAgreementURI public uri;
   BurnAgreementMinter public minter;
 
-  mapping(uint256 => string) public tokenIdToAgreementId;
-  mapping(string => string) public agreementIdToMetadata;
+  /// @notice Map a Burn Agreement token to the agreement version
+  mapping(uint256 => string) public tokenIdToAgreementVersion;
+
+  /// @notice Map an agreement version to the agreement content uri
+  mapping(string => string) public agreementVersionToMetadata;
+
+  /// @notice Keeps track of whether an agreement token has been used in a Ceremony
   mapping(uint256 => bool) public agreementUsed;
 
   event MetadataUpdate(uint256 _tokenId);
   event BatchMetadataUpdate(uint256 _fromTokenId, uint256 _toTokenId);
 
 
+  /// @dev Mints #0 to the contract deployer
   constructor(address ceremony) ERC721('Burn Agreement', 'BA') {
     burnCeremony = ceremony;
     uri = new BurnAgreementURI();
     minter = new BurnAgreementMinter();
     _safeMint(msg.sender, 0);
-    tokenIdToAgreementId[0] = activeAgreementId;
+    tokenIdToAgreementVersion[0] = activeAgreementVersion;
   }
 
+  /// @notice Checks if given token ID exists
+  /// @param tokenId Token to run existence check on
+  /// @return True if token exists
   function exists(uint256 tokenId) external view returns (bool) {
     return _exists(tokenId);
   }
 
+  /// @notice Mints a Burn Agreement token to the recipient
+  /// @param recipient Address to sent token to
+  /// @dev Can only be called by the BurnAgreementMinter
   function mint(address recipient) external payable {
     require(msg.sender == address(minter), 'Only minting address can mint');
 
-    tokenIdToAgreementId[totalSupply] = activeAgreementId;
+    tokenIdToAgreementVersion[totalSupply] = activeAgreementVersion;
     _safeMint(recipient, totalSupply);
     totalSupply++;
   }
 
+  /// @notice Marks an Agreement as "used" as part of a burn ceremony
+  /// @dev Can only be called by the BurnCeremony
   function markAgreementUsed(uint256 tokenId) external {
     require(msg.sender == burnCeremony, 'Only burn ceremony can use agreement');
     require(!agreementUsed[tokenId], 'Agreement already used');
@@ -77,13 +94,13 @@ contract BurnAgreement is ERC721, Ownable {
     burnCeremony = _burnCeremony;
   }
 
-  function setActiveAgreement(string calldata _activeAgreementId) external onlyOwner {
-    activeAgreementId = _activeAgreementId;
+  function setActiveAgreement(string calldata _activeAgreementVersion) external onlyOwner {
+    activeAgreementVersion = _activeAgreementVersion;
   }
 
 
-  function setAgreementMetadata(string calldata agreementId, string calldata metadata) external onlyOwner {
-    agreementIdToMetadata[agreementId] = metadata;
+  function setAgreementMetadata(string calldata agreementVersion, string calldata metadata) external onlyOwner {
+    agreementVersionToMetadata[agreementVersion] = metadata;
   }
 
 
@@ -101,6 +118,9 @@ contract BurnAgreement is ERC721, Ownable {
 }
 
 
+/// @title Burn Agreement Minter (bUSD)
+/// @author steviep.eth
+/// @notice Interface for minting bUSD Burn Agreement NFTs
 contract BurnAgreementMinter {
   uint256 public price = 0.01 ether;
 
@@ -123,7 +143,8 @@ contract BurnAgreementMinter {
 
 
   function withdraw(uint256 balance) external onlyOwner {
-    payable(burnAgreement.owner()).call{value: balance}('');
+    (bool success, ) = payable(burnAgreement.owner()).call{value: balance}('');
+    require(success, "Transfer failed");
   }
 
   function setPrice(uint256 _price) external onlyOwner {
@@ -143,7 +164,7 @@ contract BurnAgreementURI {
 
   function tokenURI(uint256 tokenId) public view returns (string memory) {
     bool agreementUsed = agreement.agreementUsed(tokenId);
-    string memory agreementVersion = agreement.tokenIdToAgreementId(tokenId);
+    string memory agreementVersion = agreement.tokenIdToAgreementVersion(tokenId);
 
     string memory bg = agreementUsed ? '#000' : '#fff';
     string memory text = agreementUsed ? '#ef791f' : '#000';
@@ -174,7 +195,7 @@ contract BurnAgreementURI {
       '{"name": "Burn Agreement v', agreementVersion,
       '", "description": "By purchasing this token you implicitly agree to the terms of this agreement. Ownership of this NFT does not guarantee participation in a Burn Ceremony. Participation shall be left to the full discretion of the Burn Agent.'
       '", "image": "', thumbnail,
-      '", "animation_url": "', agreement.agreementIdToMetadata(agreementVersion),
+      '", "animation_url": "', agreement.agreementVersionToMetadata(agreementVersion),
       '", "attributes":', attrs,
       '}'
     ));

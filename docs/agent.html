@@ -468,6 +468,11 @@
                   </div>
                 </div>
 
+                <div>
+                  <div>Bills Remaining: <span id="billsRemaining"></span></div>
+                  <div>Value Remaining: <span id="valueRemaining"></span></div>
+                </div>
+
                 <div id="clearQueue" style="text-decoration: underline; cursor: pointer; margin: 1em 0; color: var(--accent-color);">Clear Queue</div>
 
                 <div style="display: flex; align-items: center; justify-content: center; margin: 1em 0;">
@@ -559,6 +564,19 @@
             <div style="margin-top: 0.5em">
               <h3 id="addProofBatchError" style=""></h3>
               <button id="addProofBatch" style="margin-bottom: 0.5em">Add Proofs</button>
+            </div>
+          </section>
+
+
+          <section>
+            <h2>Add Memo</h2>
+            <h4 style="margin-bottom: 0.25em">Token ID</h4>
+            <input id="memoTokenId">
+            <h4 style="margin-bottom: 0.25em">Memo</h4>
+            <textarea id="memo"></textarea>
+            <div style="margin-top: 0.5em">
+              <h3 id="addMemoError" style=""></h3>
+              <button id="addMemo" style="margin-bottom: 0.5em">Add Memo</button>
             </div>
           </section>
 
@@ -709,7 +727,12 @@
 
       $.id('queueContent').innerHTML = ''
 
+      let billsRemaining = 0
+      let valueRemaining = 0
       existingQueue.forEach(q => {
+        billsRemaining++
+        valueRemaining += Number(q.denomination)
+
         const item = $.div(`${q.name} (${q.denomination}): ${q.serial}`, { class: 'queueContentItem' })
          $.render(
           $.id('queueContent'),
@@ -727,8 +750,13 @@
           }
           $.id('denomination').value = q.denomination
           $.id('serial').value = q.serial
+          if (q.isPre1996) $.id('isPre1996').checked = true
+
         }
       })
+
+      $.id('billsRemaining').innerHTML = billsRemaining
+      $.id('valueRemaining').innerHTML = valueRemaining
 
 
 
@@ -872,7 +900,7 @@
 
 
 
-      $.id('endSessionError').innerHTML = `Pending...`
+      $.id('addProodError').innerHTML = `Pending...`
 
 
       try {
@@ -893,6 +921,49 @@
         renderData()
       } catch (e) {
         $.id('addProofError').innerHTML = e?.data?.message || e?.error?.message || e?.message || 'Something went wrong'
+        console.error(e)
+      }
+    }
+
+
+
+    $.id('addMemo').onclick = async () => {
+      const memoTokenId = $.id('memoTokenId').value
+      const memo = $.id('memo').value
+
+      if (memoTokenId === '' || isNaN(Number(memoTokenId))) {
+        $.id('addMemoError').innerHTML = 'Invalid Token ID'
+        return
+      }
+
+      if (!memo) {
+        $.id('addMemoError').innerHTML = 'Invalid Proof'
+        return
+      }
+
+
+
+      $.id('addMemoError').innerHTML = `Pending...`
+
+
+      try {
+
+        const tx = await ProofOfBurn.addMemo(memoTokenId, memo)
+
+        $.id('addMemoError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        const txReciept1 = await tx.wait(1)
+        $.id('addMemoError').innerHTML = `Success`
+
+        setTimeout(() => {
+          $.id('addMemoError').innerHTML = ``
+        }, 4000)
+
+        $.id('memoTokenId').value = ''
+        $.id('memo').value = ''
+
+        renderData()
+      } catch (e) {
+        $.id('addMemoError').innerHTML = e?.data?.message || e?.error?.message || e?.message || 'Something went wrong'
         console.error(e)
       }
     }
@@ -929,7 +1000,7 @@
 
 
 
-      $.id('endSessionError').innerHTML = `Pending...`
+      $.id('addProofBatchError').innerHTML = `Pending...`
 
 
       try {

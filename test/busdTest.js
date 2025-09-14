@@ -116,6 +116,10 @@ describe('BUSD', () => {
         ceremony(owner).init(ZERO_ADDR, ZERO_ADDR)
       )
 
+      await expectRevert.unspecified(
+        ceremony(recipient).init(ZERO_ADDR, ZERO_ADDR)
+      )
+
     })
   })
 
@@ -324,7 +328,7 @@ describe('BUSD', () => {
       expect(await agreement(recipient).totalSupply()).to.equal(1)
       expect(await agreement(recipient).exists(0)).to.equal(true)
       expect(await agreement(recipient).ownerOf(0)).to.equal(owner.address)
-      expect(await agreement(recipient).tokenIdToAgreementId(0)).to.equal('1.0.0')
+      expect(await agreement(recipient).tokenIdToAgreementVersion(0)).to.equal('1.0.0')
 
       await agreement(owner).setActiveAgreement('1.0.1')
       await agreement(owner).setAgreementMetadata('1.0.1', 'ipfs://12345')
@@ -342,13 +346,13 @@ describe('BUSD', () => {
       )
 
       await agreementMinter(recipient).mint(txValue(0.01))
-      // await agreement(recipient).tokenIdToAgreementId(0)
+      // await agreement(recipient).tokenIdToAgreementVersion(0)
 
-      expect(await agreement(recipient).activeAgreementId()).to.equal('1.0.1')
-      expect(await agreement(recipient).tokenIdToAgreementId(1)).to.equal('1.0.1')
+      expect(await agreement(recipient).activeAgreementVersion()).to.equal('1.0.1')
+      expect(await agreement(recipient).tokenIdToAgreementVersion(1)).to.equal('1.0.1')
 
       await agreement(owner).setActiveAgreement('1.1.0')
-      expect(await agreement(recipient).activeAgreementId()).to.equal('1.1.0')
+      expect(await agreement(recipient).activeAgreementVersion()).to.equal('1.1.0')
 
       await agreementMinter(recipient).mint(txValue(0.01))
 
@@ -357,7 +361,7 @@ describe('BUSD', () => {
       expect(await agreement(recipient).exists(2)).to.equal(true)
 
 
-      expect(await agreement(recipient).tokenIdToAgreementId(2)).to.equal('1.1.0')
+      expect(await agreement(recipient).tokenIdToAgreementVersion(2)).to.equal('1.1.0')
       expect(await agreement(recipient).agreementUsed(0)).to.equal(false)
       expect(await agreement(recipient).agreementUsed(1)).to.equal(false)
       expect(await agreement(recipient).agreementUsed(2)).to.equal(false)
@@ -506,7 +510,7 @@ describe('BUSD', () => {
       expect(await pob(owner).memos(3)).to.equal('')
 
       expect(await busd(owner).contractURI()).to.equal('data:application/json;utf8,{"name":"Burnt US Dollars"}')
-      expect(await pob(owner).contractURI()).to.equal('data:application/json;utf8,{"name":"bUSD Proof of Burn"}')
+      expect(await pob(owner).contractURI()).to.equal('data:application/json;utf8,{"name":"Proof of Burn (bUSD)"}')
 
       await expectRevert(
         busd(burnAgent).updateContractURI('uriuriuri'),
