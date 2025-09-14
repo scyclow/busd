@@ -1032,7 +1032,6 @@
     $.id('addToQueue').onclick = () => {
       try {
         $.id('enqueueError').innerHTML = ''
-        console.log('sdfs')
         const queueInput = JSON.parse($.id('queueInput').value.trim())
 
         if (!Array.isArray(queueInput)) throw new Error('Queue input must be array')
