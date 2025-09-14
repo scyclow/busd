@@ -47,7 +47,7 @@ export class Web3Provider {
   VALID_CHAINS = [
     '0x1', // mainnet
     // '0x7a69', // localz
-    '0xaa36a7', // sepolia
+    // '0xaa36a7', // sepolia
     // '0x2105', // base
     // '0x14a34', // base sepolia
     // '0xa4b1', // arbitrum
