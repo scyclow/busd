@@ -725,6 +725,8 @@
       const issuedSerials = new Set(pobURI.map(p => p.tokenURI.attributes[0].value))
       const existingQueue = (ls.get(QUEUE_KEY) || []).filter(q => !issuedSerials.has(q.serial))
 
+      console.log(JSON.stringify(pobURI))
+
       $.id('queueContent').innerHTML = ''
 
       let billsRemaining = 0
@@ -783,7 +785,7 @@
 
         const tx = await ProofOfBurn.markSessionEnd()
 
-        $.id('endSessionError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        $.id('endSessionError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="https://${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
         const txReciept1 = await tx.wait(1)
         $.id('endSessionError').innerHTML = `Success`
 
@@ -861,7 +863,7 @@
           ? await BurnCeremony.issue(recipientAddr, denomination, serial.toUpperCase().replaceAll(' ', ''))
           : await BurnCeremony.issueWithAgreement(agreementId, denomination, serial.toUpperCase().replaceAll(' ', ''))
 
-        $.id('error').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        $.id('error').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="https://${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
         const txReciept1 = await tx.wait(1)
         $.id('error').innerHTML = `Success`
 
@@ -907,7 +909,7 @@
 
         const tx = await ProofOfBurn.addProof(proofTokenId, singleProof)
 
-        $.id('addProofError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        $.id('addProofError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="https://${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
         const txReciept1 = await tx.wait(1)
         $.id('addProofError').innerHTML = `Success`
 
@@ -950,7 +952,7 @@
 
         const tx = await ProofOfBurn.addMemo(memoTokenId, memo)
 
-        $.id('addMemoError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        $.id('addMemoError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="https://${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
         const txReciept1 = await tx.wait(1)
         $.id('addMemoError').innerHTML = `Success`
 
@@ -1007,7 +1009,7 @@
 
         const tx = await ProofOfBurn.addProofBatch(tokenIds, baseURI, extension)
 
-        $.id('addProofBatchError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        $.id('addProofBatchError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="https://${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
         const txReciept1 = await tx.wait(1)
         $.id('addProofBatchError').innerHTML = `Success`
 

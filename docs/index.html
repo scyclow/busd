@@ -202,9 +202,12 @@
     #proofs video {
       max-width: 100%;
       margin-top: 1em;
-      margin-bottom: 2.5em;
       border: 1px solid var(--text-color);
       cursor: pointer;
+    }
+
+    .videoArticle {
+      margin-bottom: 2.5em;
     }
 
     .tag {
@@ -284,7 +287,7 @@
     }
 
     .slow-fadein {
-      animation: SlowFadeIn 4s linear;
+      animation: SlowFadeIn 5s linear;
     }
 
     @keyframes SlowFadeIn {
@@ -457,7 +460,12 @@
 
   <div class="vidContainer">
     <video class="heroVideo" autoplay loop muted  style="">
-      <source src="./assets/pr2-small.mov" type="video/mp4">
+    <!-- <video class="heroVideo" loop muted  style=""> -->
+      <!-- <source src="./assets/pr2-small.mov" type="video/mp4"> -->
+      <!-- <source src="./assets/hero.mp4" type="video/mp4"> -->
+      <source src="./assets/hero.mp4" type="video/mp4">
+
+
       <!-- <source src="https://busd-proof-of-burn.s3.us-east-1.amazonaws.com/busd-pr.mov" type="video/mp4"> -->
       <!-- <source src="./assets/proofs/testburn1-1280.mp4" type="video/mp4"> -->
     </video>
@@ -477,6 +485,8 @@
 <main>
   <section id="aboveTheFold" class="slow-fadein" >
     <p>Burnt US Dollars ($bUSD) is a <a href="#coinInfo">coin</a> that represents the value of burned US Dollars.</p>
+
+    <h3 style="text-align: center;">Total USD Burned: $2455</h3>
   </section>
 
 
@@ -672,7 +682,7 @@
 
   <section id="proofs">
     <hr>
-    <h2 style="margin-bottom: 1em;">Proofs of Burn</h2>
+    <h2 style="margin-bottom: 1em;">Proofs of Burn [41]</h2>
 
     <div id="proofVids"></div>
 
@@ -683,10 +693,10 @@
     <hr>
     <h2>Smart Contracts</h2>
     <div style="display: flex; flex-direction: column; margin-top: 1em;">
-      <a href="#">BUSD Contract</a>
-      <a href="">BurnCeremony</a>
-      <a href="#">ProofOfBurn</a>
-      <a href="#">BurnAgreement</a>
+      <a href="https://etherscan.io/address/0xb9bdb5221585ad31ba3a4fa9c7a7b73a0495916e">BUSD Contract</a>
+      <a href="https://etherscan.io/address/0x0400B4D05090FB3DA2d6857280ab7e7648BC544c">BurnCeremony</a>
+      <a href="https://etherscan.io/address/0x46b2Fc11FD3209D42CB0971AE2C824f1814F1245">ProofOfBurn</a>
+      <a href="https://etherscan.io/address/0xA537Efd05d57AEb529f3b90517CCAc099a392729">BurnAgreement</a>
     </div>
   </section>
 
@@ -751,20 +761,6 @@ connected
   }
 
 
-  times(10, i => {
-    $.id('proofVids').innerHTML += `    <div>
-      <h3>Proof of Burn ${i} [TEST]</h3>
-      <div>
-        <span class="tag">Denomination: $1</span>
-        <span class="tag">Serial: E00484988A</span>
-        <span class="tag">Session: 0</span>
-        <span class="tag">Timestamp: 69696969</span>
-      </div>
-      <video controls>
-        <source src="./assets/proofs/${i}.mp4" type="video/mp4">
-      </video>
-    </div>`
-  })
 
 
   provider.onConnect(async (addr) => {
@@ -831,7 +827,7 @@ connected
 
         const tx = await BurnAgreementMinter.mint(txValue(0.01))
 
-        $.id('burnAgreementError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        $.id('burnAgreementError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="https://${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
         const txReciept1 = await tx.wait(1)
         $.id('burnAgreementError').innerHTML = `Success`
 
@@ -847,6 +843,325 @@ connected
     }
 
   })
+
+
+
+
+
+const s3_1080p = 'https://busd-proof-of-burn.s3.us-east-1.amazonaws.com/session-0-1080p'
+const s3_4k = 'https://busd-session-0-raw.s3.us-east-1.amazonaws.com/input'
+
+
+
+const pobData = [
+  {
+    tokenId: 0,
+    _4kVideoName: 'VID_20250915_114313.mp4',
+    serial: 'L03205550*',
+    denomination: 1,
+    burnedAt: 1757951387,
+    sessionId: 0,
+  }, {
+    tokenId: 1,
+    _4kVideoName: 'VID_20250915_114830.mp4',
+    serial: 'PB59694665J',
+    denomination: 100,
+    burnedAt: 1757951723,
+    sessionId: 0,
+  }, {
+    tokenId: 2,
+    _4kVideoName: 'VID_20250915_115431.mp4',
+    serial: 'PB81204668A',
+    denomination: 50,
+    burnedAt: 1757952107,
+    sessionId: 0,
+  }, {
+    tokenId: 3,
+    _4kVideoName: 'VID_20250915_120115.mp4',
+    serial: 'PK23194159C',
+    denomination: 20,
+    burnedAt: 1757952515,
+    sessionId: 0,
+  }, {
+    tokenId: 4,
+    _4kVideoName: 'VID_20250915_121118.mp4',
+    serial: 'MK02452588B',
+    denomination: 100,
+    burnedAt: 1757952983,
+    sessionId: 0,
+  }, {
+    tokenId: 5,
+    _4kVideoName: 'VID_20250915_121707.mp4',
+    serial: 'PG20100550H',
+    denomination: 20,
+    burnedAt: 1757953367,
+    sessionId: 0,
+  }, {
+    tokenId: 6,
+    _4kVideoName: 'VID_20250915_122849.mp4',
+    serial: 'PF03524947L',
+    denomination: 100,
+    burnedAt: 1757954075,
+    sessionId: 0,
+  }, {
+    tokenId: 7,
+    _4kVideoName: 'VID_20250915_123329.mp4',
+    serial: 'PG19122170B',
+    denomination: 20,
+    burnedAt: 1757954327,
+    sessionId: 0,
+  }, {
+    tokenId: 8,
+    _4kVideoName: 'VID_20250915_123759.mp4',
+    serial: 'MB93050677C',
+    denomination: 50,
+    burnedAt: 1757954627,
+    sessionId: 0,
+  }, {
+    tokenId: 9,
+    _4kVideoName: 'VID_20250915_124246.mp4',
+    serial: 'MB64327432A',
+    denomination: 50,
+    burnedAt: 1757954939,
+    sessionId: 0,
+  }, {
+    tokenId: 10,
+    _4kVideoName: 'VID_20250915_125359.mp4',
+    serial: 'PA77694712B',
+    denomination: 100,
+    burnedAt: 1757955635,
+    sessionId: 0,
+  }, {
+    tokenId: 11,
+    _4kVideoName: 'VID_20250915_130030.mp4',
+    serial: 'LE81751279D',
+    denomination: 100,
+    burnedAt: 1757955995,
+    sessionId: 0,
+  }, {
+    tokenId: 12,
+    _4kVideoName: 'VID_20250915_130600.mp4',
+    serial: 'MC52994081B',
+    denomination: 5,
+    burnedAt: 1757956367,
+    sessionId: 0,
+  }, {
+    tokenId: 13,
+    _4kVideoName: 'VID_20250915_131203.mp4',
+    serial: 'LL91852416A',
+    denomination: 100,
+    burnedAt: 1757956691,
+    sessionId: 0,
+  }, {
+    tokenId: 14,
+    _4kVideoName: 'VID_20250915_131727.mp4',
+    serial: 'MB31167563H',
+    denomination: 20,
+    burnedAt: 1757957099,
+    sessionId: 0,
+  }, {
+    tokenId: 15,
+    _4kVideoName: 'VID_20250915_140127.mp4',
+    serial: 'PF34675168C',
+    denomination: 100,
+    burnedAt: 1757959643,
+    sessionId: 0,
+  }, {
+    tokenId: 16,
+    _4kVideoName: 'VID_20250915_140611.mp4',
+    serial: 'MF58450627B',
+    denomination: 50,
+    burnedAt: 1757959907,
+    sessionId: 0,
+  }, {
+    tokenId: 17,
+    _4kVideoName: 'VID_20250915_141045.mp4',
+    serial: 'MD04212823E',
+    denomination: 20,
+    burnedAt: 1757960279,
+    sessionId: 0,
+  }, {
+    tokenId: 18,
+    _4kVideoName: 'VID_20250915_141726.mp4',
+    serial: 'NL32887530D',
+    denomination: 20,
+    burnedAt: 1757960567,
+    sessionId: 0,
+  }, {
+    tokenId: 19,
+    _4kVideoName: 'VID_20250915_142254.mp4',
+    serial: 'PL27956174H',
+    denomination: 100,
+    burnedAt: 1757960867,
+    sessionId: 0,
+  }, {
+    tokenId: 20,
+    _4kVideoName: 'VID_20250915_142708.mp4',
+    serial: 'JF03629341E',
+    denomination: 20,
+    burnedAt: 1757961143,
+    sessionId: 0,
+  }, {
+    tokenId: 21,
+    _4kVideoName: 'VID_20250915_144146.mp4',
+    serial: 'PE62793990A',
+    denomination: 100,
+    burnedAt: 1757962007,
+    sessionId: 0,
+    memo: 'Some footage lost due to camera overheating.'
+  }, {
+    tokenId: 22,
+    _4kVideoName: 'VID_20250915_144621.mp4',
+    serial: 'B61079383D',
+    denomination: 20,
+    burnedAt: 1757963087,
+    sessionId: 0,
+  }, {
+    tokenId: 23,
+    _4kVideoName: 'VID_20250915_145207.mp4',
+    serial: 'ML92907224B',
+    denomination: 50,
+    burnedAt: 1757963135,
+    sessionId: 0,
+  }, {
+    tokenId: 24,
+    _4kVideoName: 'VID_20250915_150646.mp4',
+    serial: 'CB30152679B',
+    denomination: 100,
+    burnedAt: 1757963507,
+    sessionId: 0,
+  }, {
+    tokenId: 25,
+    _4kVideoName: 'VID_20250915_151054.mp4',
+    serial: 'DB07544483B',
+    denomination: 100,
+    burnedAt: 1757963747,
+    sessionId: 0,
+  }, {
+    tokenId: 26,
+    _4kVideoName: 'VID_20250915_151520.mp4',
+    serial: 'KJ44485661A',
+    denomination: 100,
+    burnedAt: 1757964059,
+    sessionId: 0,
+  }, {
+    tokenId: 27,
+    _4kVideoName: 'VID_20250915_152116.mp4',
+    serial: 'MB68119048B',
+    denomination: 100,
+    burnedAt: 1757964419,
+    sessionId: 0,
+  }, {
+    tokenId: 28,
+    _4kVideoName: 'VID_20250915_152558.mp4',
+    serial: 'PF73327681B',
+    denomination: 10,
+    burnedAt: 1757964671,
+    sessionId: 0,
+  }, {
+    tokenId: 29,
+    _4kVideoName: 'VID_20250915_153612.mp4',
+    serial: 'MB70054310C',
+    denomination: 50,
+    burnedAt: 1757965355,
+    sessionId: 0,
+  }, {
+    tokenId: 30,
+    _4kVideoName: 'VID_20250915_154237.mp4',
+    serial: 'LL16772596F',
+    denomination: 100,
+    burnedAt: 1757965667,
+    sessionId: 0,
+  }, {
+    tokenId: 31,
+    _4kVideoName: 'VID_20250915_154716.mp4',
+    serial: 'PB66097803E',
+    denomination: 100,
+    burnedAt: 1757965967,
+    sessionId: 0,
+  }, {
+    tokenId: 32,
+    _4kVideoName: 'VID_20250915_161520.mp4',
+    serial: 'PL26053891J',
+    denomination: 100,
+    burnedAt: 1757967683,
+    sessionId: 0,
+  }, {
+    tokenId: 33,
+    _4kVideoName: 'VID_20250915_162043.mp4',
+    serial: 'PE17206938E',
+    denomination: 100,
+    burnedAt: 1757967995,
+    sessionId: 0,
+  }, {
+    tokenId: 34,
+    _4kVideoName: 'VID_20250915_162553.mp4',
+    serial: 'PK52002604I',
+    denomination: 100,
+    burnedAt: 1757968307,
+    sessionId: 0,
+  }, {
+    tokenId: 35,
+    _4kVideoName: 'VID_20250915_163110.mp4',
+    serial: 'QK04249811B',
+    denomination: 5,
+    burnedAt: 1757968583,
+    sessionId: 0,
+  }, {
+    tokenId: 36,
+    _4kVideoName: 'VID_20250915_163755.mp4',
+    serial: 'PG19706383H',
+    denomination: 20,
+    burnedAt: 1757968991,
+    sessionId: 0,
+  }, {
+    tokenId: 37,
+    _4kVideoName: 'VID_20250915_164244.mp4',
+    serial: 'PK48592591A',
+    denomination: 50,
+    burnedAt: 1757969303,
+    sessionId: 0,
+  }, {
+    tokenId: 38,
+    _4kVideoName: 'VID_20250915_164840.mp4',
+    serial: 'PK19341481E',
+    denomination: 100,
+    burnedAt: 1757969687,
+    sessionId: 0,
+  }, {
+    tokenId: 39,
+    _4kVideoName: 'VID_20250915_170140.mp4',
+    serial: 'D04583093A',
+    denomination: 2,
+    burnedAt: 1757970395,
+    sessionId: 0,
+  }, {
+    tokenId: 40,
+    _4kVideoName: 'VID_20250915_170520.mp4',
+    serial: 'L85920867A',
+    denomination: 2,
+    burnedAt: 1757970743,
+    sessionId: 0,
+  }
+]
+
+pobData.forEach(pob => {
+  $.id('proofVids').innerHTML += `    <article class="videoArticle">
+    <h3>Proof of Burn ${pob.tokenId}</h3>
+    <div>
+      <span class="tag">Denomination: $${pob.denomination}</span>
+      <span class="tag">Serial: ${pob.serial}</span>
+      <span class="tag">Timestamp: ${pob.burnedAt}</span>
+      <span class="tag">Session: ${pob.sessionId}</span>
+    </div>
+    ${pob.memo ? `<div><span class="tag" style="color: var(--yellow-color)">Memo: ${pob.memo}</span></div>` : ''}
+    <video controls preload="none" poster="./assets/proof-thumbnails/${pob.tokenId}.png">
+      <source src="${s3_1080p}/${pob.tokenId}.mp4" type="video/mp4">
+    </video>
+    <div><a href="${s3_4k}/${pob._4kVideoName}" target="_blank" rel="nofollow" style="font-size: 0.75em; margin-top: 1em">View raw footage →</a></div>
+    <div><a href="https://opensea.io/item/ethereum/0x46b2fc11fd3209d42cb0971ae2c824f1814f1245/${pob.tokenId}" target="_blank" rel="nofollow" style="font-size: 0.75em; margin-top: 1em">View on OpenSea →</a></div>
+  </article>`
+})
 
 
 
