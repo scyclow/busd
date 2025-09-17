@@ -185,6 +185,7 @@
 
     #aboveTheFold {
       font-size: 1.25em;
+      margin-top: 1.5em;
     }
 
 
@@ -221,7 +222,7 @@
     .tag {
       display: inline-block;
       background: var(--dark-gray-color);
-      padding: 0.25em;
+      padding: 0.25em 0.4em;
       margin: 0.25em;
       margin-left: 0;
       font-size: 0.9em;
@@ -494,7 +495,7 @@
   <section id="aboveTheFold" class="slow-fadein" >
     <p>Burnt US Dollars ($bUSD) is a <a href="#coinInfo">coin</a> that represents the value of burned US Dollars.</p>
 
-    <h3 style="text-align: center; margin-top: 1.5em; margin-bottom: 2.5em;">Total USD Burned: $2455 <!--<a href="#proofs">→</a>--></h3>
+    <h3 style="text-align: center; margin-top: 1.5em; margin-bottom: 2.5em;">Total USD Burned: $2455 <br><a href="#proofs">View Proofs →</a></h3>
   </section>
 
 
@@ -694,7 +695,7 @@
         </div>
       </connect-wallet>
     </div>
-    <h3 style="margin: 1em 0;"><a href="#">BUSD Contract</a></h3>
+    <h3 style="margin: 1em 0;"><a href="https://etherscan.io/address/0xb9bdb5221585ad31ba3a4fa9c7a7b73a0495916e">BUSD Contract</a></h3>
   </section>
 
 
@@ -1064,7 +1065,7 @@ const pobData = [
 
 pobData.forEach(pob => {
   document.getElementById('proofVids').innerHTML += `    <article id="pob-${pob.tokenId}" class="videoArticle">
-    <h3>Proof of Burn ${pob.tokenId}</h3>
+    <h3>Proof of Burn #${pob.tokenId}</h3>
     <div>
       <span class="tag">Denomination: $${pob.denomination}</span>
       <span class="tag">Serial: ${pob.serial}</span>
