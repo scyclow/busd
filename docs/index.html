@@ -705,7 +705,7 @@
     <hr>
     <div style="margin-bottom: 1em;">
       <h2>Proofs of Burn [0-40]</h2>
-      <p style="font-size: 0.75em; margin-top: 0.25em; padding: 0">IPFS: <a href="https://gateway.lighthouse.storage/ipfs/bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm/" target="_blank" rel="nofollow">bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm</a></p>
+      <p style="font-size: 0.75em; margin-top: 0.25em; padding: 0">IPFS: <a href="https://gateway.lighthouse.storage/ipfs/bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm/" target="_blank" rel="nofollow" style="word-break: break-word">bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm</a></p>
     </div>
 
     <div id="proofVids"></div>
@@ -1072,7 +1072,7 @@ pobData.forEach(pob => {
       <span class="tag">Timestamp: ${pob.burnedAt}</span>
       <span class="tag">Session: ${pob.sessionId}</span>
     </div>
-    ${pob.memo ? `<div><span class="tag" style="color: var(--yellow-color)">Memo: ${pob.memo}</span></div>` : ''}
+    ${pob.memo ? `<div><span class="tag" style="color: var(--yellow-color); word-break: break-word">Memo: ${pob.memo}</span></div>` : ''}
     <video controls preload="none" poster="./assets/proof-thumbnails/${pob.tokenId}.png" onclick="playVideo(${pob.tokenId})" id="pob-${pob.tokenId}-vid">
       <source src="${s3_1080p}/${pob.tokenId}.mp4" type="video/mp4">
     </video>
