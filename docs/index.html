@@ -657,7 +657,7 @@
   <section id="coinInfo">
     <hr>
     <h2>Coin Info</h2>
-    <button id="addBUSDToWallet" style="padding: 0.5em 1em; font-size: 0.75em; margin-top: 0.5em;">Add $bUSD to Wallet</button>
+    <button id="addBUSDToWallet" class="hidden" style="padding: 0.5em 1em; font-size: 0.75em; margin-top: 0.5em;">Add $bUSD to Wallet</button>
 
 
     <div style="margin: 1em 0">
@@ -1125,6 +1125,7 @@ function playVideo(tokenId) {
   provider.onConnect(async (addr) => {
     const { name: chainName, etherscanLink } = await provider.getNetwork()
 
+    $.id('addBUSDToWallet').classList.remove('hidden')
     //   const params = {
     //     "appCode": "My Cool App", // Name of your app (max 50 characters)
     //     "width": "100%", // Width in pixels (or 100% to use all available space)
