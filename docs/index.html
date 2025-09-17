@@ -207,7 +207,14 @@
       cursor: pointer;
     }
 
+    #proofs video:fullscreen {
+      border: none;
+    }
+
+
+
     .videoArticle {
+      padding-top: 1em;
       margin-bottom: 2.5em;
     }
 
@@ -487,7 +494,7 @@
   <section id="aboveTheFold" class="slow-fadein" >
     <p>Burnt US Dollars ($bUSD) is a <a href="#coinInfo">coin</a> that represents the value of burned US Dollars.</p>
 
-    <h3 style="text-align: center;">Total USD Burned: $2455</h3>
+    <h3 style="text-align: center; margin: 3em 0">Total USD Burned: $2455 <a href="#proofs">→</a></h3>
   </section>
 
 
@@ -495,13 +502,13 @@
     <hr>
     <h2>How To Burn Your USD</h2>
 
-    <p>Participants who submit a valid US banknote, accompanied with a completed <a href="./burn-application-1_1_0.pdf" target="_blank">Burn Application</a>, shall receive a proportional amount of <a href="#coinInfo">bUSD</a> and a <a href="#proofs">Proof of Burn</a> NFT.</p>
+    <p>Participants who submit a valid US banknote, accompanied with a completed <a href="./burn-application" target="_blank">Burn Application</a>, shall receive a proportional amount of <a href="#coinInfo">bUSD</a> and a <a href="#proofs">Proof of Burn</a> NFT.</p>
 
     <p>To submit USD for an official Burn Ceremony, please complete the following steps:</p>
     <ol>
       <li>Read the <a href="./burn-agreement" target="_blank">Burn Agreement</a> in full.</li>
       <li>
-        Sign and complete a <a href="./burn-application-1_1_0.pdf" target="_blank">Burn Application</a>.
+        Sign and complete a <a href="./burn-application" target="_blank">Burn Application</a>.
         <h3 style="padding-left: 3em;">OR</h3>
         <a href="#burnAgreement">Mint a BurnAgreement NFT</a> and complete a <a href="./simplified-burn-application-1_1_0.pdf" target="_blank">Simplified Burn Application</a>.
 
@@ -509,7 +516,7 @@
 
       <li>Mail an envelope including:
         <ul style="margin-left: 2em;">
-          <li>A completed <a href="./burn-application-1_1_0.pdf" target="_blank">Burn Application</a></li>
+          <li>A completed <a href="./burn-application" target="_blank">Burn Application</a></li>
           <li>All bills you wish to burn</li>
           <li>All required processing fees ($20 or 1 BurnAgreement NFT per submitted bill) </li>
         </ul>
@@ -683,7 +690,7 @@
 
   <section id="proofs">
     <hr>
-    <h2 style="margin-bottom: 1em;">Proofs of Burn [41]</h2>
+    <h2 style="margin-bottom: 1em;">Proofs of Burn</h2>
 
     <div id="proofVids"></div>
 
@@ -737,114 +744,7 @@ connected
 </body>
 
 
-<script type="module">
-  import { initializeRacoons } from "https://cdn.racoons.ai/libs/index.mjs";
-  initializeRacoons("96f68e58-95d7-4b25-9e16-20fb330b94c2",
-   {debugMode: false});
-</script>
-
-
-<script type="module">
-  import {provider, etherscanAddr, addEtherscanLinks, ethVal, txValue} from './eth.js'
-  import {CONTRACTS} from './contracts.js'
-  import {$} from './$.js'
-
-
-  provider.setContractInfo(CONTRACTS)
-
-  if (provider.isEthBrowser) {
-
-    $.cls('walletOnly').forEach(c => {
-      c.classList.remove('hidden')
-    })
-    // $.id('tradeLink').classList.remove('hidden')
-    // $.id('tradeLink-mobile').classList.remove('hidden')
-  }
-
-
-
-
-  provider.onConnect(async (addr) => {
-    const { name: chainName, etherscanLink } = await provider.getNetwork()
-
-      const params = {
-        "appCode": "My Cool App", // Name of your app (max 50 characters)
-        "width": "100%", // Width in pixels (or 100% to use all available space)
-        "height": "640px",
-        "chainId": 1, // 1 (Mainnet), 100 (Gnosis), 11155111 (Sepolia)
-        "tokenLists": [ // All default enabled token lists. Also see https://tokenlists.org
-            "https://files.cow.fi/tokens/CoinGecko.json",
-            "https://files.cow.fi/tokens/CowSwap.json"
-        ],
-        "tradeType": "swap", // swap, limit or advanced
-        "sell": { // Sell token. Optionally add amount for sell orders
-            "asset": "USDC",
-            "amount": "100000"
-        },
-        "buy": { // Buy token. Optionally add amount for buy orders
-            "asset": "COW",
-            "amount": "0"
-        },
-        "enabledTradeTypes": [ // swap, limit, advanced, yield
-            "swap",
-            "limit",
-            "advanced",
-            "yield"
-        ],
-        "theme": { // light/dark or provide your own color palette
-            "baseTheme": "dark",
-            "primary": "#ef791f",
-            "paper": "#000000",
-            "text": "#ffffff"
-        },
-        "standaloneMode": false,
-        "disableToastMessages": false,
-        "disableProgressBar": false,
-        "hideBridgeInfo": false,
-        "hideOrdersTable": false,
-        "images": {},
-        "sounds": {},
-        "customTokens": []
-    }
-
-
-    const { updateParams } = cowSwapWidget.createCowSwapWidget(
-      document.getElementById("cowswap"),
-      { params, provider: window.ethereum }
-    )
-
-
-    const { BurnAgreementMinter } = await provider.getContracts()
-
-
-
-    $.id('mintBurnAgreement').onclick = async () => {
-
-
-      $.id('burnAgreementError').innerHTML = `Pending...`
-
-
-      try {
-
-        const tx = await BurnAgreementMinter.mint(txValue(0.01))
-
-        $.id('burnAgreementError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="https://${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
-        const txReciept1 = await tx.wait(1)
-        $.id('burnAgreementError').innerHTML = `Success`
-
-        setTimeout(() => {
-          $.id('burnAgreementError').innerHTML = ``
-        }, 4000)
-
-        renderData()
-      } catch (e) {
-        $.id('burnAgreementError').innerHTML = e?.data?.message || e?.error?.message || e?.message || 'Something went wrong'
-        console.error(e)
-      }
-    }
-
-  })
-
+<script type="text/javascript">
 
 
 
@@ -1147,7 +1047,7 @@ const pobData = [
 ]
 
 pobData.forEach(pob => {
-  $.id('proofVids').innerHTML += `    <article class="videoArticle">
+  document.getElementById('proofVids').innerHTML += `    <article id="pob-${pob.tokenId}" class="videoArticle">
     <h3>Proof of Burn ${pob.tokenId}</h3>
     <div>
       <span class="tag">Denomination: $${pob.denomination}</span>
@@ -1156,13 +1056,136 @@ pobData.forEach(pob => {
       <span class="tag">Session: ${pob.sessionId}</span>
     </div>
     ${pob.memo ? `<div><span class="tag" style="color: var(--yellow-color)">Memo: ${pob.memo}</span></div>` : ''}
-    <video controls preload="none" poster="./assets/proof-thumbnails/${pob.tokenId}.png">
+    <video controls preload="none" poster="./assets/proof-thumbnails/${pob.tokenId}.png" onclick="playVideo(${pob.tokenId})" id="pob-${pob.tokenId}-vid">
       <source src="${s3_1080p}/${pob.tokenId}.mp4" type="video/mp4">
     </video>
     <div><a href="${s3_4k}/${pob._4kVideoName}" target="_blank" rel="nofollow" style="font-size: 0.75em; margin-top: 1em">View raw footage →</a></div>
     <div><a href="https://opensea.io/item/ethereum/0x46b2fc11fd3209d42cb0971ae2c824f1814f1245/${pob.tokenId}" target="_blank" rel="nofollow" style="font-size: 0.75em; margin-top: 1em">View on OpenSea →</a></div>
+    <div><a href="#pob-${pob.tokenId}" style="font-size: 0.75em; margin-top: 1em">Permalink</a></div>
   </article>`
 })
+
+const videoClicked = {}
+
+function playVideo(tokenId) {
+  const vid = document.getElementById(`pob-${tokenId}-vid`)
+
+  if (!videoClicked[tokenId]) {
+    vid.play();
+  }
+  videoClicked[tokenId] = true
+}
+
+</script>
+
+
+<script type="module">
+  import { initializeRacoons } from "https://cdn.racoons.ai/libs/index.mjs";
+  initializeRacoons("96f68e58-95d7-4b25-9e16-20fb330b94c2",
+   {debugMode: false});
+</script>
+
+
+<script type="module">
+  import {provider, etherscanAddr, addEtherscanLinks, ethVal, txValue} from './eth.js'
+  import {CONTRACTS} from './contracts.js'
+  import {$} from './$.js'
+
+
+  provider.setContractInfo(CONTRACTS)
+
+  if (provider.isEthBrowser) {
+
+    $.cls('walletOnly').forEach(c => {
+      c.classList.remove('hidden')
+    })
+    // $.id('tradeLink').classList.remove('hidden')
+    // $.id('tradeLink-mobile').classList.remove('hidden')
+  }
+
+
+
+
+  provider.onConnect(async (addr) => {
+    const { name: chainName, etherscanLink } = await provider.getNetwork()
+
+      const params = {
+        "appCode": "My Cool App", // Name of your app (max 50 characters)
+        "width": "100%", // Width in pixels (or 100% to use all available space)
+        "height": "640px",
+        "chainId": 1, // 1 (Mainnet), 100 (Gnosis), 11155111 (Sepolia)
+        "tokenLists": [ // All default enabled token lists. Also see https://tokenlists.org
+            "https://files.cow.fi/tokens/CoinGecko.json",
+            "https://files.cow.fi/tokens/CowSwap.json"
+        ],
+        "tradeType": "swap", // swap, limit or advanced
+        "sell": { // Sell token. Optionally add amount for sell orders
+            "asset": "USDC",
+            "amount": "100000"
+        },
+        "buy": { // Buy token. Optionally add amount for buy orders
+            "asset": "COW",
+            "amount": "0"
+        },
+        "enabledTradeTypes": [ // swap, limit, advanced, yield
+            "swap",
+            "limit",
+            "advanced",
+            "yield"
+        ],
+        "theme": { // light/dark or provide your own color palette
+            "baseTheme": "dark",
+            "primary": "#ef791f",
+            "paper": "#000000",
+            "text": "#ffffff"
+        },
+        "standaloneMode": false,
+        "disableToastMessages": false,
+        "disableProgressBar": false,
+        "hideBridgeInfo": false,
+        "hideOrdersTable": false,
+        "images": {},
+        "sounds": {},
+        "customTokens": []
+    }
+
+
+    const { updateParams } = cowSwapWidget.createCowSwapWidget(
+      document.getElementById("cowswap"),
+      { params, provider: window.ethereum }
+    )
+
+
+    const { BurnAgreementMinter } = await provider.getContracts()
+
+
+
+    $.id('mintBurnAgreement').onclick = async () => {
+
+
+      $.id('burnAgreementError').innerHTML = `Pending...`
+
+
+      try {
+
+        const tx = await BurnAgreementMinter.mint(txValue(0.01))
+
+        $.id('burnAgreementError').innerHTML = `<span class="blinkSlow">TX Pending.</span> <a href="https://${etherscanLink}/tx/${tx.hash}" target="_blank" rel="nofollow">View on etherscan</a>`
+        const txReciept1 = await tx.wait(1)
+        $.id('burnAgreementError').innerHTML = `Success`
+
+        setTimeout(() => {
+          $.id('burnAgreementError').innerHTML = ``
+        }, 4000)
+
+        renderData()
+      } catch (e) {
+        $.id('burnAgreementError').innerHTML = e?.data?.message || e?.error?.message || e?.message || 'Something went wrong'
+        console.error(e)
+      }
+    }
+
+  })
 
 
 
