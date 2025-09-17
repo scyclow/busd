@@ -328,6 +328,21 @@
     }
 
 
+    .fadeInOut {
+      animation: FadeInOut 6s linear infinite;
+    }
+
+    @keyframes FadeInOut {
+      0%, 20%, 80% 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+
+
 
     .glow {
       animation: Glow 8s linear infinite;
@@ -495,7 +510,7 @@
   <section id="aboveTheFold" class="slow-fadein" >
     <p>Burnt US Dollars ($bUSD) is a <a href="#coinInfo">coin</a> that represents the value of burned US Dollars.</p>
 
-    <h3 style="text-align: center; margin-top: 1.5em; margin-bottom: 2.5em;">Total USD Burned: $2455 <br><a href="#proofs">View Proofs →</a></h3>
+    <h3 style="text-align: center; margin-top: 1.5em; margin-bottom: 2.5em;">Total USD Burned: $2455 <br><a href="#proofs" class="fadeInOut">View Burn Ceremonies →</a></h3>
   </section>
 
 
@@ -677,10 +692,9 @@
 <!--           <h3>USD/bUSD Exchange Rate: 1.22222</h3> -->
 
           <div style="width: 300px"></div>
-          <details style="border: 1px solid; color: var(--accent-color); padding: 0.5em; border: 1px solid var(--accent-color); margin-top: 0.5em">
-            <summary> Swap</summary>
-            <div id="uniswapPanel"></div>
-          </details>
+          <a href="https://app.uniswap.org/#/swap?inputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&outputCurrency=0xB9BDB5221585aD31bA3A4fa9C7A7b73A0495916E" target="_blank" rel="nofollow" style="border: 1px solid; color: var(--accent-color); padding: 0.5em; border: 1px solid var(--accent-color); margin-top: 0.5em; display: block; text-decoration: none;">
+            ▶ Swap
+          </a>
 
           <a href="https://app.uniswap.org/positions/create/v4?currencyA=0xb9bdb5221585ad31ba3a4fa9c7a7b73a0495916e&currencyB=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=ethereum" target="_blank" rel="nofollow" style="border: 1px solid; color: var(--accent-color); padding: 0.5em; border: 1px solid var(--accent-color); margin-top: 0.5em; display: block; text-decoration: none;">
             ▶ LP
@@ -1212,14 +1226,14 @@ function playVideo(tokenId) {
       $.id('addBUSDToWallet').onclick = () => provider.addCoin(BUSD.address, 'bUSD', 'https://busd.steviep.xyz/assets/logo.png')
 
 
-      $.id('uniswapPanel').innerHTML = `
-          <iframe
-            src="https://app.uniswap.org/#/swap?inputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&outputCurrency=0xB9BDB5221585aD31bA3A4fa9C7A7b73A0495916E&theme=dark"
-            height="630px"
-            width="100%"
-            style="border: 0; margin-top: 0.75em;"
-          />
-      `
+      // $.id('uniswapPanel').innerHTML = `
+      //     <iframe
+      //       src="https://app.uniswap.org/#/swap?inputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&outputCurrency=0xB9BDB5221585aD31bA3A4fa9C7A7b73A0495916E&theme=dark"
+      //       height="630px"
+      //       width="100%"
+      //       style="border: 0; margin-top: 0.75em;"
+      //     />
+      // `
 
 
       const usdcAddr = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
