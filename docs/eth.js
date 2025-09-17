@@ -13,6 +13,10 @@ export const fromWei = amt => bnToN(amt)/1e18
 export const txValue = amt => ({ value: toETH(amt) })
 export const ZERO_ADDR = '0x0000000000000000000000000000000000000000'
 
+export const keccak256 = ethers.utils.keccak256
+export const defaultAbiCoder = ethers.utils.defaultAbiCoder
+
+
 
 export function isENS(ens) {
   return ens.slice(-4) === '.eth'

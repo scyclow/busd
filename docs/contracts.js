@@ -63,5 +63,14 @@ export const CONTRACTS = {
     ]
   },
 
+  UniswapV4StateView: {
+    addr: {
+      mainnet: '0x7ffe42c4a5deea5b0fec41c94c136cf115597227'
+    },
+    abi: [
+      'function getSlot0(bytes32 poolId) external view returns (uint160 sqrtPriceX96, int24 tick, uint24 protocolFee, uint24 lpFee)',
+    ]
+  },
+
 }
 

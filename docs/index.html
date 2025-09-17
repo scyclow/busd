@@ -4,13 +4,13 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Burnt US Dollars ($bUSD)</title>
+  <title>Burnt US Dollars</title>
   <link rel="shortcut icon" type="image/x-icon" href="./logo.svg" id="favicon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#000" />
 
   <meta name="description" content="Burnt US Dollars ($bUSD) is a coin that represents the value of burned US Dollars.">
-  <meta name="keywords" content="busd, burnt us Dollars, burnt us dollars, $busd, burnt united states dollars, coin, proof of burn, burn agreement, busd burn agreement, busd proof of burn, burn ceremony, performance art, video art, media art, crypto art, cryptoart, legal art, conceptual art, coin, memecoin, steviep, steve pikelny, pikelny, crypto, ethereum, eth, bitcoin, scam, pyramid scheme, scheme">
+  <meta name="keywords" content="busd, burnt us Dollars, burnt us dollars, $busd, burnt united states dollars, coin, proof of burn, burn agreement, busd burn agreement, busd proof of burn, burn ceremony, performance art, video art, media art, crypto art, cryptoart, legal art, conceptual art, coin, memecoin, steviep, steve pikelny, pikelny, crypto, ethereum, eth, bitcoin, scam, pyramid scheme, scheme, stablecoin, stable coin, inflation">
 
   <meta name="twitter:image" content="https://busd.steviep.xyz/assets/thumbnail.png">
   <meta name="twitter:image:alt" content="bUSD Burn Ceremony">
@@ -23,8 +23,8 @@
   <meta name="og:image:alt" content="bUSD Burn Ceremony">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://busd.steviep.xyz">
-  <meta property="og:title" content="bUSD (Burnt US Dollars)">
-  <meta property="og:site_name" content="bUSD (Burnt US Dollars)">
+  <meta property="og:title" content="Burnt US Dollars">
+  <meta property="og:site_name" content="Burnt US Dollars">
   <meta property="og:description" content="Burnt US Dollars ($bUSD) is a coin that represents the value of burned US Dollars.">
 
 
@@ -246,7 +246,7 @@
     button {
       background: var(--accent-color);
       color: var(--bg-color);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--deep-orange-color);
       padding: 0.5em 1.5em;
       font-size: 1.5em;
       border-radius: 0.25em;
@@ -441,7 +441,7 @@
   </style>
 
 
-  <script src="./cowswap.min.js"></script>
+  <!-- <script src="./cowswap.min.js"></script> -->
   <script src="./utils.js"></script>
   <!-- <script type="module" src="./modal.js"></script> -->
   <script type="module" src="./connectWallet.js"></script>
@@ -494,13 +494,13 @@
   <section id="aboveTheFold" class="slow-fadein" >
     <p>Burnt US Dollars ($bUSD) is a <a href="#coinInfo">coin</a> that represents the value of burned US Dollars.</p>
 
-    <h3 style="text-align: center; margin: 3em 0">Total USD Burned: $2455 <a href="#proofs">→</a></h3>
+    <h3 style="text-align: center; margin-top: 1.5em; margin-bottom: 2.5em;">Total USD Burned: $2455 <!--<a href="#proofs">→</a>--></h3>
   </section>
 
 
   <section id="burn">
     <hr>
-    <h2>How To Burn Your USD</h2>
+    <h2>How To Burn</h2>
 
     <p>Participants who submit a valid US banknote, accompanied with a completed <a href="./burn-application" target="_blank">Burn Application</a>, shall receive a proportional amount of <a href="#coinInfo">bUSD</a> and a <a href="#proofs">Proof of Burn</a> NFT.</p>
 
@@ -543,7 +543,7 @@
   <section id="about">
     <hr>
     <h2>How Does It Work?</h2>
-    <ol>
+    <ol style="padding-top: 1em">
       <li>Participants <a href="#burn">submit valid US currency</a> to the <a href="https://steviep.xyz" target="_blank">Burn Agent</a>.</li>
       <li>The <a href="https://steviep.xyz" target="_blank">Burn Agent</a> performs a Burn Ceremony, in which the submitted bill is lit on fire.</li>
       <li>The <a href="https://steviep.xyz" target="_blank">Burn Agent</a> issues bUSD to the participant at a one-to-one rate<sup><a href="#burnRate">*</a></sup> with the denomination of the submitted bill once it has been completely burned.</li>
@@ -657,22 +657,33 @@
   <section id="coinInfo">
     <hr>
     <h2>Coin Info</h2>
+    <button id="addBUSDToWallet" style="padding: 0.5em 1em; font-size: 0.75em; margin-top: 0.5em;">Add $bUSD to Wallet</button>
 
-    <h3 style="margin: 1em 0;"><a href="#">BUSD Contract</a></h3>
 
-    <h3>Total Supply: --- bUSD</h3>
-    <h3>Total USD Burned: $--.00</h3>
+    <div style="margin: 1em 0">
+      <h3>Total bUSD Supply: <span id="totalBUSD">2455</span></h3>
+      <h3>Total USD Burned: $2455.00</h3>
+      <h3 id="usd_busd"></h3>
+      <h3 id="busd_usd"></h3>
+    </div>
+
 
 
 
     <div style="display: flex; flex-direction: column; align-items: center; margin-top: 1em">
       <connect-wallet>
         <div slot="connected">
-          <h3>USD/bUSD Exchange Rate: 1.22222</h3>
-          <details style="border: 1px solid; background: var(--accent-color); color: var(--bg-color); padding: 0.5em;">
-            <summary>Swap</summary>
-            <div id="cowswap"></div>
+<!--           <h3>USD/bUSD Exchange Rate: 1.22222</h3> -->
+
+          <div style="width: 300px"></div>
+          <details style="border: 1px solid; color: var(--accent-color); padding: 0.5em; border: 1px solid var(--accent-color); margin-top: 0.5em">
+            <summary> Swap</summary>
+            <div id="uniswapPanel"></div>
           </details>
+
+          <a href="https://app.uniswap.org/positions/create/v4?currencyA=0xb9bdb5221585ad31ba3a4fa9c7a7b73a0495916e&currencyB=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=ethereum" target="_blank" rel="nofollow" style="border: 1px solid; color: var(--accent-color); padding: 0.5em; border: 1px solid var(--accent-color); margin-top: 0.5em; display: block; text-decoration: none;">
+            ▶ LP
+          </a>
         </div>
 
         <div slot="notConnected">
@@ -683,6 +694,7 @@
         </div>
       </connect-wallet>
     </div>
+    <h3 style="margin: 1em 0;"><a href="#">BUSD Contract</a></h3>
   </section>
 
 
@@ -690,7 +702,7 @@
 
   <section id="proofs">
     <hr>
-    <h2 style="margin-bottom: 1em;">Proofs of Burn</h2>
+    <h2 style="margin-bottom: 1em;">Proofs of Burn [0-40]</h2>
 
     <div id="proofVids"></div>
 
@@ -1087,7 +1099,7 @@ function playVideo(tokenId) {
 
 
 <script type="module">
-  import {provider, etherscanAddr, addEtherscanLinks, ethVal, txValue} from './eth.js'
+  import {provider, etherscanAddr, addEtherscanLinks, ethVal, txValue, keccak256, defaultAbiCoder, ZERO_ADDR} from './eth.js'
   import {CONTRACTS} from './contracts.js'
   import {$} from './$.js'
 
@@ -1109,54 +1121,54 @@ function playVideo(tokenId) {
   provider.onConnect(async (addr) => {
     const { name: chainName, etherscanLink } = await provider.getNetwork()
 
-      const params = {
-        "appCode": "My Cool App", // Name of your app (max 50 characters)
-        "width": "100%", // Width in pixels (or 100% to use all available space)
-        "height": "640px",
-        "chainId": 1, // 1 (Mainnet), 100 (Gnosis), 11155111 (Sepolia)
-        "tokenLists": [ // All default enabled token lists. Also see https://tokenlists.org
-            "https://files.cow.fi/tokens/CoinGecko.json",
-            "https://files.cow.fi/tokens/CowSwap.json"
-        ],
-        "tradeType": "swap", // swap, limit or advanced
-        "sell": { // Sell token. Optionally add amount for sell orders
-            "asset": "USDC",
-            "amount": "100000"
-        },
-        "buy": { // Buy token. Optionally add amount for buy orders
-            "asset": "COW",
-            "amount": "0"
-        },
-        "enabledTradeTypes": [ // swap, limit, advanced, yield
-            "swap",
-            "limit",
-            "advanced",
-            "yield"
-        ],
-        "theme": { // light/dark or provide your own color palette
-            "baseTheme": "dark",
-            "primary": "#ef791f",
-            "paper": "#000000",
-            "text": "#ffffff"
-        },
-        "standaloneMode": false,
-        "disableToastMessages": false,
-        "disableProgressBar": false,
-        "hideBridgeInfo": false,
-        "hideOrdersTable": false,
-        "images": {},
-        "sounds": {},
-        "customTokens": []
-    }
+    //   const params = {
+    //     "appCode": "My Cool App", // Name of your app (max 50 characters)
+    //     "width": "100%", // Width in pixels (or 100% to use all available space)
+    //     "height": "640px",
+    //     "chainId": 1, // 1 (Mainnet), 100 (Gnosis), 11155111 (Sepolia)
+    //     "tokenLists": [ // All default enabled token lists. Also see https://tokenlists.org
+    //         "https://files.cow.fi/tokens/CoinGecko.json",
+    //         "https://files.cow.fi/tokens/CowSwap.json"
+    //     ],
+    //     "tradeType": "swap", // swap, limit or advanced
+    //     "sell": { // Sell token. Optionally add amount for sell orders
+    //         "asset": "USDC",
+    //         "amount": "100000"
+    //     },
+    //     "buy": { // Buy token. Optionally add amount for buy orders
+    //         "asset": "COW",
+    //         "amount": "0"
+    //     },
+    //     "enabledTradeTypes": [ // swap, limit, advanced, yield
+    //         "swap",
+    //         "limit",
+    //         "advanced",
+    //         "yield"
+    //     ],
+    //     "theme": { // light/dark or provide your own color palette
+    //         "baseTheme": "dark",
+    //         "primary": "#ef791f",
+    //         "paper": "#000000",
+    //         "text": "#ffffff"
+    //     },
+    //     "standaloneMode": false,
+    //     "disableToastMessages": false,
+    //     "disableProgressBar": false,
+    //     "hideBridgeInfo": false,
+    //     "hideOrdersTable": false,
+    //     "images": {},
+    //     "sounds": {},
+    //     "customTokens": []
+    // }
 
 
-    const { updateParams } = cowSwapWidget.createCowSwapWidget(
-      document.getElementById("cowswap"),
-      { params, provider: window.ethereum }
-    )
+    // const { updateParams } = cowSwapWidget.createCowSwapWidget(
+    //   document.getElementById("cowswap"),
+    //   { params, provider: window.ethereum }
+    // )
 
 
-    const { BurnAgreementMinter } = await provider.getContracts()
+    const { BurnAgreementMinter, BUSD, UniswapV4StateView } = await provider.getContracts()
 
 
 
@@ -1184,6 +1196,43 @@ function playVideo(tokenId) {
         console.error(e)
       }
     }
+
+      const busdTotalSupply = await BUSD.totalSupply()
+
+      $.id('totalBUSD').innerHTML = ethVal(busdTotalSupply).toFixed(2)
+
+
+      $.id('addBUSDToWallet').onclick = () => provider.addCoin(BUSD.address, 'bUSD', 'https://busd.steviep.xyz/assets/logo.png')
+
+
+      $.id('uniswapPanel').innerHTML = `
+          <iframe
+            src="https://app.uniswap.org/#/swap?inputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&outputCurrency=0xB9BDB5221585aD31bA3A4fa9C7A7b73A0495916E&theme=dark"
+            height="630px"
+            width="100%"
+            style="border: 0; margin-top: 0.75em;"
+          />
+      `
+
+
+      const usdcAddr = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+
+      const poolId = ethers.utils.keccak256(
+        ethers.utils.defaultAbiCoder.encode(
+          ['address', 'address', 'uint24', 'int24', 'address'],
+          [usdcAddr, BUSD.address, 10000, 200, ZERO_ADDR]
+        )
+      )
+
+      setRunInterval(async () => {
+        const {sqrtPriceX96} = await UniswapV4StateView.getSlot0(poolId)
+        const USD_bUSD = (Number(sqrtPriceX96) ** 2 / 2 ** 192) / 10**12
+        const bUSD_USD = 1/USD_bUSD
+
+        $.id('usd_busd').innerHTML = `USDC/bUSD: ${USD_bUSD.toFixed(8)}`
+        $.id('busd_usd').innerHTML = `bUSD/USDC: ${bUSD_USD.toFixed(8)}`
+      }, 15)
+
 
   })
 
