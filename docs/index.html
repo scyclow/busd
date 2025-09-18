@@ -644,7 +644,7 @@
 
     <p>The bUSD <a href="./burn-agreement" target="_blank">Burn Agreement</a> outlines all legal matters pertaining to the bUSD project, including valuation, legality, the Burn Ceremony, Proof of Burn media, bUSD reciept, the Burn Agent, issuance authorization, bUSD supply, bill custody, bill forfeit, return policy, bill eligibility, burn scheduling, processing fees, privacy policy, intellectual property, and warranty. </p>
 
-    <div class="hidden walletOnly" style="margin-top: 3em;">
+    <div id="agreementNFT" class="hidden walletOnly" style="margin-top: 3em;">
       <h3>Mint an Agreement NFT</h3>
       <p>Burn Agreement NFTs, which display the bUSD Burn Agreement in full, may be used in place of a processing fee as part of a simplified bUSD application process. To use an Agreement NFT, please follow the standard <a href="#burn">Burn Application process</a> using a completed <a href="./simplified-burn-application-1_1_0.pdf" target="_blank">Simplified Burn Application</a> instead of the standard Application in Step 2. Each Agreement NFT may be used to exempt an individual bill's processing fee.</p>
 
@@ -677,14 +677,13 @@
   <section id="coinInfo">
     <hr>
     <h2>Coin Info</h2>
-    <button id="addBUSDToWallet" class="hidden" style="padding: 0.5em 1em; font-size: 0.75em; margin-top: 0.5em;">Add $bUSD to Wallet</button>
-
 
     <div style="margin: 1em 0">
       <h3>Total bUSD Supply: <span id="totalBUSD">2455</span></h3>
       <h3>Total USD Burned: $2455.00</h3>
       <h3 id="usd_busd"></h3>
       <h3 id="busd_usd"></h3>
+
     </div>
 
 
@@ -698,26 +697,23 @@
       <a href="https://app.uniswap.org/positions/create/v4?currencyA=0xb9bdb5221585ad31ba3a4fa9c7a7b73a0495916e&currencyB=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=ethereum" target="_blank" rel="nofollow" class="tradeLink">
         ▶ LP
       </a>
-
-
-      <connect-wallet>
-        <div slot="noWeb3">
-
-        </div>
-        <div slot="connected">
-<!--           <h3>USD/bUSD Exchange Rate: 1.22222</h3> -->
-
-        </div>
-
-        <div slot="notConnected">
-          <connect-button>
-            <button class="connectButton" slot="button">Connect</button>
-            <h3 slot="loading">Connecting...</h3>
-          </connect-button>
-        </div>
-      </connect-wallet>
     </div>
-    <h3 style="margin: 1em 0;"><a href="https://etherscan.io/address/0xb9bdb5221585ad31ba3a4fa9c7a7b73a0495916e" target="_blank" rel="nofollow">BUSD Contract</a></h3>
+
+    <connect-wallet>
+      <div slot="connected">
+        <button id="addBUSDToWallet" style="padding: 0.5em 1em; font-size: 0.75em; margin-top: 2em;">Add $bUSD to Wallet</button>
+      </div>
+
+      <div slot="notConnected" style="display: inline-block;">
+        <connect-button>
+          <button class="connectButton" slot="button" style="padding: 0.5em 1em; font-size: 1em; margin-top: 2em;">Connect to Add Coin to Wallet</button>
+          <h3 slot="loading">Connecting...</h3>
+        </connect-button>
+      </div>
+    </connect-wallet>
+
+
+    <h3 style="margin-bottom: 1em; margin-top: 0.5em;"><a href="https://etherscan.io/address/0xb9bdb5221585ad31ba3a4fa9c7a7b73a0495916e" target="_blank" rel="nofollow">BUSD Contract</a></h3>
   </section>
 
 
