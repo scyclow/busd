@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <title>Burnt US Dollars</title>
-  <link rel="shortcut icon" type="image/x-icon" href="./logo.svg" id="favicon">
+  <link rel="shortcut icon" type="image/x-icon" href="./logo.ico" id="favicon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#000" />
 
@@ -107,7 +107,7 @@
       margin: 1em auto;
       max-width: 200px;
       padding: 0.5em;
-      font-weight: bolder;
+      font-weight: bold;
       background: var(--dark-gray-color);
       border: 1px dashed var(--light-gray-color);
     }
@@ -228,14 +228,6 @@
       font-size: 0.9em;
     }
 
-    #cowswap {
-      margin: 2em auto;
-      max-width: 400px;
-      border-radius: 5px;
-      box-shadow: 0 0 10px var(--text-color);
-    }
-
-
     .spacer {
       height: 0.5em;
       width: 100vw;
@@ -287,6 +279,22 @@
     .scanlink:hover {
       text-decoration: none;
       border-bottom: 0.1em solid;
+    }
+
+
+    .tradeLink {
+      color: var(--accent-color);
+      padding: 0.5em;
+      border: 1px solid var(--accent-color);
+      margin-top: 0.5em;
+      display: block;
+      text-decoration: none;
+      width: 300px;
+    }
+
+    .tradeLink:hover {
+      border: 1px solid var(--yellow-color);
+      color: var(--yellow-color);
     }
 
 
@@ -457,9 +465,7 @@
   </style>
 
 
-  <!-- <script src="./cowswap.min.js"></script> -->
   <script src="./utils.js"></script>
-  <!-- <script type="module" src="./modal.js"></script> -->
   <script type="module" src="./connectWallet.js"></script>
 
 
@@ -483,13 +489,11 @@
 
 
   <div class="vidContainer">
-    <video class="heroVideo" autoplay loop muted  style="">
-    <!-- <video class="heroVideo" loop muted  style=""> -->
-      <!-- <source src="./assets/pr2-small.mov" type="video/mp4"> -->
-      <!-- <source src="./assets/hero.mp4" type="video/mp4"> -->
-      <source src="./assets/hero.mp4" type="video/mp4">
+    <video class="heroVideo" autoplay loop muted playsinline poster="./assets/hero.png">
 
-
+      <source src="./assets/hero.mp4" type="video/mp4" media="(min-width: 960px)">
+      <source src="./assets/hero-960p.mp4"  type="video/mp4" media="(min-width: 640px)">
+      <source src="./assets/hero-640p.mp4"  type="video/mp4" media="(max-width: 639px)">
       <!-- <source src="https://busd-proof-of-burn.s3.us-east-1.amazonaws.com/busd-pr.mov" type="video/mp4"> -->
       <!-- <source src="./assets/proofs/testburn1-1280.mp4" type="video/mp4"> -->
     </video>
@@ -687,18 +691,22 @@
 
 
     <div style="display: flex; flex-direction: column; align-items: center; margin-top: 1em">
+      <a href="https://app.uniswap.org/#/swap?inputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&outputCurrency=0xB9BDB5221585aD31bA3A4fa9C7A7b73A0495916E" target="_blank" rel="nofollow" class="tradeLink">
+        ▶ Swap
+      </a>
+
+      <a href="https://app.uniswap.org/positions/create/v4?currencyA=0xb9bdb5221585ad31ba3a4fa9c7a7b73a0495916e&currencyB=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=ethereum" target="_blank" rel="nofollow" class="tradeLink">
+        ▶ LP
+      </a>
+
+
       <connect-wallet>
+        <div slot="noWeb3">
+
+        </div>
         <div slot="connected">
 <!--           <h3>USD/bUSD Exchange Rate: 1.22222</h3> -->
 
-          <div style="width: 300px"></div>
-          <a href="https://app.uniswap.org/#/swap?inputCurrency=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&outputCurrency=0xB9BDB5221585aD31bA3A4fa9C7A7b73A0495916E" target="_blank" rel="nofollow" style="border: 1px solid; color: var(--accent-color); padding: 0.5em; border: 1px solid var(--accent-color); margin-top: 0.5em; display: block; text-decoration: none;">
-            ▶ Swap
-          </a>
-
-          <a href="https://app.uniswap.org/positions/create/v4?currencyA=0xb9bdb5221585ad31ba3a4fa9c7a7b73a0495916e&currencyB=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&chain=ethereum" target="_blank" rel="nofollow" style="border: 1px solid; color: var(--accent-color); padding: 0.5em; border: 1px solid var(--accent-color); margin-top: 0.5em; display: block; text-decoration: none;">
-            ▶ LP
-          </a>
         </div>
 
         <div slot="notConnected">
@@ -1088,14 +1096,26 @@ pobData.forEach(pob => {
       <span class="tag">Session: ${pob.sessionId}</span>
     </div>
     ${pob.memo ? `<div><span class="tag" style="color: var(--yellow-color); word-break: break-word">Memo: ${pob.memo}</span></div>` : ''}
-    <video controls preload="none" poster="./assets/proof-thumbnails/${pob.tokenId}.png" onclick="playVideo(${pob.tokenId})" id="pob-${pob.tokenId}-vid">
-      <source src="${s3_1080p}/${pob.tokenId}.mp4" type="video/mp4">
-    </video>
+    <div id="pob-${pob.tokenId}-vid-placeholder"></div>
     <div><a href="${s3_4k}/${pob._4kVideoName}" target="_blank" rel="nofollow" style="font-size: 0.75em; margin-top: 1em">View raw footage →</a></div>
     <div><a href="https://opensea.io/item/ethereum/0x46b2fc11fd3209d42cb0971ae2c824f1814f1245/${pob.tokenId}" target="_blank" rel="nofollow" style="font-size: 0.75em; margin-top: 1em">View on OpenSea →</a></div>
     <div><a href="#pob-${pob.tokenId}" style="font-size: 0.75em; margin-top: 1em">Permalink</a></div>
   </article>`
 })
+
+
+
+setTimeout(() => {
+
+  pobData.forEach(pob => {
+    document.getElementById(`pob-${pob.tokenId}-vid-placeholder`).innerHTML = `
+    <video controls preload="none" poster="./assets/proof-thumbnails/${pob.tokenId}.png" onclick="playVideo(${pob.tokenId})" id="pob-${pob.tokenId}-vid">
+      <source src="${s3_1080p}/${pob.tokenId}.mp4" type="video/mp4" id="pob-${pob.tokenId}-src">
+    </video>
+    `
+  })
+
+}, 200)
 
 const videoClicked = {}
 
@@ -1110,13 +1130,6 @@ function playVideo(tokenId) {
 
 </script>
 
-
-<!-- <script type="module">
-  import { initializeRacoons } from "https://cdn.racoons.ai/libs/index.mjs";
-  initializeRacoons("96f68e58-95d7-4b25-9e16-20fb330b94c2",
-   {debugMode: false});
-</script>
- -->
 
 <script type="module">
   import {provider, etherscanAddr, addEtherscanLinks, ethVal, txValue, keccak256, defaultAbiCoder, ZERO_ADDR} from './eth.js'
@@ -1142,51 +1155,6 @@ function playVideo(tokenId) {
     const { name: chainName, etherscanLink } = await provider.getNetwork()
 
     $.id('addBUSDToWallet').classList.remove('hidden')
-    //   const params = {
-    //     "appCode": "My Cool App", // Name of your app (max 50 characters)
-    //     "width": "100%", // Width in pixels (or 100% to use all available space)
-    //     "height": "640px",
-    //     "chainId": 1, // 1 (Mainnet), 100 (Gnosis), 11155111 (Sepolia)
-    //     "tokenLists": [ // All default enabled token lists. Also see https://tokenlists.org
-    //         "https://files.cow.fi/tokens/CoinGecko.json",
-    //         "https://files.cow.fi/tokens/CowSwap.json"
-    //     ],
-    //     "tradeType": "swap", // swap, limit or advanced
-    //     "sell": { // Sell token. Optionally add amount for sell orders
-    //         "asset": "USDC",
-    //         "amount": "100000"
-    //     },
-    //     "buy": { // Buy token. Optionally add amount for buy orders
-    //         "asset": "COW",
-    //         "amount": "0"
-    //     },
-    //     "enabledTradeTypes": [ // swap, limit, advanced, yield
-    //         "swap",
-    //         "limit",
-    //         "advanced",
-    //         "yield"
-    //     ],
-    //     "theme": { // light/dark or provide your own color palette
-    //         "baseTheme": "dark",
-    //         "primary": "#ef791f",
-    //         "paper": "#000000",
-    //         "text": "#ffffff"
-    //     },
-    //     "standaloneMode": false,
-    //     "disableToastMessages": false,
-    //     "disableProgressBar": false,
-    //     "hideBridgeInfo": false,
-    //     "hideOrdersTable": false,
-    //     "images": {},
-    //     "sounds": {},
-    //     "customTokens": []
-    // }
-
-
-    // const { updateParams } = cowSwapWidget.createCowSwapWidget(
-    //   document.getElementById("cowswap"),
-    //   { params, provider: window.ethereum }
-    // )
 
 
     const { BurnAgreementMinter, BUSD, UniswapV4StateView } = await provider.getContracts()
@@ -1258,11 +1226,12 @@ function playVideo(tokenId) {
   })
 
 
+</script>
 
 
+<script type="module">
+  import { initializeRacoons } from "https://cdn.racoons.ai/libs/index.mjs";
 
-
-
-
+  setTimeout(() => initializeRacoons("96f68e58-95d7-4b25-9e16-20fb330b94c2", {debugMode: false}), 500);
 </script>
 </html>
