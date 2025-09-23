@@ -12,14 +12,14 @@
   <meta name="description" content="For my latest project, Burnt US Dollars, I set 41 bills (totaling $2,455) on fire. The idea is simple:">
   <meta name="keywords" content="busd, burnt us Dollars, burnt us dollars, $busd, how, to, howto, how to set on fire, $2455, 2455, burnt united states dollars, coin, proof of burn, burn agreement, busd burn agreement, busd proof of burn, burn ceremony, performance art, video art, media art, crypto art, cryptoart, legal art, conceptual art, coin, memecoin, steviep, steve pikelny, pikelny, crypto, ethereum, eth, bitcoin, scam, pyramid scheme, scheme, stablecoin, stable coin, inflation">
 
-  <meta name="twitter:image" content="https://busd.steviep.xyz/assets/thumbnail.png">
+  <meta name="twitter:image" content="https://busd.steviep.xyz/assets/burn-setup.jpg">
   <meta name="twitter:image:alt" content="bUSD Burn Ceremony">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:creator" content="@steviepxyz">
   <meta name="twitter:site" content="@steviepxyz">
   <meta property="twitter:description" content="For my latest project, Burnt US Dollars, I set 41 bills (totaling $2,455) on fire. The idea is simple:">
 
-  <meta name="og:image" property="og:image" content="https://busd.steviep.xyz/assets/thumbnail.png">
+  <meta name="og:image" property="og:image" content="https://busd.steviep.xyz/assets/burn-setup.jpg">
   <meta name="og:image:alt" content="bUSD Burn Ceremony">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://busd.steviep.xyz">
@@ -103,9 +103,17 @@
       text-decoration: none;
     }
 
-    p, main a, main em {
+    p, main a, main em, figcaption {
       font-family: "Roboto", sans-serif;
 
+    }
+
+
+    figcaption {
+      font-size: 0.9em;
+      text-align: center;
+      font-style: italic;
+      margin-top: 0.5em;
     }
 
     p, ol {
@@ -205,15 +213,6 @@
 
 
 
-    .heroVideo {
-      width: 100vw;
-      min-height: 48vw;
-    }
-
-    .navContent, .heroVideo {
-      max-width: 1500px;
-      margin: auto;
-    }
 
     video {
       max-width: 100%;
@@ -486,6 +485,14 @@
       /*text-align: center;*/
     }
 
+    .imgContainer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      margin: 1.5em 0;
+    }
+
 
   </style>
 
@@ -530,7 +537,7 @@
     <h2>How To Set $2,455 on Fire</h2>
     <h4><a href="https://steviep.xyz" target="_blank">Steve Pikelny</a> - 9/21/25</h4>
 
-    <video autoplay loop muted playsinline poster="./assets/hero.png" poster="./assets/proof-thumbnails/19.png" style="margin-top: 2em">
+    <video autoplay loop muted playsinline poster="./assets/hero.png" poster="./assets/proof-thumbnails/19.png" style="margin-top: 2em; cursor: default;">
 
       <source src="https://busd-proof-of-burn.s3.us-east-1.amazonaws.com/session-0-1080p/19.mp4" type="video/mp4">
       <!-- <source src="https://busd-proof-of-burn.s3.us-east-1.amazonaws.com/busd-pr.mov" type="video/mp4"> -->
@@ -541,7 +548,7 @@
 
 
   <section>
-    <p>For my latest project, Burnt US Dollars, I set 41 bills (totaling $2,455) on fire. The idea was simple:</p>
+    <p>Last week I set $2,455 in US bank notes on fire. The idea was simple:</p>
 
     <ol>
       <li>Participants give me US currency</li>
@@ -551,14 +558,21 @@
 
     <p>So, if you give me a $100 bill, I set it on fire and issue you 100 bUSD.</p>
 
-    <p>But bringing this idea to fruition took more work than you might expect. I originally came up with the concept in early 2022 and ultimately spent three and a half years mulling it over, stopping, starting, experimenting, and working through the intricate details.</p>
 
-    <p>By design, those implementation details are largely pushed into the background. But now that I have some time to stop and reflect on it all, I wanted to shine some light on the overall process. After all, burning thousands of dollars in cash looks easy, but the devil is in the details.</p>
+    <p>The burning itself consisted of 41 bills, and took me about five and a half hours from start to finish. But bringing this idea to fruition took more time and work than you might expect. I originally came up with the concept in early 2022, and ended up mulling it over for three and a half years. Of all my art projects, this one took the longest to execute by far.</p>
+
+    <p>By design, the implementation details of this project are largely pushed into the background. But now that the first burn session is over I wanted to stop to shed some light on the overall process. After all, burning thousands of dollars in cash looks easy, but the devil is in the details.</p>
+
+    <div class="imgContainer">
+      <img src="./assets/tray.jpg" style="width: 620px; max-width: 90vw; border: 1px solid var(--text-color);" alt="The burn tray after 41 burns">
+      <figcaption>The burn tray after 41 burns</figcaption>
+    </div>
+
   </section>
 
   <section>
     <hr>
-    <h3>1. Isn't burning money illegal?</h3>
+    <h3>1. Isn't Burning Money Illegal?</h3>
 
     <p>Burning United States currency is a misdemeanor. United States Code Title 18 (CRIMES AND CRIMINAL PROCEDURE), Part I (CRIMES), Chapter 17 (COINS AND CURRENCY), Sec. 333 (Mutilation of national bank obligations) <a href="https://uscode.house.gov/view.xhtml?path=/prelim@title18/part1/chapter17&edition=prelim" target="_blank" rel="nofollow">states</a>:</p>
 
@@ -589,6 +603,11 @@
     <p>Once the headline legal concerns were out of the way I stumbled upon a pretty hairy tax issue with the mechanics of all this. Let's say someone sends me $100.00 through Venmo, wire transfer, check, or crypto. Then I go to the bank, withdraw a $100 bill, and set it on fire. In this scenario I've just incurred $100 in taxable income. But destroying US currency is illegal, so burning the physical bill is not a valid business expense. I would be on the hook to pay taxes on the initial $100.00 digital transaction... and would then be down $100.</p>
 
     <p>This ended up being the biggest blocker of the project. It took me the better part of a year and a half to figure out. Eventually, I realized that this would only work if I'm not burning <em>my</em> money. I needed to establish the fact that I'm burning <em>your</em> money. So, I decided to do two things. First, I would only accept physical cash from people, either via mail (which turns out to not be illegal) or in person. Second, I would have each Participant sign a legal agreement that establishes them as the rightful owner of the bill. I'm simply performing a service <em>on</em> the bill <em>for</em> them. This came with all sorts of stipulations about how they can get the money back before I burn it. It is their money, after all.</p>
+
+    <div class="imgContainer">
+      <img src="./assets/burn-agreement-thumbnail.png" style="width: 320px; max-width: 90vw; border: 1px solid var(--text-color);" alt="Burn Agreement 1.2.0">
+      <figcaption>Burn Agreement 1.2.0</figcaption>
+    </div>
 
     <p>The <a href="./burn-agreement" target="_blank">final Burn Agreement</a> addresses all of these issues, and addresses various interesting questions, such as: What happens if I die before the money is burned? What happens if I grant someone else the ability to issue bUSD? What happens if my wallet is compromised and a bunch of fraudulent bUSD is issued? What happens if someone wants their money back? What happens if someone sends me an ineligible bill?</p>
 
@@ -623,9 +642,27 @@
 
     <p>I'm not the first person to burn money as part of an art project. The K Foundation famously <a href="https://youtu.be/a3dcXzPFLOc?si=7xWljdEeXona83a2" target="_blank" rel="nofollow">burned 1 million GBP</a>, Dread Scott <a href="https://www.youtube.com/watch?v=oSclYWiEMQk&ab_channel=DreadScott" target="_blank" rel="nofollow">burned $171</a> while singing in front of the NY Stock Exchange, and Eric Paulos allowed 1996 website visitors to <a href="http://www.eiu.org/orig/experiments/legal_tender/" target="_blank" rel="nofollow">remotely perforate a $100 bill</a> with robotics. These are all great projects, but their methods for actually burning the money accomplish very different goals. By continuously shoveling piles of money into a furnace for an hour, the K foundation put an emphasis on the sheer monetary value they were destroying. Scott's theatrics drew attention to the absurdity of what he was doing. Paulos' project put a strong emphasis on dissecting the legal implications, but otherwise did not leave much in the way of clear documentation.</p>
 
+    <div class="imgContainer">
+      <img src="./assets/k-foundation.png" style="width: 620px; max-width: 90vw; border: 1px solid var(--text-color);" alt="The K Foundation Burn A Million Quid">
+      <figcaption>The K Foundation Burn A Million Quid</figcaption>
+    </div>
+
+
+    <div class="imgContainer">
+      <img src="./assets/money-to-burn.png" style="width: 620px; max-width: 90vw; border: 1px solid var(--text-color);" alt="Money To Burn by Dread Scott">
+      <figcaption>Money To Burn</figcaption>
+    </div>
+
+
     <p>Meanwhile, I wanted to give each bill a dignified death with clear documentation. The project's internal logic requires a clear connection between the physical bill's destruction and the creation of a new digital object in its place. It was important that each bill's destruction was slow and clinical, without leaving much room for speculation that this was faked.</p>
 
     <p>Furthermore, the bill needed to be completely destroyed. The US Bureau of Engraving & Printing provides free mutilated currency redemption services in which individuals and businesses can redeem damaged currency at face value. The BEP website states that bills can be redeemed if either (1) more than 50% of the bill is clearly present, or (2) less than 50% of the bill is present, but supporting evidence demonstrates to a BEP investigation that the remaining portions have been totally destroyed. This means that the conceptual underpinning of the project would be destroyed if I only burned a portion of a bill and redeemed the remains with the BEP. The monetary value would then be represented in multiple forms instead of clearly being transmuted to a single blockchain-based representation.</p>
+
+    <div class="imgContainer">
+      <img src="./assets/bep.png" style="width: 620px; max-width: 90vw; border: 1px solid var(--text-color);" alt="The Mutilated Currency Division at the BEP">
+      <figcaption>The Mutilated Currency Division at the BEP</figcaption>
+    </div>
+
 
 
     <p>So I decided that each bill would receive its own Burn Ceremony, in which the viewer could observe its destruction from start to finish. The Ceremony would consist of the following steps:</p>
@@ -649,6 +686,15 @@
     <hr>
     <h3>5. Actually Burning the Money</h3>
 
+    <div class="imgContainer">
+      <div>
+        <video controls onclick="playVideo('burn-example-vid')" id="burn-example-vid" style="height: 600px; max-height: 155vw;">
+          <source src="https://busd-proof-of-burn.s3.us-east-1.amazonaws.com/documentation/burn-ceremony-example-small.mp4" type="video/mp4">
+        </video>
+        <figcaption>Behind the scenes footage</figcaption>
+      </div>
+    </div>
+
 
     <p>Paper is obviously very flammable, but it's surprisingly difficult to consistently film it in an aesthetic way. Most footage I've found of money being burned involved the burner holding the bill with their hand, and the camera being positioned far away. In order to get the clear and aesthetic documentation feel I was after I would need to position the camera directly over the burning bill lying flat on a tray.</p>
 
@@ -662,7 +708,13 @@
 
     <p>Burning money also produces a lot of smoke. This means that doing the Burn Ceremonies indoors wasn't really feasible, and doing it outdoors brings a host of issues, including: over exposure to sunlight, wind, temperature, noise, internet access, and the prying eyes of the public. Thankfully, I found a willing friend who let me use their deck, where the light, wind, internet, and privacy issues weren't huge concerns. The final recordings still have some ambient sound, but I was able to reduce this to some extent with a directional microphone. The deck was also mostly absent of flammable materials, but I made sure to bring a fire blanket and a water spray bottle.</p>
 
-  [IMG: water/fire spray bottles. Don't want to get these confused]
+
+    <div class="imgContainer">
+      <div>
+        <img src="./assets/spray-bottles.jpg" style="width: 620px; max-width: 90vw; border: 1px solid var(--text-color);" alt="Alcohol and water spray bottles">
+        <figcaption>Don't want to get these confused</figcaption>
+      </div>
+    </div>
 
 
     <p>For aesthetic and hygiene reasons I also chose to wear black nitrile gloves for filming. But at the end of each Burn Ceremony I had to run a blockchain transaction on my laptop. I'd built a web interface to streamline the process, but during one of the test burn sessions I realized that the gloves made it a lot harder to get anything done. This, along with keeping all the paperwork straight, was error prone, and added an extra layer of context switching on top of everything else I had to keep track of. So I ended up preloading the data into the interface such that I could run the transaction in two clicks. This easily shaved one to two minutes off each burn, and probably saved me more than an hour on the burn day.</p>
@@ -671,8 +723,13 @@
     <p>In all, there were also a lot of boring little items I needed to use to solve all the little problems that popped up in testing: long neck lighters, various tripods, various cords, a tiny dustpan, tape, ziplock bags etc. My equipment list quickly grew to keep track of everything I needed for a burn session.</p>
 
 
-  [IMG of equipment list]
-  [VIDEO  of me burning]
+
+    <div class="imgContainer">
+      <div>
+        <img src="./assets/equipment-list.jpg" style="width: 470px; max-width: 90vw; border: 1px solid var(--text-color);" alt="Equipment List">
+        <figcaption>Equipment List</figcaption>
+      </div>
+    </div>
 
   </section>
 
@@ -685,7 +742,7 @@
 
     <p>I also wanted to index the videos of the Burn Ceremonies, so I created an NFT collection, Proof of Burn. Each token logs the denomination, the serial number, and the timestamp of the burn. It also attaches a session ID to each burn. This all serves two purposes. First, it creates a slightly more digestible art object. Even though bUSD is nominally the point of this whole project, I understand that most people will experience it through the videos of US currency burning and really just want to collect the NFT. Second, the NFT acts as a security measure if bUSD is ever fraudulently issued. In the event my wallet is ever compromised, or greed gets the better of me, bUSD could theoretically be issued without a corresponding Burn Ceremony. If this ever happens, then the contract allows NFT holders to burn their NFT plus the amount of bUSD corresponding to the denomination. A separate smart contract could then issue a new token (Burnt bUSD) in accordance to all validly issued and burned Proof of Burn NFTs and bUSD. Everyone who owns a Proof of Burn from an invalid session would not be able to get the new token. I also figure that this could be a good way to bridge bUSD: Someone could burn the bUSD on L1 and mint Based bUSD (or Bridged bUSD) on Base.</p>
 
-    <p>Managing the media for the NFTs was a bit of a pain. I shot all the footage in 4k, but this left me with 41 humongous files that I couldn't easily/cheaply host anywhere. I also made a mistake framing my shots and needed to crop all the footage. I ended up using ffmpeg to downsize and crop everything, which was pretty painless. The NFTs were originally minted with placeholder SVGs, but once I pinned the cropped 1080p videos to IPFS [LINK to lighthouse ipfs] I connected all the metadata.</p>
+    <p>Managing the media for the NFTs was a bit of a pain. I shot all the footage in 4k, but this left me with 41 humongous files that I couldn't easily/cheaply host anywhere. I also made a mistake framing my shots and needed to crop all the footage. I ended up using ffmpeg to downsize and crop everything, which was pretty painless. The NFTs were originally minted with placeholder SVGs, but after I <a href="https://gateway.lighthouse.storage/ipfs/bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm/" target="_blank" rel="nofollow">pinned the cropped 1080p videos to IPFS</a> I connected all the metadata.</p>
   </section>
 
 
@@ -700,6 +757,11 @@
   <section>
     <hr>
     <h3>8. Can You Burn Some Money for Me?</h3>
+
+    <div class="imgContainer">
+      <img src="./assets/ashes.jpg" style="width: 620px; max-width: 90vw; border: 1px solid var(--text-color);" alt="$2,455 in ashes">
+      <figcaption>$2,455 in ashes</figcaption>
+    </div>
 
     <p>If you read this article and thought "Man, I really wish Steve would burn some money for me," then you're in luck! All you need to do is read the <a href="./burn-agreement" target="_blank">Burn Agreement</a>, fill out a <a href="./burn-application" target="_blank">Burn Application</a>, and mail that, along with your bill and processing fees, to:</p>
 
@@ -716,6 +778,7 @@
       <div>BOX #32</div>
       <div>BROOKLYN, NY 11238</div>
     </div>
+
   </section>
 
 
@@ -743,6 +806,19 @@
 
 
 </body>
+
+<script type="text/javascript">
+  const videoClicked = {}
+  function playVideo(vidID) {
+    const vid = document.getElementById(vidID)
+
+    if (!videoClicked[tokenId]) {
+      vid.play();
+    }
+    videoClicked[vidID] = true
+  }
+
+</script>
 
 
 </html>
