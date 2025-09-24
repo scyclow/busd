@@ -497,10 +497,6 @@
   </style>
 
 
-  <script src="./utils.js"></script>
-  <script type="module" src="./connectWallet.js"></script>
-
-
 
 
 </head>
@@ -738,11 +734,22 @@
     <hr>
     <h3>6. $bUSD and the Proof of Burn</h3>
 
-    <p>Everyone who gave me money to burn received bUSD and a Proof of Burn NFT. bUSD is an ERC20 token issued on Ethereum L1. This means that I was able to easily set up a liquidity pool with my own personal bUSD and USDC. I know that Solana is the home base for stupid memecoins, but this project required some custom smart contract work that I couldn't get out of the box on something like pump.fun. Ethereum has a much better smart contract ecosystem, and all of my other work is there, so it was the obvious choice.</p>
+    <p>Everyone who gave me money to burn received bUSD and a <a href="https://opensea.io/collection/proof-of-burn" target="_blank" rel="nofollow">Proof of Burn NFT</a>. bUSD is an ERC20 token issued on Ethereum L1. This means that I was able to easily set up a liquidity pool with my own personal bUSD and USDC. I know that Solana is the home base for stupid memecoins, but this project required some custom smart contract work that I couldn't get out of the box on something like pump.fun. Ethereum has a much better smart contract ecosystem, and all of my other work is there, so it was the obvious choice.</p>
+
+    <p>You can read the <a href="https://etherscan.io/address/0xb9bdb5221585ad31ba3a4fa9c7a7b73a0495916e#code" target="_blank" rel="nofollow">bUSD</a> and <a href="https://etherscan.io/address/0x46b2Fc11FD3209D42CB0971AE2C824f1814F1245#code" target="_blank" rel="nofollow">Proof of Burn</a> on Etherscan.</p>
+
+    <div class="imgContainer">
+      <div>
+        <img src="./assets/busd-contract.png" style="width: 470px; max-width: 90vw; border: 1px solid var(--text-color);" alt="Equipment List">
+        <figcaption>Verified on Etherscan</figcaption>
+      </div>
+    </div>
+
 
     <p>I also wanted to index the videos of the Burn Ceremonies, so I created an NFT collection, Proof of Burn. Each token logs the denomination, the serial number, and the timestamp of the burn. It also attaches a session ID to each burn. This all serves two purposes. First, it creates a slightly more digestible art object. Even though bUSD is nominally the point of this whole project, I understand that most people will experience it through the videos of US currency burning and really just want to collect the NFT. Second, the NFT acts as a security measure if bUSD is ever fraudulently issued. In the event my wallet is ever compromised, or greed gets the better of me, bUSD could theoretically be issued without a corresponding Burn Ceremony. If this ever happens, then the contract allows NFT holders to burn their NFT plus the amount of bUSD corresponding to the denomination. A separate smart contract could then issue a new token (Burnt bUSD) in accordance to all validly issued and burned Proof of Burn NFTs and bUSD. Everyone who owns a Proof of Burn from an invalid session would not be able to get the new token. I also figure that this could be a good way to bridge bUSD: Someone could burn the bUSD on L1 and mint Based bUSD (or Bridged bUSD) on Base.</p>
 
     <p>Managing the media for the NFTs was a bit of a pain. I shot all the footage in 4k, but this left me with 41 humongous files that I couldn't easily/cheaply host anywhere. I also made a mistake framing my shots and needed to crop all the footage. I ended up using ffmpeg to downsize and crop everything, which was pretty painless. The NFTs were originally minted with placeholder SVGs, but after I <a href="https://gateway.lighthouse.storage/ipfs/bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm/" target="_blank" rel="nofollow">pinned the cropped 1080p videos to IPFS</a> I connected all the metadata.</p>
+
   </section>
 
 
