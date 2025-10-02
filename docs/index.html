@@ -680,10 +680,11 @@
     <h2>Coin Info</h2>
 
     <div style="margin: 1em 0">
-      <h3>Total bUSD Supply: <span id="totalBUSD">2455</span></h3>
-      <h3>Total USD Burned: $2455.00</h3>
-      <h3 id="usd_busd"></h3>
+      <h3 id="busd_marketCap"></h3>
+      <h3>Total USD Burned: $<span id="totalUSDBurned">-</span></h3>
+      <h3>Total bUSD Supply: <span id="totalBUSD">-</span></h3>
       <h3 id="busd_usd"></h3>
+      <h3 id="usd_busd"></h3>
 
     </div>
 
@@ -1192,6 +1193,7 @@ function playVideo(tokenId) {
       const busdTotalSupply = await BUSD.totalSupply()
 
       $.id('totalBUSD').innerHTML = ethVal(busdTotalSupply).toFixed(2)
+      $.id('totalUSDBurned').innerHTML = ethVal(busdTotalSupply).toFixed(2)
 
 
       $.id('addBUSDToWallet').onclick = () => provider.addCoin(BUSD.address, 'bUSD', 'https://busd.steviep.xyz/assets/logo.png')
@@ -1221,9 +1223,10 @@ function playVideo(tokenId) {
         const USD_bUSD = (Number(sqrtPriceX96) ** 2 / 2 ** 192) / 10**12
         const bUSD_USD = 1/USD_bUSD
 
-        $.id('usd_busd').innerHTML = `USDC/bUSD: ${USD_bUSD.toFixed(8)}`
-        $.id('busd_usd').innerHTML = `bUSD/USDC: ${bUSD_USD.toFixed(8)}`
-      }, 15)
+        $.id('usd_busd').innerHTML = `USDC/bUSD: ${USD_bUSD.toFixed(4)}`
+        $.id('busd_usd').innerHTML = `bUSD/USDC: ${bUSD_USD.toFixed(4)}`
+        $.id('busd_marketCap').innerHTML = `bUSD Market Capitalization: $${(ethVal(busdTotalSupply) * bUSD_USD).toFixed(2)}`
+      }, 15000)
 
 
   })
