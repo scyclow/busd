@@ -792,8 +792,9 @@ connected
 
 
 
-const s3_1080p = 'https://busd-proof-of-burn.s3.us-east-1.amazonaws.com/session-0-1080p'
-const s3_4k = 'https://busd-session-0-raw.s3.us-east-1.amazonaws.com/input'
+const s3_1080p = 'https://gateway.lighthouse.storage/ipfs/bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm'
+// const s3_4k = 'https://busd-session-0-raw.s3.us-east-1.amazonaws.com/input'
+const s3_4k = ''
 
 
 
@@ -1101,7 +1102,7 @@ pobData.forEach(pob => {
     </div>
     ${pob.memo ? `<div><span class="tag" style="color: var(--yellow-color); word-break: break-word">Memo: ${pob.memo}</span></div>` : ''}
     <div id="pob-${pob.tokenId}-vid-placeholder"></div>
-    <div><a href="${s3_4k}/${pob._4kVideoName}" target="_blank" rel="nofollow" style="font-size: 0.75em; margin-top: 1em">View raw footage →</a></div>
+    <!-- <div><a href="${s3_4k}/${pob._4kVideoName}" target="_blank" rel="nofollow" style="font-size: 0.75em; margin-top: 1em">View raw footage →</a></div> -->
     <div><a href="https://opensea.io/item/ethereum/0x46b2fc11fd3209d42cb0971ae2c824f1814f1245/${pob.tokenId}" target="_blank" rel="nofollow" style="font-size: 0.75em; margin-top: 1em">View on OpenSea →</a></div>
     <div><a href="#pob-${pob.tokenId}" style="font-size: 0.75em; margin-top: 1em">Permalink</a></div>
   </article>`
