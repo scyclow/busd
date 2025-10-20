@@ -514,7 +514,7 @@
   <section id="aboveTheFold" class="slow-fadein" >
     <p>Burnt US Dollars ($bUSD) is a <a href="#swap">coin</a> that represents the value of burned US Dollars.</p>
 
-    <h3 style="text-align: center; margin-top: 1.5em; margin-bottom: 2.5em;">Total USD Burned: $2455 <br><a href="#proofs" class="fadeInOut">View Burn Ceremonies →</a></h3>
+    <h3 style="text-align: center; margin-top: 1.5em; margin-bottom: 2.5em;">Total USD Burned: $3076 <br><a href="#proofs" class="fadeInOut">View Burn Ceremonies →</a></h3>
   </section>
 
 
@@ -730,12 +730,22 @@
   <section id="proofs">
     <hr>
     <div style="margin-bottom: 1em;">
-      <h2>Proofs of Burn [0-40]</h2>
-      <p style="font-size: 0.75em; margin-top: 0.25em; padding: 0">IPFS: <a href="https://gateway.lighthouse.storage/ipfs/bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm/" target="_blank" rel="nofollow" style="word-break: break-word">bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm</a></p>
+      <h2 style="font-size: 1.75em">Proofs of Burn</h2>
       <p style="font-size: 0.75em; margin-top: 0.25em; padding: 0">View on: <a href="https://opensea.io/collection/proof-of-burn" target="_blank" rel="nofollow" >OpenSea</a>, <a href="https://etherscan.io/address/0x46b2Fc11FD3209D42CB0971AE2C824f1814F1245" target="_blank" rel="nofollow">Etherscan</a></p>
+
+      <h3 style="margin-top: 2em">Session 0 [0-40]</h3>
+      <p style="font-size: 0.75em; margin-top: 0.25em; padding: 0">IPFS: <a href="https://gateway.lighthouse.storage/ipfs/bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm/" target="_blank" rel="nofollow" style="word-break: break-word">bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm</a></p>
     </div>
 
-    <div id="proofVids"></div>
+    <div id="proofVids0"></div>
+
+
+    <div style="margin-bottom: 1em;">
+      <h3 style="margin-top: 2em">Session 1 [41-53]</h3>
+      <p style="font-size: 0.75em; margin-top: 0.25em; padding: 0">IPFS: <a href="https://gateway.lighthouse.storage/ipfs/bafybeibfl3betthgoiw7uko6ajo5yxwdylv2kymijqmd5ouvvb7aevzaqu/" target="_blank" rel="nofollow" style="word-break: break-word">bafybeibfl3betthgoiw7uko6ajo5yxwdylv2kymijqmd5ouvvb7aevzaqu</a></p>
+    </div>
+
+    <div id="proofVids1"></div>
 
 
   </section>
@@ -792,7 +802,11 @@ connected
 
 
 
-const s3_1080p = 'https://gateway.lighthouse.storage/ipfs/bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm'
+const s3_1080p = [
+  'https://gateway.lighthouse.storage/ipfs/bafybeig266ejeenbhn3hz2vfhnpzie4t7kl6dxscbk5a7m2y6ovck2j2rm',
+  'https://gateway.lighthouse.storage/ipfs/bafybeibfl3betthgoiw7uko6ajo5yxwdylv2kymijqmd5ouvvb7aevzaqu',
+]
+
 // const s3_4k = 'https://busd-session-0-raw.s3.us-east-1.amazonaws.com/input'
 const s3_4k = ''
 
@@ -1088,11 +1102,86 @@ const pobData = [
     denomination: 2,
     burnedAt: 1757970743,
     sessionId: 0,
-  }
+  }, {
+    tokenId: 41,
+    serial: 'I88715705A',
+    denomination: 1,
+    burnedAt: 1760816267,
+    sessionId: 1
+}, {
+    tokenId: 42,
+    serial: 'LB11102625M',
+    denomination: 100,
+    burnedAt: 1760816663,
+    sessionId: 1
+}, {
+    tokenId: 43,
+    serial: 'PF34422972B',
+    denomination: 100,
+    burnedAt: 1760816975,
+    sessionId: 1
+}, {
+    tokenId: 44,
+    serial: 'MK44709052A',
+    denomination: 20,
+    burnedAt: 1760817347,
+    sessionId: 1
+}, {
+    tokenId: 45,
+    serial: 'PK74695363A',
+    denomination: 20,
+    burnedAt: 1760817731,
+    sessionId: 1
+}, {
+    tokenId: 46,
+    serial: 'PF22347538H',
+    denomination: 100,
+    burnedAt: 1760818115,
+    sessionId: 1
+}, {
+    tokenId: 47,
+    serial: 'QK07314286B',
+    denomination: 100,
+    burnedAt: 1760818379,
+    sessionId: 1
+}, {
+    tokenId: 48,
+    serial: 'QD16787876A',
+    denomination: 100,
+    burnedAt: 1760818739,
+    sessionId: 1
+}, {
+    tokenId: 49,
+    serial: 'PG19706370H',
+    denomination: 20,
+    burnedAt: 1760818967,
+    sessionId: 1
+}, {
+    tokenId: 50,
+    serial: 'IG49553711E',
+    denomination: 20,
+    burnedAt: 1760819363,
+    sessionId: 1
+}, {
+    tokenId: 51,
+    serial: 'PH59012403A',
+    denomination: 20,
+    burnedAt: 1760819711,
+    sessionId: 1
+}, {
+    tokenId: 52,
+    serial: 'PL59076406A',
+    denomination: 20,
+    burnedAt: 1760820359,
+    sessionId: 1
+}
+
+
 ]
 
 pobData.forEach(pob => {
-  document.getElementById('proofVids').innerHTML += `    <article id="pob-${pob.tokenId}" class="videoArticle">
+
+  document.getElementById('proofVids' + pob.sessionId).innerHTML += `    <article id="pob-${pob.tokenId}" class="videoArticle">
     <h3>Proof of Burn #${pob.tokenId}</h3>
     <div>
       <span class="tag">Denomination: $${pob.denomination}</span>
@@ -1115,7 +1204,7 @@ setTimeout(() => {
   pobData.forEach(pob => {
     document.getElementById(`pob-${pob.tokenId}-vid-placeholder`).innerHTML = `
     <video controls preload="none" poster="./assets/proof-thumbnails/${pob.tokenId}.png" onclick="playVideo(${pob.tokenId})" id="pob-${pob.tokenId}-vid">
-      <source src="${s3_1080p}/${pob.tokenId}.mp4" type="video/mp4" id="pob-${pob.tokenId}-src">
+      <source src="${s3_1080p[pob.sessionId]}/${pob.tokenId}.mp4" type="video/mp4" id="pob-${pob.tokenId}-src">
     </video>
     `
   })
@@ -1236,9 +1325,9 @@ function playVideo(tokenId) {
 </script>
 
 
-<script type="module">
+<!-- <script type="module">
   import { initializeRacoons } from "https://cdn.racoons.ai/libs/index.mjs";
 
   setTimeout(() => initializeRacoons("96f68e58-95d7-4b25-9e16-20fb330b94c2", {debugMode: false}), 500);
-</script>
+</script> -->
 </html>

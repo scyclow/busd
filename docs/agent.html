@@ -725,7 +725,13 @@
       const issuedSerials = new Set(pobURI.map(p => p.tokenURI.attributes[0].value))
       const existingQueue = (ls.get(QUEUE_KEY) || []).filter(q => !issuedSerials.has(q.serial))
 
-      console.log(JSON.stringify(pobURI))
+      console.log(JSON.stringify(pobURI.map(p => ({
+        tokenId: p.tokenId,
+        serial: p.tokenURI.attributes[0].value,
+        denomination: p.tokenURI.attributes[1].value,
+        burnedAt: p.tokenURI.attributes[2].value,
+        sessionId: p.tokenURI.attributes[3].value,
+      }))))
 
       $.id('queueContent').innerHTML = ''
 
