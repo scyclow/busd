@@ -244,7 +244,7 @@ export class Web3Provider {
     try {
       const ens = await this.getENS(addr)
       if (isENS(ens)) {
-        return ens.length > nameLength
+        return ens.length > nameLength && truncate
           ? ens.slice(0, nameLength-3) + '...'
           : ens
       } else {

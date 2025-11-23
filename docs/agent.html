@@ -711,7 +711,7 @@
         return {
           tokenId,
           tokenURI: JSON.parse((await ProofOfBurn.tokenURI(tokenId)).replace('data:application/json;utf8,', '')),
-          owner: await provider.formatAddr(await ProofOfBurn.ownerOf(tokenId))
+          owner: await provider.formatAddr(await ProofOfBurn.ownerOf(tokenId), false)
 
         }
       }))).sort((a, b) => a.tokenId - b.tokenId)
